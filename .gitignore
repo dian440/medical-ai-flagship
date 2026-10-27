@@ -1,0 +1,34 @@
+# 数据与权重（体积大或受授权限制，不入库）
+*.pt
+*.pth
+*.ckpt
+data/
+datasets/
+*.tar.gz
+*.csv.gz
+*.png
+!code/sample_cxr.png
+!results/*.png
+!paper/figures/*.png
+
+# 缓存
+.cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# 实验输出
+code/*_result.txt
+code/*_net.txt
+results/raw/
+logs/
+*.log
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
