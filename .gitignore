@@ -32,3 +32,4 @@ logs/
 .idea/
 .DS_Store
 Thumbs.db
+results/cache_*.jsonl
