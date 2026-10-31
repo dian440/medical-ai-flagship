@@ -65,6 +65,11 @@ DATASETS = {
         "kind": "binary_folder",
         "desc": "Kermany Chest X-ray · 儿童 · NORMAL/PNEUMONIA 二值",
     },
+    "VIN": {
+        "root": os.path.join(DATA_ROOT, "VinDr"),
+        "kind": "vindr_label_csv",
+        "desc": "VinDr-CXR 测试集 · 成人越南门诊 · 22 类（含全局标签）",
+    },
 }
 
 # 统一标签（论文口径）：跨数据集只比较这两个
@@ -75,6 +80,14 @@ NIH_TO_UNIFIED = {
     "Pneumonia": "PNEUMONIA",
     "No Finding": "NORMAL",
 }
+
+# VinDr 全局标签 -> 统一标签（见 docs/第三数据集_标签口径.md §3）
+# 口径 A（宽松·主口径）与口径 B（严格·敏感性分析）各一套
+VINDR_PNEUMONIA_A = {
+    "Consolidation", "Infiltration", "Lung Opacity",
+    "Atelectasis", "Lung cavity",
+}
+VINDR_PNEUMONIA_B = {"Consolidation", "Infiltration"}
 
 
 def log(msg: str) -> None:
@@ -165,6 +178,38 @@ def build_model():
     model = xrv.models.DenseNet(weights="densenet121-res224-nih")
     model.eval()
     return model
+
+
+def load_vindr_labels():
+    """读 VinDr 统一标签表，返回 {image_id: 标签}
+
+    标签表由 code/download_vindr.py 生成，含两套口径：
+      col unified_label      → 口径 A（宽松，主口径）
+      col unified_label_strict → 口径 B（严格，敏感性分析）
+    """
+    import csv as _csv
+
+    root = DATASETS["VIN"]["root"]
+    lab_path = os.path.join(root, "annotations", "vindr_unified_labels.csv")
+    if not os.path.isfile(lab_path):
+        return {}, {}
+    out_a, out_b = {}, {}
+    with open(lab_path, encoding="utf-8") as f:
+        for r in _csv.DictReader(f):
+            iid = r["image_id"]
+            out_a[iid] = r.get("unified_label", "")
+            out_b[iid] = r.get("unified_label_strict", out_a[iid])
+    return out_a, out_b
+
+
+def vindr_image_files():
+    """列出已下载到本地的 VinDr 影像（只取标签表里有的）"""
+    img_dir = os.path.join(DATASETS["VIN"]["root"], "images")
+    if not os.path.isdir(img_dir):
+        return []
+    return sorted(
+        f for f in os.listdir(img_dir) if f.endswith(".png")
+    )
 
 
 # torchxrayvision 的 nih densenet 输出 18 维，但只有前 14 维是真实病种，
@@ -500,6 +545,21 @@ def main() -> int:
                             cache_path=os.path.join(RESULTS, "cache_kem.jsonl"))
     log("")
 
+    # --- 第三数据集：VinDr-CXR（成人越南门诊）---
+    vin_files = vindr_image_files()
+    vin_labels_a, vin_labels_b = load_vindr_labels()
+    vin_probs = {}
+    if vin_files:
+        log(f"  [3/3] VinDr 推理 {len(vin_files)} 张 ...")
+        vin_root = os.path.join(DATASETS["VIN"]["root"], "images")
+        vin_paths = [os.path.join(vin_root, f) for f in vin_files]
+        vin_probs = infer_batch(model, vin_paths,
+                                 cache_path=os.path.join(RESULTS,
+                                                        "cache_vin.jsonl"))
+    else:
+        log("  [3/3] VinDr：本地无影像，跳过（先跑 download_vindr.py）")
+    log("")
+
     # --- 阶段 3：统一标签 + 计算指标 ---
     log("=" * 68)
     log("阶段 3 · 统一标签口径并计算指标")
@@ -537,6 +597,26 @@ def main() -> int:
             "prob_normal": normal_score(prow, model),
         })
 
+    # VinDr：口径 A（宽松，主口径）与口径 B（严格）分别入行
+    vin_root = os.path.join(DATASETS["VIN"]["root"], "images")
+    for f in vin_files:
+        iid = f[:-4]  # 去 .png
+        lab_a = vin_labels_a.get(iid, "")
+        lab_b = vin_labels_b.get(iid, "")
+        if not lab_a:
+            continue
+        prow = vin_probs.get(os.path.join(vin_root, f))
+        if prow is None:
+            continue
+        rows.append({
+            "dataset": "VIN",
+            "file": f,
+            "gt": lab_a,
+            "gt_strict": lab_b,
+            "prob_pneumonia": prow.get("Pneumonia", 0.0),
+            "prob_normal": normal_score(prow, model),
+        })
+
     df = pd.DataFrame(rows)
     df.to_csv(os.path.join(RESULTS, "cross_dataset_predictions.csv"),
               index=False, encoding="utf-8")
@@ -544,8 +624,10 @@ def main() -> int:
 
     # 指标
     metrics = {}
-    for ds in ["NIH", "KEM"]:
+    for ds in ["NIH", "KEM", "VIN"]:
         sub = df[df.dataset == ds]
+        if len(sub) == 0:
+            continue
         for lbl in UNIFIED_LABELS:
             y = (sub["gt"] == lbl).astype(int).tolist()
             score = (sub["prob_normal"] if lbl == "NORMAL"
@@ -572,6 +654,28 @@ def main() -> int:
                 log(f"       {lbl:10s} ECE = {ece['ece']:.4f} "
                     f"(n={len(y)}, 10 bins)")
 
+    # VinDr 口径 B（严格）敏感性分析：只用 Consolidation + Infiltration
+    if "gt_strict" in df.columns:
+        sub_v = df[df.dataset == "VIN"]
+        if len(sub_v):
+            log("")
+            log("  ---- VinDr 口径 B（严格）敏感性分析 ----")
+            for lbl in UNIFIED_LABELS:
+                y = (sub_v["gt_strict"] == lbl).astype(int).tolist()
+                score = (sub_v["prob_normal"] if lbl == "NORMAL"
+                         else sub_v["prob_pneumonia"]).tolist()
+                auc = roc_auc(y, score)
+                if auc:
+                    metrics[f"VIN_strict_{lbl}_AUC"] = auc
+                    log(f"  VIN  {lbl:10s} AUC(严格口径) = {auc:.4f} "
+                        f"(n={len(y)})")
+                f1 = f1_at_best_threshold(y, score)
+                if f1:
+                    metrics[f"VIN_strict_{lbl}_F1"] = f1["f1"]
+                ece = expected_calibration_error(y, score)
+                if ece:
+                    metrics[f"VIN_strict_{lbl}_ECE"] = ece["ece"]
+
     # DeLong 检验：ΔAUC 是否显著（不加这个，0.0125 的差值无法解读）
     log("")
     log("  ---- DeLong 检验：跨数据集 AUC 差异是否显著 ----")
@@ -587,9 +691,24 @@ def main() -> int:
         dt = delong_test(yn, sn, yk, sk)
         if dt:
             metrics[f"DeLong_{lbl}"] = dt
-            log(f"  {lbl:10s} ΔAUC={dt['delta']:+.4f} SE={dt['se']:.4f} "
-                f"z={dt['z']:+.3f} p(双侧)={dt['p_two_sided']:.4f} "
+            log(f"  {lbl:10s} NIH->KEM  ΔAUC={dt['delta']:+.4f} "
+                f"SE={dt['se']:.4f} z={dt['z']:+.3f} "
+                f"p(双侧)={dt['p_two_sided']:.4f} "
                 f"→ {'显著' if dt['significant_05'] else '不显著'}")
+
+        # NIH -> VinDr（第三数据集，成人外部集）
+        sub_v = df[df.dataset == "VIN"]
+        if len(sub_v):
+            yv = (sub_v["gt"] == lbl).astype(int).tolist()
+            sv = (sub_v["prob_normal"] if lbl == "NORMAL"
+                  else sub_v["prob_pneumonia"]).tolist()
+            dv = delong_test(yn, sn, yv, sv)
+            if dv:
+                metrics[f"DeLong_{lbl}_NIH_vs_VIN"] = dv
+                log(f"  {lbl:10s} NIH->VIN  ΔAUC={dv['delta']:+.4f} "
+                    f"SE={dv['se']:.4f} z={dv['z']:+.3f} "
+                    f"p(双侧)={dv['p_two_sided']:.4f} "
+                    f"→ {'显著' if dv['significant_05'] else '不显著'}")
 
     # 衰减幅度（本研究的核心数字）
     log("")
