@@ -169,27 +169,49 @@ def main():
 
         # 该提交相对父提交改动的文件
         rc, files, _ = run_git(
-            ["diff-tree", "--no-commit-id", "--name-only", "-r", sha], repo_dir)
+            ["-c", "core.quotepath=false",
+             "diff-tree", "--no-commit-id", "--name-only", "-r", sha], repo_dir)
         files = [f for f in files.splitlines() if f.strip()]
 
         tree_entries = []
         for f in files:
-            rc, blob_sha, _ = run_git(
-                ["rev-parse", f"{sha}:{f}"], repo_dir)
-            if rc != 0:
+            # 判断该文件在此提交中是被删除还是被修改
+            rc2, status_out, _ = run_git(
+                ["-c", "core.quotepath=false", "diff-tree", "--no-commit-id",
+                 "--name-status", "-r", sha, "--", f], repo_dir)
+            status = status_out.split("\t")[0].strip() if status_out else ""
+            if status.startswith("D"):
+                tree_entries.append({
+                    "path": f, "mode": "100644", "type": "blob", "sha": None,
+                })
+                continue
+
+            # 取本地 blob 的原始字节 → base64 → 在 GitHub 上建 blob
+            rc3, blob_sha, _ = run_git(["rev-parse", f"{sha}:{f}"], repo_dir)
+            if rc3 != 0:
                 log(f"   跳过 {f}（本地无此对象）")
                 continue
+            p = subprocess.run(
+                ["git", "cat-file", "blob", blob_sha], cwd=repo_dir,
+                capture_output=True,
+            )
+            if p.returncode != 0:
+                log(f"   跳过 {f}（读取内容失败）")
+                continue
+            content_b64 = base64.b64encode(p.stdout).decode("ascii")
+
             st, blob = api(
-                "GET", f"/repos/{REPO}/git/blobs/{blob_sha}",
-                token, proxy=proxy)
-            if st != 200:
-                log(f"   跳过 {f}（blob 读取失败 {st}）")
+                "POST", f"/repos/{REPO}/git/blobs", token,
+                body={"content": content_b64, "encoding": "base64"},
+                proxy=proxy)
+            if st != 201:
+                log(f"   跳过 {f}（建 blob 失败 {st}: {blob}）")
                 continue
             tree_entries.append({
                 "path": f,
                 "mode": "100644",
                 "type": "blob",
-                "sha": blob_sha,
+                "sha": blob["sha"],
             })
 
         st, tree = api(
