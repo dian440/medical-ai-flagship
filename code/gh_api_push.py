@@ -119,10 +119,7 @@ def main():
 
     # --- 1. 本地状态 ---
     rc, out, _ = run_git(["status", "--porcelain"], repo_dir)
-    changed = [l for l in out.splitlines() if l.strip()]
-    if not changed:
-        log("[跳过] 工作区没有待提交内容")
-        return 0
+    dirty = [l for l in out.splitlines() if l.strip()]
 
     rc, branch, _ = run_git(["rev-parse", "--abbrev-ref", "HEAD"], repo_dir)
     branch = branch or "main"
@@ -130,11 +127,14 @@ def main():
 
     log(f"分支   : {branch}")
     log(f"本地 HEAD: {head_sha[:10]}")
-    log(f"待提交 : {len(changed)} 项")
-    for c in changed[:12]:
-        log(f"   {c}")
-    if len(changed) > 12:
-        log(f"   ... 另有 {len(changed) - 12} 项")
+    if dirty:
+        log(f"⚠ 工作区有 {len(dirty)} 项未提交改动（不会被推送）：")
+        for c in dirty[:8]:
+            log(f"   {c}")
+        if len(dirty) > 8:
+            log(f"   ... 另有 {len(dirty) - 8} 项")
+    else:
+        log("工作区干净")
 
     if dry:
         log("[dry-run] 未做任何网络操作")
