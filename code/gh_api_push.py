@@ -149,12 +149,54 @@ def main():
     remote_sha = remote["object"]["sha"]
     log(f"远端 HEAD: {remote_sha[:10]}")
 
-    # --- 3. 待推送的提交（本地领先远端的那些） ---
-    rc, ahead, _ = run_git(
-        ["rev-list", "--reverse", f"{remote_sha}..HEAD"], repo_dir)
-    commits = [c for c in ahead.splitlines() if c.strip()]
+    # --- 3. 待推送的提交（本地领先远端的那些）---
+    #
+    # 关键：API 重建的 commit 对象与本地 commit 的 SHA **不同**（作者时间、
+    # 树结构相同但 commit 元数据由 API 生成），所以不能直接用
+    # `git rev-list remote_sha..HEAD` —— 远端那个 SHA 在本地根本不存在。
+    #
+    # 解法：维护一个映射文件，记录 "远端 commit SHA -> 本地 commit SHA"。
+    # 上次推到的本地 SHA 之后的提交，就是待推送的。
+    MAP_PATH = os.path.join(repo_dir, ".gh_api_push_map.json")
+    mapping = {}
+    if os.path.isfile(MAP_PATH):
+        try:
+            with open(MAP_PATH, encoding="utf-8") as f:
+                mapping = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            mapping = {}
+
+    local_by_sha = {}
+    rc, all_local, _ = run_git(["rev-list", "--all"], repo_dir)
+    for s in all_local.splitlines():
+        s = s.strip()
+        if s:
+            local_by_sha[s] = s
+
+    # 找出远端 HEAD 对应的本地 SHA
+    last_local = mapping.get(remote_sha)
+    if last_local is None:
+        # 远端 HEAD 不在映射里 → 可能远端是 git 直推的老提交，
+        # 那就退化成"本地领先 origin/main 的提交"，用远端 ref 的历史比对
+        rc, ls_remote_out, _ = run_git(["log", "--format=%H", "-20"], repo_dir)
+        # 无法确定时：推送全部本地提交中不在远端映射里的
+        last_local = None
+        log("[提示] 远端 HEAD 不在映射表中，按提交顺序对齐推送")
+
+    rc, all_local_list, _ = run_git(["rev-list", "--reverse", "HEAD"], repo_dir)
+    ordered = [s.strip() for s in all_local_list.splitlines() if s.strip()]
+
+    if last_local in ordered:
+        idx = ordered.index(last_local)
+        commits = ordered[idx + 1:]
+    else:
+        # 远端 HEAD 对应的本地提交不在当前历史里（例如 rebase 过）：
+        # 推送那些"从未出现在映射表里"的本地提交
+        pushed_locals = set(mapping.values())
+        commits = [s for s in ordered if s not in pushed_locals]
+
     if not commits:
-        log("[跳过] 没有领先远端的提交")
+        log("[跳过] 没有需要推送的新提交")
         return 0
     log(f"待推送提交 {len(commits)} 个")
 
@@ -235,6 +277,7 @@ def main():
             return 5
 
         parent = commit["sha"]
+        mapping[commit["sha"]] = sha  # 远端 SHA -> 本地 SHA
         log(f"   ✓ {sha[:8]} → {commit['sha'][:8]}  {subj[:60]}")
 
     # --- 5. 更新远端 ref ---
@@ -245,6 +288,12 @@ def main():
     if st != 200:
         log(f"[错误] 更新 ref 失败 status={st}: {ref}")
         return 6
+
+    try:
+        with open(MAP_PATH, "w", encoding="utf-8") as f:
+            json.dump(mapping, f, indent=2)
+    except OSError as e:
+        log(f"[警告] 映射表写入失败: {e}")
 
     log("")
     log(f"[推送完成] {branch} → {REPO}")

@@ -33,3 +33,4 @@ logs/
 .DS_Store
 Thumbs.db
 results/cache_*.jsonl
+.gh_api_push_map.json
