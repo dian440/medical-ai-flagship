@@ -431,19 +431,36 @@ def delong_test(y1, s1, y2, s2):
             return ranks
 
         def _auc_and_var(y, s):
+            """单库 AUC 与 Var(AUC)（DeLong 1988 结构分量，逐类 midrank 版）。
+
+            ⚠️ 2026-11-03 修正了一个会把 SE 高估约 7 倍的 bug。
+            原写法：
+                v01 = (r[:n1] - (n1 + 1) / 2.0) / n0      # 减「类别均值常数」
+                v10 = 1.0 - (r[n1:] - (n0 + 1) / 2.0) / n1
+            DeLong 的结构分量应该减**每个样本自己在本类中的 midrank**：
+                V10_i = (R_i - r_i) / n      # R_i = 全体 midrank，r_i = 正类类内 midrank
+                V01_j = 1 - (S_j - s_j) / m  # S_j = 全体 midrank，s_j = 负类类内 midrank
+            两者在均值上等价（mean(r_i) = (n1+1)/2），但方差不等价：
+            常数替换等于往结构分量里注入了一份「类内秩的离散度」，
+            于是 Var(AUC) 被系统性高估，且**类别越不平衡偏得越离谱**
+            （NIH PNEUMONIA 正负比 65:2754，SE 被算成 0.2398，真值 0.0335）。
+            后果：四组 DeLong 检验的 p 值全部虚高，把「显著」误判成「不显著」。
+            验证：code/delong_groundtruth.py 用 O(m*n) 暴力法按 DeLong 定义直算，
+                  与本实现逐位吻合；Hanley-McNeil 与 bootstrap 独立复现同一结论。
+            """
             pos = s[y == 1]
             neg = s[y == 0]
             if len(pos) == 0 or len(neg) == 0:
                 return None, None
             n1, n0 = len(pos), len(neg)
-            all_s = _np.concatenate([pos, neg])
-            r = _midrank(all_s)
+            r = _midrank(_np.concatenate([pos, neg]))
             auc = (r[:n1].sum() - n1 * (n1 + 1) / 2.0) / (n1 * n0)
-            v01 = (r[:n1] - (n1 + 1) / 2.0) / n0
-            v10 = 1.0 - (r[n1:] - (n0 + 1) / 2.0) / n1
-            s01 = v01.var(ddof=1)
-            s10 = v10.var(ddof=1)
-            var = s01 / n1 + s10 / n0
+            # 逐类 midrank（原始顺序，不做置换）
+            r_pos = _midrank(pos)
+            r_neg = _midrank(neg)
+            v10 = (r[:n1] - r_pos) / n0        # 正类结构分量，应 ∈ [0,1]
+            v01 = 1.0 - (r[n1:] - r_neg) / n1  # 负类结构分量，应 ∈ [0,1]
+            var = v10.var(ddof=1) / n1 + v01.var(ddof=1) / n0
             return float(auc), float(var)
 
         a1, v1 = _auc_and_var(y1, s1)

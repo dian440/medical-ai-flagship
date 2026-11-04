@@ -1,0 +1,110 @@
+{
+  "NIH_PNEUMONIA": {
+    "n": 2819,
+    "n_pos": 65,
+    "n_neg": 2754,
+    "auc": 0.7228590581531757,
+    "ci95_low": 0.6554408971565835,
+    "ci95_high": 0.7832086196301883,
+    "ci_width": 0.1277677224736048,
+    "n_boot": 2000,
+    "seed": 20261103,
+    "method": "stratified bootstrap percentile"
+  },
+  "NIH_NORMAL": {
+    "n": 2819,
+    "n_pos": 2754,
+    "n_neg": 65,
+    "auc": 0.7852717725266745,
+    "ci95_low": 0.7293485699122954,
+    "ci95_high": 0.834914250600525,
+    "ci_width": 0.10556568068822969,
+    "n_boot": 2000,
+    "seed": 20261103,
+    "method": "stratified bootstrap percentile"
+  },
+  "KEM_PNEUMONIA": {
+    "n": 5828,
+    "n_pos": 4247,
+    "n_neg": 1581,
+    "auc": 0.7833627249178532,
+    "ci95_low": 0.7707680362832298,
+    "ci95_high": 0.7955180439904225,
+    "ci_width": 0.02475000770719271,
+    "n_boot": 2000,
+    "seed": 20261103,
+    "method": "stratified bootstrap percentile"
+  },
+  "KEM_NORMAL": {
+    "n": 5828,
+    "n_pos": 1581,
+    "n_neg": 4247,
+    "auc": 0.8744306916352905,
+    "ci95_low": 0.8629272893750799,
+    "ci95_high": 0.8852753634779144,
+    "ci_width": 0.02234807410283446,
+    "n_boot": 2000,
+    "seed": 20261103,
+    "method": "stratified bootstrap percentile"
+  },
+  "VIN_PNEUMONIA": {
+    "n": 702,
+    "n_pos": 272,
+    "n_neg": 430,
+    "auc": 0.7036422708618331,
+    "ci95_low": 0.665360593365253,
+    "ci95_high": 0.7427989269835841,
+    "ci_width": 0.07743833361833108,
+    "n_boot": 2000,
+    "seed": 20261103,
+    "method": "stratified bootstrap percentile"
+  },
+  "VIN_NORMAL": {
+    "n": 702,
+    "n_pos": 430,
+    "n_neg": 272,
+    "auc": 0.8301470588235295,
+    "ci95_low": 0.7999091569767441,
+    "ci95_high": 0.8603883806429549,
+    "ci_width": 0.060479223666210724,
+    "n_boot": 2000,
+    "seed": 20261103,
+    "method": "stratified bootstrap percentile"
+  },
+  "delta_KEM_PNEUMONIA_vs_NIH": {
+    "delta": 0.060503666764677444,
+    "ci95_low": -0.0041184690989252565,
+    "ci95_high": 0.12586348194054864,
+    "crosses_zero": true,
+    "interpretation": "不显著（CI 跨 0）",
+    "n_boot": 2000,
+    "seed": 20261103
+  },
+  "delta_VIN_PNEUMONIA_vs_NIH": {
+    "delta": -0.019216787291342685,
+    "ci95_low": -0.09347507301138176,
+    "ci95_high": 0.05581174922181808,
+    "crosses_zero": true,
+    "interpretation": "不显著（CI 跨 0）",
+    "n_boot": 2000,
+    "seed": 20261103
+  },
+  "delta_KEM_NORMAL_vs_NIH": {
+    "delta": 0.08915891910861606,
+    "ci95_low": 0.040002134633685044,
+    "ci95_high": 0.14552197175862133,
+    "crosses_zero": false,
+    "interpretation": "显著（CI 不跨 0）",
+    "n_boot": 2000,
+    "seed": 20261103
+  },
+  "delta_VIN_NORMAL_vs_NIH": {
+    "delta": 0.044875286296855,
+    "ci95_low": -0.012252305517880582,
+    "ci95_high": 0.10710466147467396,
+    "crosses_zero": true,
+    "interpretation": "不显著（CI 跨 0）",
+    "n_boot": 2000,
+    "seed": 20261103
+  }
+}
