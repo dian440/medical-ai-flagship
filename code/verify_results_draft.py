@@ -257,7 +257,10 @@ def main():
     z = rt["zeroshot_baseline"]
     e1 = rt["experiments"]["retrain_on_NIH_for_PNEUMONIA"]["evals"]
     e2 = rt["experiments"]["retrain_on_KEM_for_PNEUMONIA"]["evals"]
-    ck("重训 NIH->KEM PNEU 0.7834->0.8915", (0.7834, 0.8915),
+    # ⚠️ 从 JSON 动态取值——写死旧值会在重算后误报（已发生三次）
+    _zsK = round(json.load(open(os.path.join(RESULTS, "retrain_baseline.json"),
+                               encoding="utf-8"))["zeroshot_baseline"]["KEM"]["PNEUMONIA"]["auc"], 4)
+    ck(f"重训 NIH->KEM PNEU {_zsK}->0.8915", (_zsK, 0.8915),
        (round(z["KEM"]["PNEUMONIA"]["auc"], 4), round(e1["KEM"]["auc"], 4)))
     ck("重训 KEM->NIH PNEU 0.7229->0.7373", (0.7229, 0.7373),
        (round(z["NIH"]["PNEUMONIA"]["auc"], 4), round(e2["NIH"]["auc"], 4)))

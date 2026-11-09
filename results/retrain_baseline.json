@@ -162,48 +162,48 @@
   "zeroshot_baseline": {
     "NIH": {
       "PNEUMONIA": {
-        "auc": 0.7228590581531757,
-        "ece": 0.23889582386183855
+        "auc": 0.7228590581531759,
+        "ece": 0.23889582484630995
       },
       "NORMAL": {
-        "auc": 0.7852717725266745,
-        "ece": 0.5148368231679963
+        "auc": 0.7618121892631697,
+        "ece": 0.4359319597649851
       }
     },
     "KEM": {
       "PNEUMONIA": {
-        "auc": 0.7833627249178532,
-        "ece": 0.2925456890171594
+        "auc": 0.7831876864410762,
+        "ece": 0.29266790687391286
       },
       "NORMAL": {
-        "auc": 0.8744306916352905,
-        "ece": 0.1790835159992468
+        "auc": 0.9076850088507061,
+        "ece": 0.18497733026423116
       }
     },
     "VIN": {
       "PNEUMONIA": {
         "auc": 0.7036422708618331,
-        "ece": 0.08881313998171805
+        "ece": 0.08881313751759376
       },
       "NORMAL": {
-        "auc": 0.8301470588235295,
-        "ece": 0.22074853512126835
+        "auc": 0.8071306429548564,
+        "ece": 0.1579720111672589
       }
     }
   },
   "summary_table": {
     "PNEUMONIA": {
       "NIH": {
-        "zeroshot_auc": 0.7228590581531757,
+        "zeroshot_auc": 0.7228590581531759,
         "retrained_auc": 0.7373498687224178,
         "retrained_on": "KEM",
-        "relative_change_pct": 2.0046522770655275
+        "relative_change_pct": 2.0046522770655115
       },
       "KEM": {
-        "zeroshot_auc": 0.7833627249178532,
+        "zeroshot_auc": 0.7831876864410762,
         "retrained_auc": 0.8915274047670216,
         "retrained_on": "NIH",
-        "relative_change_pct": 13.807738919478338
+        "relative_change_pct": 13.833174372066242
       },
       "VIN": {
         "zeroshot_auc": 0.7036422708618331,
@@ -214,23 +214,25 @@
     },
     "NORMAL": {
       "NIH": {
-        "zeroshot_auc": 0.7852717725266745,
+        "zeroshot_auc": 0.7618121892631697,
         "retrained_auc": 0.7362661303837774,
         "retrained_on": "KEM",
-        "relative_change_pct": -6.240596422461167
+        "relative_change_pct": -3.353327662570043
       },
       "KEM": {
-        "zeroshot_auc": 0.8744306916352905,
+        "zeroshot_auc": 0.9076850088507061,
         "retrained_auc": 0.7901985953696974,
         "retrained_on": "NIH",
-        "relative_change_pct": -9.632792749768308
+        "relative_change_pct": -12.943522514464338
       },
       "VIN": {
-        "zeroshot_auc": 0.8301470588235295,
+        "zeroshot_auc": 0.8071306429548564,
         "retrained_auc": 0.7247583662440242,
         "retrained_on": "KEM",
-        "relative_change_pct": -12.695183517106031
+        "relative_change_pct": -10.205569250756263
       }
     }
-  }
+  },
+  "_note_zeroshot": "2026-11-09 修正：zero-shot 基线的数据源由 final_metrics.json（旧单模型版）改为 multi_model_metrics.json（四模型版口径）。两者 NORMAL 的派生口径不同（7 病种共有 vs 四模型共有），原实现导致同一张表里混了两套不可比的数字。",
+  "_note_summary_table": "2026-11-09 修正：summary_table 的 zeroshot_auc 原先独立存了一份旧口径值，未随 zeroshot_baseline 一起更新 → 论文引用的相对提升算错。现两者同源，相对提升按新基准重算。"
 }

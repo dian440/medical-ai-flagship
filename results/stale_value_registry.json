@@ -52,6 +52,30 @@
     {
       "value": 5.7e-20,
       "reason": "占位：噪声基线 p 上界现为 5.7e-20（旧值 2.9e-22）"
+    },
+    {
+      "value": 0.7853,
+      "reason": "旧单模型口径 NIH NORMAL AUC（四模型版为 0.7618）"
+    },
+    {
+      "value": 0.8744,
+      "reason": "旧单模型口径 KEM NORMAL AUC（四模型版为 0.9077）"
+    },
+    {
+      "value": 0.8301,
+      "reason": "旧单模型口径 VIN NORMAL AUC（四模型版为 0.8071）"
+    },
+    {
+      "value": 0.5148,
+      "reason": "旧单模型口径 NIH NORMAL ECE（四模型版为 0.4359）"
+    },
+    {
+      "value": 0.1791,
+      "reason": "旧单模型口径 KEM NORMAL ECE（四模型版为 0.1850）"
+    },
+    {
+      "value": 0.2207,
+      "reason": "旧单模型口径 VIN NORMAL ECE（四模型版为 0.1580）"
     }
   ]
 }

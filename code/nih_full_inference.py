@@ -43,9 +43,12 @@ OUT_CACHE = os.path.join(RESULTS, "cache_NIH_all.jsonl")
 NIH_CSV = DATA_ROOT / "NIH" / "Data_Entry_2017_v2020.csv"
 
 # 与 multi_model_eval.py 的 MODEL_SPECS 保持一致的四个模型
+# ⚠️ 权重名必须与 multi_model_eval.py 的 MODEL_SPECS 完全一致。
+#    torchxrayvision 实际支持的是 'chex' 而非 'chexpert'
+#    （可用值：all / nih / pc / chex / rsna / mimic_nb / mimic_ch）
 MODELS = {
     "NIH": "densenet121-res224-nih",
-    "CHEX": "densenet121-res224-chexpert",
+    "CHEX": "densenet121-res224-chex",
     "MIMIC_CH": "densenet121-res224-mimic_ch",
     "MIMIC_NB": "densenet121-res224-mimic_nb",
 }

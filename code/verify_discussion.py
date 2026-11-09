@@ -98,7 +98,13 @@ def main():
     z = rt["zeroshot_baseline"]
     e1 = rt["experiments"]["retrain_on_NIH_for_PNEUMONIA"]["evals"]
     e2 = rt["experiments"]["retrain_on_KEM_for_PNEUMONIA"]["evals"]
-    ck("§4.1 重训 KEM 0.7834", 0.7834, round(z["KEM"]["PNEUMONIA"]["auc"], 4))
+    # ⚠️ 恒真断言无意义 —— 改为真正有价值的检查：
+    #    ① JSON 里 zero-shot 的 KEM PNEUMONIA 值必须出现在正文
+    #    ② 且必须是**当前口径**（四模型版），不是旧单模型版的 0.7834
+    _zk = round(z["KEM"]["PNEUMONIA"]["auc"], 4)
+    ck("§4.1 重训基准用当前口径的 KEM zero-shot", True, f"{_zk:.4f}" in en)
+    ck("§4.1 未残留旧口径 0.7834", True, "0.7834" not in en)
+    ck("§4.1 未残留旧口径 0.8744", True, "0.8744" not in en)
     ck("§4.1 重训后 0.8915", 0.8915, round(e1["KEM"]["auc"], 4))
     ck("§4.1 重训 NIH 0.7229", 0.7229, round(z["NIH"]["PNEUMONIA"]["auc"], 4))
     ck("§4.1 重训后 0.7373", 0.7373, round(e2["NIH"]["auc"], 4))

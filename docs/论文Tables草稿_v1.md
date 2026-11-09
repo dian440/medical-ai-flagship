@@ -134,7 +134,7 @@ The observed rate exceeded the most conservative null in **7 of 8** combinations
 | MIMIC-CXR (CheXpert labels) | NORMAL: NIH vs VinDr-CXR | -0.0665 | 0.0379 | [-0.1407, +0.0077] | -1.756 | 0.079 | no |
 | MIMIC-CXR (noise-handled labels) | PNEUMONIA: NIH vs Kermany | -0.0366 | 0.0354 | [-0.1061, +0.0328] | -1.033 | 0.301 | no |
 | MIMIC-CXR (noise-handled labels) | PNEUMONIA: NIH vs VinDr-CXR | -0.0676 | 0.0395 | [-0.1451, +0.0099] | -1.710 | 0.087 | no |
-| MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs Kermany | -0.1274 | 0.0331 | [-0.1922, -0.0625] | -3.847 | 1.2 × 10⁻4 | **yes** |
+| MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs Kermany | -0.1274 | 0.0331 | [-0.1923, -0.0625] | -3.847 | 1.2 × 10⁻4 | **yes** |
 | MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs VinDr-CXR | -0.0551 | 0.0374 | [-0.1285, +0.0183] | -1.472 | 0.141 | no |
 
 **7 of 16** comparisons reached significance and **all 7 pointed to an easier external dataset**. Comparisons were not corrected for multiplicity and are therefore interpreted as descriptive.
@@ -162,7 +162,7 @@ Net benefit was computed at threshold probabilities of 0.10, 0.30 and 0.50. The 
 | Target label | Zero-shot NIH | Zero-shot Kermany | Zero-shot VinDr-CXR |
 |---|---|---|---|
 | PNEUMONIA | 0.7229 | 0.7832 | 0.7036 |
-| NORMAL | 0.7853 | 0.8744 | 0.8301 |
+| NORMAL | 0.7618 | 0.9077 | 0.8071 |
 
 **(d) Operating point at the F1-maximising threshold (NIH-pretrained classifier).**
 

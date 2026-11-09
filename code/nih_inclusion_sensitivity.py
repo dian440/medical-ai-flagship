@@ -58,6 +58,12 @@ NIH_CSV = r"E:/港校申请环境/data/NIH/Data_Entry_2017_v2020.csv"
 PRED = os.path.join(RESULTS, "multi_model_predictions.csv")
 
 MODELS = ["NIH", "CHEX", "MIMIC_CH", "MIMIC_NB"]
+
+# 四模型共同病种集合 —— NORMAL 派生以此为准（必须与 multi_model_eval.py 一致）
+COMMON = [
+    "Atelectasis", "Cardiomegaly", "Consolidation", "Edema",
+    "Effusion", "Pneumonia", "Pneumothorax",
+]
 DATASETS = ["NIH", "KEM", "VIN"]
 LABELS = ["PNEUMONIA", "NORMAL"]
 SEED = 20261104
@@ -96,8 +102,11 @@ def build_nih_label_map():
             idx = (row.get("Image Index") or "").strip()
             if not idx:
                 continue
-            fn = idx + "_000.png"
-            if fn not in local:
+            # CSV 的 Image Index 形如 "00000002_000"，本地文件名为 "00000002_000.png"
+            # ⚠️ 部分影像的本地文件名与索引不完全对应，故同时尝试几种形式
+            cands = [idx + "_000.png", idx + ".png", idx]
+            fn = next((c for c in cands if c in local), None)
+            if fn is None:
                 continue
             labels = (row.get("Finding Labels") or "").strip()
             parts = [x.strip() for x in labels.split("|") if x.strip()]
@@ -109,79 +118,177 @@ def build_nih_label_map():
 
 
 def nih_inclusion_rules(lblmap):
-    """四种规则下，NIH 各任务的纳入文件名集合。"""
-    only_pneu = set()
-    has_pneu = set()
-    only_nofind = set()
-    no_pneu_other = set()   # 无肺炎标签且非 No Finding（纯其他异常）
+    """四种规则下，每个任务的 NIH 纳入集合。
+
+    🔴 先厘清主分析的实际口径（这决定了什么算"规则变化"）：
+      multi_model_eval.py 用 `NIH_TO_UNIFIED = {"Pneumonia": "PNEUMONIA",
+      "No Finding": "NORMAL"}` 做**子串匹配**，且 Pneumonia 优先。
+      → 「含 Pneumonia 标签（含并发其他标签）」全部归 PNEUMONIA = 65 张
+      → 「No Finding」= 2,754 张
+      → 其余带其他 12 类标签的 2,180 张**被排除**
+
+    所以真正的敏感性维度不是"要不要含共病"（主分析已经含了），
+    而是**被排除的那 2,180 张该怎么处理**：
+
+      R1 现行      排除（主分析口径）
+      R2 纳入为负类 把它们当作 PNEUMONIA 任务的负类、NORMAL 任务的负类
+                   → 队列变大、患病率下降，检验"排除是否让 NIH 显得更容易"
+      R3 仅作 NORMAL负 把它们只放进 NORMAL 任务的负类（PNEUMONIA 任务不变）
+                   → 检验"若把它们视为非正常会怎样"
+      R4 全量纳入   两个任务都用全部 4,999 张（患病率差距的极端情形）
+    """
+    has_pneu = set()       # 含肺炎标签（含共病）—— 主分析的 PNEUMONIA 类
+    only_nofind = set()    # No Finding —— 主分析的 NORMAL 类
+    other_only = set()     # 有异常但不含肺炎 —— 主分析排除的那批
     allf = set()
 
     for fn, (parts, hp, is_nf) in lblmap.items():
         allf.add(fn)
-        if hp and is_nofind is False and len(parts) == 1:
-            only_pneu.add(fn)
         if hp:
             has_pneu.add(fn)
-        if is_nofind:
+        elif is_nf:
             only_nofind.add(fn)
-        if (not hp) and (not is_nofind):
-            no_pneu_other.add(fn)
+        else:
+            other_only.add(fn)
 
-    # 只含肺炎标签（无其他标签）
-    strict_pneu = set()
-    for fn, (parts, hp, is_nf) in lblmap.items():
-        if hp and len(parts) == 1 and parts[0] == "Pneumonia":
-            strict_pneu.add(fn)
+    core = has_pneu | only_nofind          # 2,819 张 = 主分析队列
 
     rules = {
-        "R1_current": {
-            "PNEUMONIA": strict_pneu,
-            "NORMAL": only_nofind,
-            "desc": "现行主分析：PNEUMONIA 仅含肺炎标签者；NORMAL 仅 No Finding",
+        "R1_current_exclude": {
+            "PNEUMONIA": set(core),
+            "NORMAL": set(core),
+            "desc": "现行主分析：排除带其他 12 类标签的 2,180 张",
         },
-        "R2_comorbidity_in_pneu": {
-            "PNEUMONIA": has_pneu,
-            "NORMAL": only_nofind,
-            "desc": "PNEUMONIA 纳入全部含肺炎标签者（含并发其他标签）；NORMAL 不变",
+        "R2_other_as_negative": {
+            "PNEUMONIA": set(core | other_only),
+            "NORMAL": set(core | other_only),
+            "desc": "把被排除的 2,180 张在两个任务中都作为负类纳入",
         },
-        "R3_other_as_normal": {
-            "PNEUMONIA": strict_pneu,
-            "NORMAL": only_nofind | no_pneu_other,
-            "desc": "PNEUMONIA 同 R1；NORMAL 额外纳入「仅含其他标签而无肺炎」者",
+        "R3_other_in_normal_only": {
+            "PNEUMONIA": set(core),
+            "NORMAL": set(core | other_only),
+            "desc": "被排除的 2,180 张仅加入 NORMAL 任务（作为负类）",
         },
-        "R4_all_images": {
-            "PNEUMONIA": allf,
-            "NORMAL": allf,
-            "desc": "上限情形：两个任务都用全部本地影像（患病率差距极端化）",
+        # R4：另一端的极端标签解释 —— 把「有异常但不含肺炎」的 2,180 张
+        #     全部当作 PNEUMONIA 任务的**正类**（临床上的"疑似肺炎"宽口径）。
+        #     → 与 R2 恰好相反（R2 把它们当负类），共同给出患病率的上下界。
+        "R4_other_as_positive": {
+            "PNEUMONIA": set(core | other_only),
+            "NORMAL": set(core),
+            "desc": "被排除的 2,180 张在 PNEUMONIA 任务中作为正类（疑似肺炎宽口径）",
         },
     }
     return rules
+
+
+def nih_labels(lblmap):
+    """每张影像在 NIH 队列中的类别（PNEUMONIA / NORMAL）。
+
+    采用与 multi_model_eval.py 相同的**子串匹配**优先级：
+      先看是否含 "Pneumonia" → PNEUMONIA；否则若为 "No Finding" → NORMAL；
+      其余（仅其他标签）在现行规则下不入队，但保留供 R3/R4 使用，
+      此时其类别按「非肺炎、非正常」处理 —— 归入 NORMAL 任务的负类。
+    """
+    out = {}
+    for fn, (parts, hp, is_nf) in lblmap.items():
+        if hp:
+            out[fn] = "PNEUMONIA"
+        elif is_nf:
+            out[fn] = "NORMAL"
+        else:
+            out[fn] = "OTHER"
+    return out
 
 
 # ----------------------------------------------------------------------
 # 第二步：按规则重算一个 (model, label) 的全部核心量
 # ----------------------------------------------------------------------
 def load_raw_vectors():
-    """从权威预测文件读取每个 model×dataset×label 的 (y, score, filename)。
+    """读取每个 model × dataset × label 的 (y, score, filename)。
 
-    score 取该 model 在该 dataset 上对相应任务输出的概率。
+    NIH 部分来自**全量推理缓存**（results/cache_NIH_all_<model>.jsonl，4,999 张），
+    其余两个数据集来自权威预测文件 multi_model_predictions.csv。
+
+    ⚠️ 必须用全量缓存：主分析的预测文件只含 NIH 队列的 2,819 张，
+    若用它，R2/R3/R4（放宽纳入规则）就是空操作，会静默产出"结论不变"的假象。
     """
-    data = defaultdict(lambda: defaultdict(list))
+    # 三层嵌套：data[model][dataset][field] → list
+    data = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+
+    # ---- NIH：全量缓存 ----
+    n_cached = 0
+    for m in MODELS:
+        cp = os.path.join(RESULTS, f"cache_NIH_all_{m}.jsonl")
+        if not os.path.exists(cp):
+            continue
+        with open(cp, "r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    rec = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                path = rec["p"]
+                v = rec["v"]
+                fn = os.path.basename(path)
+                data[m]["NIH"]["fn"].append(fn)
+                data[m]["NIH"]["path"].append(path)
+                # PNEUMONIA 分数 = Pneumonia 概率
+                data[m]["NIH"]["p_pneu"].append(float(v["Pneumonia"]))
+                # 🔴 NORMAL 分数 = 1 − max(COMMON 七个共同病种)
+                #    COMMON 必须与 multi_model_eval.py 的定义完全一致：
+                #    Atelectasis, Cardiomegaly, Consolidation, Edema,
+                #    Effusion, Pneumonia, Pneumothorax
+                #    若误用 14 个病种全量，NORMAL 的语义就变了，
+                #    敏感性分析将与主分析不可比 —— 这正是 11-05 那次
+                #    「单模型自派生口径」教训的同一类错误。
+                mx = max(float(v[c]) for c in COMMON)
+                data[m]["NIH"]["p_norm"].append(1.0 - mx)
+                n_cached += 1
+    log(f"  NIH 全量缓存载入: {n_cached} 条")
+
+    # 🔴 完整性守卫：某模型的缓存若未覆盖全部影像，其 NIH 队列会残缺，
+    #    导致先验匹配与 AUC 失真（例如 obs=0.00% 的假象）。
+    #    故只保留缓存完整（覆盖全部本地影像）的模型，其余**整模型跳过**。
+    expected = set()
+    for m in MODELS:
+        cp = os.path.join(RESULTS, f"cache_NIH_all_{m}.jsonl")
+        if not os.path.exists(cp):
+            continue
+        got = {data[m]["NIH"]["fn"][i] for i in range(len(data[m]["NIH"]["fn"]))}
+        if not expected:
+            expected = got
+        complete = (len(got) >= len(expected) - 2)   # 允许末尾一两张的边界差异
+        if not complete:
+            log(f"  ⚠️ 模型 {m} 的 NIH 缓存不完整（{len(got)}/{len(expected)}）→ 本次跳过该模型")
+            for k in list(data[m]["NIH"].keys()):
+                data[m]["NIH"][k].clear()
+
+    # ---- KEM / VIN：权威预测文件 ----
     with open(PRED, newline="", encoding="utf-8") as fh:
         for r in csv.DictReader(fh):
             m, d = r["model"], r["dataset"]
-            if d not in DATASETS:
+            if d not in ("KEM", "VIN"):
                 continue
-            fn = r["file"]
-            data[m][d]["fn"].append(fn)
+            data[m][d]["fn"].append(r["file"])
             data[m][d]["gt"].append(r["gt"])
             data[m][d]["p_pneu"].append(float(r["p_pneumonia"]))
             data[m][d]["p_norm"].append(float(r["p_normal_common"]))
     return data
 
 
-def build_domain(data, model, label, nih_sets):
-    """构造某个 (model, label) 的三库向量；NIH 部分按规则筛选。"""
+def build_domain(data, model, label, nih_sets, nih_label_of,
+                 other_as_positive=False):
+    """构造某个 (model, label) 的三库向量；NIH 部分按规则筛选。
+
+    🔴 标签定义（每个任务都是二分类，正负两类必须同时存在）：
+       PNEUMONIA 任务：正类 = PNEUMONIA，负类 = NORMAL
+       NORMAL    任务：正类 = NORMAL，    负类 = PNEUMONIA
+    ⚠️ nih_sets 里给出的是「该任务纳入哪些影像」，
+       纳入的影像里正负两类都有（否则该任务的 AUC 无定义）。
+    """
     dom = {}
     for ds in DATASETS:
         dom[ds] = {"fn": [], "y": [], "s": []}
@@ -189,8 +296,24 @@ def build_domain(data, model, label, nih_sets):
         fn = data[model]["NIH"]["fn"][i]
         if fn not in nih_sets:
             continue
+        # 该影像在 NIH 队列中的类别（PNEUMONIA / NORMAL / OTHER）
+        uni = nih_label_of[fn]
+        # 任务标签：正类=1
+        # OTHER（有异常但不含肺炎）的处置随规则而变：
+        #   默认（R1/R2/R3）：两个任务中都是负类
+        #     PNEUMONIA 任务：非肺炎 → 负类
+        #     NORMAL 任务：有异常 → 不是"无异常" → 负类
+        #   R4（other_as_positive=True）：在 PNEUMONIA 任务中作为正类
+        #     → 对应「疑似肺炎」的宽口径读法
+        if label == "PNEUMONIA":
+            if other_as_positive and uni == "OTHER":
+                y = 1
+            else:
+                y = 1 if uni == "PNEUMONIA" else 0
+        else:
+            y = 1 if uni == "NORMAL" else 0
         dom["NIH"]["fn"].append(fn)
-        dom["NIH"]["y"].append(1 if data[model]["NIH"]["gt"][i] == "PNEUMONIA" else 0)
+        dom["NIH"]["y"].append(y)
         dom["NIH"]["s"].append(data[model]["NIH"]["p_pneu"][i]
                               if label == "PNEUMONIA" else data[model]["NIH"]["p_norm"][i])
     for ds in ("KEM", "VIN"):
@@ -277,6 +400,7 @@ def main():
         log(f"  {k:24s} PNEUMONIA {len(v['PNEUMONIA']):5d} 张 / "
             f"NORMAL {len(v['NORMAL']):5d} 张")
 
+    nih_lbl = nih_labels(lblmap)
     data = load_raw_vectors()
 
     out = {
@@ -294,8 +418,12 @@ def main():
         log(f"── 规则 {rk}：{rv['desc']} ──")
         out["results"][rk] = {}
         for m in MODELS:
+            # 该模型 NIH 缓存不完整 → 整模型跳过（避免队列残缺导致假象）
+            if not data[m]["NIH"]["fn"]:
+                continue
             for label in LABELS:
-                dom = build_domain(data, m, label, rv[label])
+                dom = build_domain(data, m, label, rv[label], nih_lbl,
+                                   other_as_positive=(rk == "R4_other_as_positive"))
                 # 过滤掉空集或只有一类的情形
                 for ds in DATASETS:
                     ys = dom[ds]["y"]
