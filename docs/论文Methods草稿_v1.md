@@ -40,11 +40,15 @@ Findings belonging to neither class — the VIN studies with other radiographic 
 
 The final analysed samples were 2,819 NIH images (65 PNEUMONIA, 2,754 NORMAL), 5,828 KEM images (4,247 PNEUMONIA, 1,581 NORMAL), and 702 VIN images (272 PNEUMONIA, 430 NORMAL). The VIN figure is lower than the 714 images for which an annotation had been matched because the inference run enumerated the available image files at start-up and completed before the final twelve retrievals had been written to disk; these twelve images were therefore absent from the cached predictions and were excluded. Their class composition (four PNEUMONIA, eight NORMAL) was close to that of the full annotated set, so the omission is not expected to bias the estimates. Under the strict VIN definition a further 136 images carrying other abnormalities were excluded, leaving 566 images (136 PNEUMONIA, 430 NORMAL) for the sensitivity analysis.
 
-#### 2.2.4 Model and inference
+#### 2.2.4 Models and inference
 
-We evaluated DenseNet-121 with weights released in the torchxrayvision package (`densenet121-res224-nih`), a network pretrained on the NIH ChestX-ray14 dataset and used without any fine-tuning in the primary analysis [reference]. Images were scaled to 224 × 224 pixels, normalised by the torchxrayvision utility, converted to a single channel, and passed through the network in batches of 32 on a CPU-only environment. Inference was deterministic, and intermediate predictions were cached so that the analysis could be resumed without altering any result.
+We evaluated four publicly released classifiers that share the DenseNet-121 architecture but differ in the data on which they were pretrained: weights trained on the NIH ChestX-ray14 dataset, on CheXpert, and on MIMIC-CXR with two alternative label-annotation treatments. All four were obtained from the torchxrayvision package and used without any fine-tuning in the primary analysis [reference]. Holding the architecture constant while varying the training source allows any difference we observe to be attributed to the training distribution rather than to model capacity, and it makes the audit a test of the evaluation procedure rather than of one checkpoint.
 
-The network returns 18 outputs, of which 14 correspond to genuine disease categories and four are unused placeholders. The model provides no output for the absence of findings; we therefore derived the NORMAL score as one minus the maximum score across the 14 genuine disease categories. The PNEUMONIA score was taken directly from the corresponding output head. Because these two scores have different provenance, the discrimination and calibration of the two classes were evaluated separately and never pooled.
+Images were scaled to 224 × 224 pixels, normalised by the torchxrayvision utility, converted to a single channel, and passed through the network in batches of 32 on a CPU-only environment. Inference was deterministic, and intermediate predictions were cached so that the analysis could be resumed without altering any result.
+
+Each network exposes 18 output slots, of which only a subset corresponds to genuine disease categories; the remaining slots are either unused placeholders or, in the CheXpert-derived weights, categories that the source dataset annotates with explicit uncertainty labels and that the package therefore leaves unnamed. The number of genuine categories accordingly differs between models, being 14 for the NIH-pretrained weights and 11 for the other three. The model provides no output for the absence of findings, so we derived the NORMAL score as one minus the maximum score across a fixed set of disease categories. Deriving that score from each model's own full set would have caused the label to denote a different quantity in different models, and cross-model comparison of a quantity that changes meaning is not a comparison; we therefore derived it from the seven categories common to all four models — atelectasis, cardiomegaly, consolidation, oedema, effusion, pneumonia and pneumothorax — so that the NORMAL score is semantically identical across models. As a sensitivity analysis we repeated the analysis with each model's own full category set. The PNEUMONIA score was taken directly from the corresponding output head in every model. Because the two scores have different provenance, the discrimination and calibration of the two classes were evaluated separately and never pooled.
+
+We excluded a fifth available checkpoint, pretrained on the RSNA pneumonia challenge, because it exposes only two genuine disease categories, pneumonia and lung opacity. Had it been included, the category set common to all models would have collapsed to pneumonia alone, and the derived NORMAL score would have become the exact complement of the PNEUMONIA score, carrying no information beyond it and making the calibration analysis degenerate.
 
 ### 2.3 Outcomes
 
@@ -118,9 +122,13 @@ Ethics approval and consent to participate: not applicable. Consent for publicat
 
 #### 2.2.4 模型与推理
 
-本研究评估 torchxrayvision 包发布的 DenseNet-121 权重（`densenet121-res224-nih`），该网络在 NIH ChestX-ray14 上预训练，主分析中未做任何微调。影像缩放至 224 × 224，用 torchxrayvision 的工具函数归一化，转为单通道，在纯 CPU 环境下按 32 张一批送入网络。推理过程是确定性的，中间预测结果落盘缓存，以便分析中断后可在不改变任何结果的前提下续跑。
+本研究评估四个公开发布的分类器，它们架构同为 DenseNet-121，但预训练数据源不同：分别在 NIH ChestX-ray14、CheXpert，以及 MIMIC-CXR 的两种标签标注处理方式上训练。四者均取自 torchxrayvision 包，主分析中未做任何微调 [reference]。**在固定架构的同时改变训练来源，使我们观察到的任何差异都可归因于训练分布而非模型容量，也使本研究成为对评估流程而非对某一个权重的检验。**
 
-网络返回 18 个输出，其中 14 个对应真实疾病类别，4 个为未使用的占位。模型没有"无异常发现"的输出头，因此我们把 NORMAL 分数派生为 14 个真实疾病类别分数的最大值取一后的余量。PNEUMONIA 分数直接取自对应输出头。由于这两个分数来源不同，两类的判别与校准分别评估，从不合并计算。
+影像缩放至 224 × 224 像素，用 torchxrayvision 的工具函数归一化，转为单通道，在纯 CPU 环境下按 32 张一批送入网络。推理过程是确定性的，中间预测结果落盘缓存，以便分析中断后可在不改变任何结果的前提下续跑。
+
+每个网络暴露 18 个输出槽位，其中仅一部分对应真实疾病类别；其余槽位或为未使用的占位，或（在 CheXpert 派生的权重中）为源数据集以显式"不确定"标签标注、因而该包不予命名的类别。因此各模型可表达的真实类别数不同——NIH 预训练权重为 14 个，其余三个为 11 个。模型没有"无异常发现"的输出头，因此我们把 NORMAL 分数派生为固定一组疾病类别上最大概率取一后的余量。**若按各模型自身全集派生，该标签在不同模型下将指称不同的量，而比较一个含义随模型改变的量并不构成比较**；因此我们改用四个模型共有的七个类别——膨胀不全、心脏增大、实变、水肿、胸腔积液、肺炎、气胸——派生，使 NORMAL 分数在所有模型下语义完全一致。作为敏感性分析，我们另行报告按各模型自身全集派生的结果。PNEUMONIA 分数在所有模型中均直接取自对应输出头。由于这两个分数来源不同，两类的判别与校准分别评估，从不合并计算。
+
+我们排除了第五个可用权重（RSNA 肺炎挑战赛预训练），因为它只暴露两个真实疾病类别：肺炎与肺野不透明。若纳入它，全模型共有的类别集合将塌缩至仅肺炎一项，派生出的 NORMAL 分数将成为 PNEUMONIA 分数的精确补集，不携带任何超出后者的信息，校准分析随之退化。
 
 ### 2.3 结局
 
