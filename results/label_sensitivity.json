@@ -1,0 +1,152 @@
+{
+  "generated": "2026-11-08",
+  "seed": 20261104,
+  "n_reps": 500,
+  "question": "Does the core finding (prior-dependent ranking reversal) survive under the strict VinDr label definition?",
+  "labels": {
+    "PNEUMONIA": {
+      "relaxed": {
+        "target_prior": 0.38746438746438744,
+        "n_target": 167,
+        "n_valid_reps": 500,
+        "raw_ece": {
+          "NIH": 0.23889582386183855,
+          "KEM": 0.2925456890171594,
+          "VIN": 0.08881313998171805
+        },
+        "raw_rank": [
+          "VIN",
+          "NIH",
+          "KEM"
+        ],
+        "raw_span": 3.293946020570595,
+        "matched_ece_median": {
+          "NIH": 0.10175141399363083,
+          "KEM": 0.0638128504105481,
+          "VIN": 0.09691161064661634
+        },
+        "matched_span": 1.5945285838040482,
+        "span_retained_pct": 48.40785410101637,
+        "flip_full": 442,
+        "flip_partial": 44,
+        "same": 14,
+        "n_best_changed": 454,
+        "best_changed_rate": 0.908,
+        "best_changed_p": 2.0733315288743927e-85,
+        "flip_rate": 0.972,
+        "direction_consistency": 0.9094650205761317,
+        "p_value": 9.149113200057149e-84,
+        "verdict": "systematic_flip_confirmed"
+      },
+      "strict": {
+        "target_prior": 0.19373219373219372,
+        "n_target": 335,
+        "n_valid_reps": 500,
+        "raw_ece": {
+          "NIH": 0.23889582386183855,
+          "KEM": 0.2925456890171594,
+          "VIN": 0.12707570911763802
+        },
+        "raw_rank": [
+          "VIN",
+          "NIH",
+          "KEM"
+        ],
+        "raw_span": 2.3021369784082064,
+        "matched_ece_median": {
+          "NIH": 0.1294017916548747,
+          "KEM": 0.1805114296574229,
+          "VIN": 0.12756774774787308
+        },
+        "matched_span": 1.415024038945867,
+        "span_retained_pct": 61.46567524944905,
+        "flip_full": 0,
+        "flip_partial": 221,
+        "same": 279,
+        "n_best_changed": 221,
+        "best_changed_rate": 0.442,
+        "best_changed_p": 0.010727148116076807,
+        "flip_rate": 0.442,
+        "direction_consistency": 0.0,
+        "p_value": 5.934729841099874e-67,
+        "verdict": "flip_direction_not_consistent"
+      },
+      "robust_verdict": false,
+      "both_show_flip": false,
+      "vin_eces_relaxed": 0.08881313998171805,
+      "vin_eces_strict": 0.12707570911763802
+    },
+    "NORMAL": {
+      "relaxed": {
+        "target_prior": 0.6125356125356125,
+        "n_target": 167,
+        "n_valid_reps": 500,
+        "raw_ece": {
+          "NIH": 0.5148368231679963,
+          "KEM": 0.1790835159992468,
+          "VIN": 0.22074853512126835
+        },
+        "raw_rank": [
+          "KEM",
+          "VIN",
+          "NIH"
+        ],
+        "raw_span": 2.874842055089881,
+        "matched_ece_median": {
+          "NIH": 0.21219157753233422,
+          "KEM": 0.2647304870188236,
+          "VIN": 0.22985976472675446
+        },
+        "matched_span": 1.2476012954778255,
+        "span_retained_pct": 43.39721179704321,
+        "flip_full": 483,
+        "flip_partial": 15,
+        "same": 2,
+        "n_best_changed": 490,
+        "best_changed_rate": 0.98,
+        "best_changed_p": 1.533028171757011e-130,
+        "flip_rate": 0.996,
+        "direction_consistency": 0.9698795180722891,
+        "p_value": 4.479245801560582e-122,
+        "verdict": "systematic_flip_confirmed"
+      },
+      "strict": {
+        "target_prior": 0.6125356125356125,
+        "n_target": 167,
+        "n_valid_reps": 500,
+        "raw_ece": {
+          "NIH": 0.5148368231679963,
+          "KEM": 0.1790835159992468,
+          "VIN": 0.22074853512126835
+        },
+        "raw_rank": [
+          "KEM",
+          "VIN",
+          "NIH"
+        ],
+        "raw_span": 2.874842055089881,
+        "matched_ece_median": {
+          "NIH": 0.21219157753233422,
+          "KEM": 0.2647304870188236,
+          "VIN": 0.22985976472675446
+        },
+        "matched_span": 1.2476012954778255,
+        "span_retained_pct": 43.39721179704321,
+        "flip_full": 483,
+        "flip_partial": 15,
+        "same": 2,
+        "n_best_changed": 490,
+        "best_changed_rate": 0.98,
+        "best_changed_p": 1.533028171757011e-130,
+        "flip_rate": 0.996,
+        "direction_consistency": 0.9698795180722891,
+        "p_value": 4.479245801560582e-122,
+        "verdict": "systematic_flip_confirmed"
+      },
+      "robust_verdict": true,
+      "both_show_flip": true,
+      "vin_eces_relaxed": 0.22074853512126835,
+      "vin_eces_strict": 0.22074853512126835
+    }
+  }
+}

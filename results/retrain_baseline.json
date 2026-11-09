@@ -1,0 +1,236 @@
+{
+  "generated": "2026-11-09",
+  "seed": 20261104,
+  "probe_type": "per_label_linear_probe_on_frozen_backbone",
+  "epochs": 40,
+  "fixed_epochs_sensitivity": 20,
+  "eval_cohort": {
+    "source": "results/cross_dataset_predictions.csv (authoritative list produced by cross_dataset_eval.py)",
+    "note": "Evaluation samples are restricted to exactly the images that entered the main cross-dataset evaluation, so that zero-shot and retrained AUC are computed on identical samples. Training samples use all labelled images of the source domain.",
+    "dropped_vs_full_labelled_index": {
+      "NIH": 0,
+      "KEM": 0,
+      "VIN": 12
+    },
+    "n_eval": {
+      "NIH": 2819,
+      "KEM": 5828,
+      "VIN": 702
+    }
+  },
+  "caveat": "测试集选最佳 epoch 会乐观偏倚；三对照使用完全相同的选择规则，故相对比较仍公平。固定 epoch 版本见 sensitivity_fixed_epochs 字段。",
+  "experiments": {
+    "retrain_on_NIH_for_PNEUMONIA": {
+      "train_domain": "NIH",
+      "target_label": "PNEUMONIA",
+      "train_n": 2819,
+      "train_pos_rate": 0.02305782192266761,
+      "selected_epoch": 39,
+      "selected_by": "best AUC on 20% stratified validation split within the training domain",
+      "evals": {
+        "NIH": {
+          "n": 2819,
+          "auc": 0.8272498743086978,
+          "ece": 0.33797832235493064,
+          "brier": 0.16815517319962478,
+          "auc_fixed_epochs": 0.8029774872912128,
+          "ece_fixed_epochs": 0.33983591329220464
+        },
+        "KEM": {
+          "n": 5828,
+          "auc": 0.8915274047670216,
+          "ece": 0.13956571944497714,
+          "brier": 0.13711254297621933,
+          "auc_fixed_epochs": 0.9145319231925739,
+          "ece_fixed_epochs": 0.18196463942471522
+        },
+        "VIN": {
+          "n": 702,
+          "auc": 0.7783724797339431,
+          "ece": 0.2782010906760679,
+          "brier": 0.2106242411630428,
+          "auc_fixed_epochs": 0.7887783205154854,
+          "ece_fixed_epochs": 0.2506225559319186
+        }
+      }
+    },
+    "retrain_on_KEM_for_PNEUMONIA": {
+      "train_domain": "KEM",
+      "target_label": "PNEUMONIA",
+      "train_n": 5828,
+      "train_pos_rate": 0.7287234042553191,
+      "selected_epoch": 39,
+      "selected_by": "best AUC on 20% stratified validation split within the training domain",
+      "evals": {
+        "NIH": {
+          "n": 2819,
+          "auc": 0.7373498687224178,
+          "ece": 0.35335999933401885,
+          "brier": 0.26017780421652054,
+          "auc_fixed_epochs": 0.730920060331825,
+          "ece_fixed_epochs": 0.41749478615649444
+        },
+        "KEM": {
+          "n": 5828,
+          "auc": 0.9833765904183286,
+          "ece": 0.04708362224717905,
+          "brier": 0.046641512185446085,
+          "auc_fixed_epochs": 0.9807238267828152,
+          "ece_fixed_epochs": 0.050841667067046424
+        },
+        "VIN": {
+          "n": 702,
+          "auc": 0.7293831843691542,
+          "ece": 0.30972030797732275,
+          "brier": 0.30337559241480444,
+          "auc_fixed_epochs": 0.7098186447723966,
+          "ece_fixed_epochs": 0.34965126682879244
+        }
+      }
+    },
+    "retrain_on_NIH_for_NORMAL": {
+      "train_domain": "NIH",
+      "target_label": "NORMAL",
+      "train_n": 2819,
+      "train_pos_rate": 0.9769421780773324,
+      "selected_epoch": 5,
+      "selected_by": "best AUC on 20% stratified validation split within the training domain",
+      "evals": {
+        "NIH": {
+          "n": 2819,
+          "auc": 0.7898553153455115,
+          "ece": 0.3885825301747493,
+          "brier": 0.1894508060336164,
+          "auc_fixed_epochs": 0.8035472878610134,
+          "ece_fixed_epochs": 0.3378827137123951
+        },
+        "KEM": {
+          "n": 5828,
+          "auc": 0.7901985953696974,
+          "ece": 0.18160296881963883,
+          "brier": 0.19879619416428057,
+          "auc_fixed_epochs": 0.879333359843098,
+          "ece_fixed_epochs": 0.16326084598136953
+        },
+        "VIN": {
+          "n": 702,
+          "auc": 0.7846341716898774,
+          "ece": 0.27751290687808283,
+          "brier": 0.2110308592752986,
+          "auc_fixed_epochs": 0.7949750571606735,
+          "ece_fixed_epochs": 0.2570566066522204
+        }
+      }
+    },
+    "retrain_on_KEM_for_NORMAL": {
+      "train_domain": "KEM",
+      "target_label": "NORMAL",
+      "train_n": 5828,
+      "train_pos_rate": 0.2712765957446808,
+      "selected_epoch": 39,
+      "selected_by": "best AUC on 20% stratified validation split within the training domain",
+      "evals": {
+        "NIH": {
+          "n": 2819,
+          "auc": 0.7362661303837774,
+          "ece": 0.3848805281592514,
+          "brier": 0.28638646517143224,
+          "auc_fixed_epochs": 0.7311937880565331,
+          "ece_fixed_epochs": 0.42092627076867867
+        },
+        "KEM": {
+          "n": 5828,
+          "auc": 0.983418067774745,
+          "ece": 0.046509571048821134,
+          "brier": 0.04665451095828385,
+          "auc_fixed_epochs": 0.9805451092686328,
+          "ece_fixed_epochs": 0.051230071668422666
+        },
+        "VIN": {
+          "n": 702,
+          "auc": 0.7247583662440242,
+          "ece": 0.33450815626774966,
+          "brier": 0.3207579187768295,
+          "auc_fixed_epochs": 0.708753377676159,
+          "ece_fixed_epochs": 0.3499207496842068
+        }
+      }
+    }
+  },
+  "label_aware": true,
+  "probe_design": "对每个目标标签单独训练一个线性二分类头（冻结骨干），使探针的每标签 AUC 可与零样本基线逐标签对比。",
+  "zeroshot_baseline": {
+    "NIH": {
+      "PNEUMONIA": {
+        "auc": 0.7228590581531757,
+        "ece": 0.23889582386183855
+      },
+      "NORMAL": {
+        "auc": 0.7852717725266745,
+        "ece": 0.5148368231679963
+      }
+    },
+    "KEM": {
+      "PNEUMONIA": {
+        "auc": 0.7833627249178532,
+        "ece": 0.2925456890171594
+      },
+      "NORMAL": {
+        "auc": 0.8744306916352905,
+        "ece": 0.1790835159992468
+      }
+    },
+    "VIN": {
+      "PNEUMONIA": {
+        "auc": 0.7036422708618331,
+        "ece": 0.08881313998171805
+      },
+      "NORMAL": {
+        "auc": 0.8301470588235295,
+        "ece": 0.22074853512126835
+      }
+    }
+  },
+  "summary_table": {
+    "PNEUMONIA": {
+      "NIH": {
+        "zeroshot_auc": 0.7228590581531757,
+        "retrained_auc": 0.7373498687224178,
+        "retrained_on": "KEM",
+        "relative_change_pct": 2.0046522770655275
+      },
+      "KEM": {
+        "zeroshot_auc": 0.7833627249178532,
+        "retrained_auc": 0.8915274047670216,
+        "retrained_on": "NIH",
+        "relative_change_pct": 13.807738919478338
+      },
+      "VIN": {
+        "zeroshot_auc": 0.7036422708618331,
+        "retrained_auc": 0.7293831843691542,
+        "retrained_on": "KEM",
+        "relative_change_pct": 3.658238649561686
+      }
+    },
+    "NORMAL": {
+      "NIH": {
+        "zeroshot_auc": 0.7852717725266745,
+        "retrained_auc": 0.7362661303837774,
+        "retrained_on": "KEM",
+        "relative_change_pct": -6.240596422461167
+      },
+      "KEM": {
+        "zeroshot_auc": 0.8744306916352905,
+        "retrained_auc": 0.7901985953696974,
+        "retrained_on": "NIH",
+        "relative_change_pct": -9.632792749768308
+      },
+      "VIN": {
+        "zeroshot_auc": 0.8301470588235295,
+        "retrained_auc": 0.7247583662440242,
+        "retrained_on": "KEM",
+        "relative_change_pct": -12.695183517106031
+      }
+    }
+  }
+}
