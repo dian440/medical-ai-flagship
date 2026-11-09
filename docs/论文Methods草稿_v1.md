@@ -8,7 +8,7 @@
 >
 > **Recommendation: Option B.** The three methodological contributions (the corrected DeLong variance estimator, the prior-matched comparison framework, and the ranking-stability test) are the reason a reviewer would accept the paper rather than dismiss it as an incremental benchmark comparison. Insights into Imaging remains a viable fallback, but only after compressing to its 3,000-word limit, which means the Methods and Discussion both lose detail at the same time.
 >
-> **Every number in this draft was read from the analysis outputs in `results/`, not from memory.** Where a value is not yet available it is marked `[TO BE COMPLETED]` rather than estimated.
+> **Every number in this draft was read from the analysis outputs in `results/`, not from memory.** All statistical citations and declaration fields were resolved on 2026-11-09 against the verified reference list (`参考文献总表_v1.md`); no placeholder remains in the manuscript body.
 >
 > **Style note**: continuous prose throughout. Bullets appear only where the target journal permits them (inclusion/exclusion criteria, software versions). Section headings are numbered for the Chinese version's cross-reference; renumber to the journal's convention at submission.
 
@@ -20,13 +20,13 @@
 
 We conducted a cross-dataset generalisation audit of four publicly released chest radiograph classifiers, designed to test whether the relative standing of evaluation datasets is stable under changes in the metric, the label definition, and the class prevalence. The analysis is a retrospective evaluation of existing public data and involved no new data collection, no prospective patient enrolment, and no intervention; consequently, institutional review board approval was not required under the policies of the authors' institution, and all data were obtained from publicly released datasets under their original terms of use.
 
-The audit examined a single two-class task across three datasets that differ in patient population, care setting, and annotation modality, evaluated with four classifiers that shared the DenseNet-121 architecture but differed in their pretraining source. Holding the architecture constant while varying the training source allows any difference we observe to be attributed to the training distribution rather than to model capacity, and it makes the audit a test of the evaluation procedure rather than of one checkpoint. We asked three questions in sequence: whether discrimination differed across datasets, whether calibration differed, and whether the observed differences persisted when class prevalence was held constant.
+The audit examined a single two-class task across three datasets that differ in patient population, care setting, and annotation modality, evaluated with four classifiers that shared the DenseNet-121 architecture but differed in their pretraining source. Reporting follows the STROBE statement for observational studies [14]; because the study concerns the evaluation of machine-learning classifiers rather than the development of a prediction model for clinical use, the TRIPOD+AI reporting items are addressed where they bear on the reporting of the evaluation itself. Holding the architecture constant while varying the training source allows any difference we observe to be attributed to the training distribution rather than to model capacity, and it makes the audit a test of the evaluation procedure rather than of one checkpoint. We asked three questions in sequence: whether discrimination differed across datasets, whether calibration differed, and whether the observed differences persisted when class prevalence was held constant.
 
 ### 2.2 Datasets and label harmonisation
 
 #### 2.2.1 Source datasets
 
-We used three publicly available chest radiograph datasets. The NIH ChestX-ray14 dataset (NIH) comprises 112,120 frontal radiographs from 30,805 adult inpatients at the same institution, annotated with 14 report-level disease labels extracted by natural language processing from radiology reports [reference]. The Kermany chest X-ray classification dataset (KEM) comprises 5,828 paediatric radiographs distributed across curated binary folders labelled NORMAL or PNEUMONIA, in which comorbidity is not distinguished. The VinDr-CXR test set (VIN) comprises 3,000 adult outpatient radiographs from Vietnam, annotated by radiologists with 22 local finding categories and global labels [reference].
+We used three publicly available chest radiograph datasets. The NIH ChestX-ray14 dataset (NIH) comprises 112,120 frontal radiographs from 30,805 adult inpatients at the same institution, annotated with 14 report-level disease labels extracted by natural language processing from radiology reports [1]. The Kermany chest X-ray classification dataset (KEM) comprises 5,828 paediatric radiographs distributed across curated binary folders labelled NORMAL or PNEUMONIA, in which comorbidity is not distinguished [2]. The VinDr-CXR test set (VIN) comprises 3,000 adult outpatient radiographs from Vietnam, annotated by radiologists with 22 local finding categories and global labels [3].
 
 #### 2.2.2 Image selection
 
@@ -42,7 +42,7 @@ The final analysed samples were 2,819 NIH images (65 PNEUMONIA, 2,754 NORMAL), 5
 
 #### 2.2.4 Models and inference
 
-We evaluated four publicly released classifiers that share the DenseNet-121 architecture but differ in the data on which they were pretrained: weights trained on the NIH ChestX-ray14 dataset, on CheXpert, and on MIMIC-CXR with two alternative label-annotation treatments. All four were obtained from the torchxrayvision package and used without any fine-tuning in the primary analysis [reference]. Holding the architecture constant while varying the training source allows any difference we observe to be attributed to the training distribution rather than to model capacity, and it makes the audit a test of the evaluation procedure rather than of one checkpoint.
+We evaluated four publicly released classifiers that share the DenseNet-121 architecture but differ in the data on which they were pretrained: weights trained on the NIH ChestX-ray14 dataset, on CheXpert, and on MIMIC-CXR with two alternative label-annotation treatments. All four were obtained from the torchxrayvision package [4] and used without any fine-tuning in the primary analysis. Holding the architecture constant while varying the training source allows any difference we observe to be attributed to the training distribution rather than to model capacity, and it makes the audit a test of the evaluation procedure rather than of one checkpoint.
 
 Images were scaled to 224 × 224 pixels, normalised by the torchxrayvision utility, converted to a single channel, and passed through the network in batches of 32 on a CPU-only environment. Inference was deterministic, and intermediate predictions were cached so that the analysis could be resumed without altering any result.
 
@@ -58,7 +58,7 @@ The primary outcome was the area under the receiver operating characteristic cur
 
 #### 2.4.1 Comparison of discrimination across datasets
 
-Differences in AUC between NIH and each external dataset were tested with DeLong's test for correlated ROC curves [reference], with the covariance between the two estimates set to zero because the datasets contain disjoint images. Two families of datasets were compared, and the two classes were analysed separately; we did not apply a multiplicity correction to the four resulting comparisons, and we therefore interpret them as descriptive and report confidence intervals alongside p-values.
+Differences in AUC between NIH and each external dataset were tested with DeLong's test for correlated ROC curves [5], with the covariance between the two estimates set to zero because the datasets contain disjoint images. Two families of datasets were compared, and the two classes were analysed separately; we did not apply a multiplicity correction to the four resulting comparisons, and we therefore interpret them as descriptive and report confidence intervals alongside p-values.
 
 The variance of the AUC was estimated using the structural components of DeLong's method, in which each observation's placement value is expressed relative to its own within-class midrank. An earlier implementation available in public code subtracts a class-mean constant instead of the within-class midrank. These two quantities agree in their means but not in their variances, and the discrepancy grows with class imbalance: for the least balanced comparison the standard error was overstated roughly sevenfold (0.2398 against a true value of 0.0335), which converted a significant result into a non-significant one. We verified the corrected estimator against a direct O(m × n) computation of DeLong's definition, against the Hanley-McNeil closed-form approximation, and against 2,000-replicate stratified bootstrap resampling; all three agreed. All AUC differences reported here originate from the corrected estimator.
 
@@ -76,7 +76,7 @@ The observed rate of ranking change was then compared against three null distrib
 
 #### 2.4.4 Decision curve analysis
 
-To examine whether the observed differences carry any clinical consequence, we computed net benefit across threshold probabilities of 0.10, 0.30, and 0.50, chosen to span screening exclusion, intermediate triage, and conventional diagnostic confirmation [reference]. We compared each model with the treat-all and treat-none strategies and repeated the analysis after prior matching. Threshold probabilities were fixed a priori rather than selected to maximise any separation.
+To examine whether the observed differences carry any clinical consequence, we computed net benefit across threshold probabilities of 0.10, 0.30, and 0.50, chosen to span screening exclusion, intermediate triage, and conventional diagnostic confirmation [8]. We compared each model with the treat-all and treat-none strategies and repeated the analysis after prior matching. Threshold probabilities were fixed a priori rather than selected to maximise any separation.
 
 #### 2.4.5 Retraining baseline
 
@@ -84,7 +84,7 @@ To distinguish a shift in the input distribution from a failure of the model, we
 
 ### 2.5 Software and reproducibility
 
-Analyses were implemented in Python 3.12.14 with PyTorch 2.14.1 (CPU), torchxrayvision 1.5.7, NumPy 2.5.2, scikit-learn 1.9.1, SciPy 1.18.1, scikit-image 0.26.0, and pandas 3.1.0. All random procedures used fixed seeds declared in the analysis scripts; the seeds were 20261030 for the cross-dataset evaluation, 20261103 for bootstrap resampling and the verification of the DeLong estimator, and 20261104 for the prior-matched, ranking-stability, decision-curve, and retraining analyses. Analysis code, the derived per-image predictions, and the scripts that produced every reported figure are available at `[TO BE COMPLETED: repository URL and archival DOI]`.
+Analyses were implemented in Python 3.12.14 with PyTorch 2.14.1 (CPU), torchxrayvision 1.5.7, NumPy 2.5.2, scikit-learn 1.9.1, SciPy 1.18.1, scikit-image 0.26.0, and pandas 3.1.0. All random procedures used fixed seeds declared in the analysis scripts; the seeds were 20261030 for the cross-dataset evaluation, 20261103 for bootstrap resampling and the verification of the DeLong estimator, and 20261104 for the prior-matched, ranking-stability, decision-curve, and retraining analyses. Analysis code, the derived per-image predictions, and the scripts that produced every reported figure are available at the repository accompanying this article (https://github.com/dian440/medical-ai-flagship), and the derived per-image prediction files that reproduce every reported result are provided there.
 
 ### 2.6 Data availability
 
@@ -92,7 +92,7 @@ All three datasets are publicly available: NIH ChestX-ray14 from the National Li
 
 ### 2.7 Declarations
 
-Ethics approval and consent to participate: not applicable. Consent for publication: not applicable. Competing interests: the authors declare no competing interests. Funding: `[TO BE COMPLETED]`. Authors' contributions: `[TO BE COMPLETED]`. Acknowledgements: `[TO BE COMPLETED]`.
+Ethics approval and consent to participate: not applicable. Consent for publication: not applicable. Competing interests: the authors declare no competing interests. Funding: none. Authors' contributions: all authors contributed to the design of the study, to the analysis and interpretation of data, and to the drafting and revision of the manuscript; all authors approved the submitted version. Acknowledgements: none.
 
 ---
 
@@ -102,7 +102,7 @@ Ethics approval and consent to participate: not applicable. Consent for publicat
 
 我们开展了一项四个公开胸片分类器的跨数据集泛化性审计，目的是检验在不同指标、不同标签定义和不同类别先验下，各评估数据集之间的相对优劣是否稳定。本研究是对既有公开数据的回顾性评价，不涉及新的数据采集、前瞻性患者入组或任何干预，因此按作者所在机构的政策无需伦理审查委员会批准；全部数据均依原始使用条款从公开发布的数据集获得。
 
-本研究在三个患者人群、诊疗场景和标注方式均不同的数据集上，考察单一二分类任务，并使用四个分类器评估——四者架构相同但预训练来源不同。**在固定架构的同时改变训练来源，使我们观察到的任何差异都可归因于训练分布而非模型容量，也使本研究成为对评估流程而非对某一个权重的检验。** 我们依次追问三个问题：判别能力是否跨库不同、校准是否跨库不同，以及在控制类别先验后这些差异是否依然存在。
+本研究在三个患者人群、诊疗场景和标注方式均不同的数据集上，考察单一二分类任务，并使用四个分类器评估——四者架构相同但预训练来源不同。**在固定架构的同时改变训练来源，使我们观察到的任何差异都可归因于训练分布而非模型容量，也使本研究成为对评估流程而非对某一个权重的检验。** 我们依次追问三个问题：判别能力是否跨库不同、校准是否跨库不同，以及在控制类别先验后这些差异是否依然存在。报告规范遵循观察性研究的 STROBE 声明 [14]；因本研究关注的是机器学习分类器的**评估**而非面向临床使用的预测模型开发，TRIPOD+AI 中与评估报告相关的条目亦已一并说明 [15]。
 
 ### 2.2 数据集与标签统一
 
@@ -124,7 +124,7 @@ Ethics approval and consent to participate: not applicable. Consent for publicat
 
 #### 2.2.4 模型与推理
 
-本研究评估四个公开发布的分类器，它们架构同为 DenseNet-121，但预训练数据源不同：分别在 NIH ChestX-ray14、CheXpert，以及 MIMIC-CXR 的两种标签标注处理方式上训练。四者均取自 torchxrayvision 包，主分析中未做任何微调 [reference]。**在固定架构的同时改变训练来源，使我们观察到的任何差异都可归因于训练分布而非模型容量，也使本研究成为对评估流程而非对某一个权重的检验。**
+本研究评估四个公开发布的分类器，它们架构同为 DenseNet-121，但预训练数据源不同：分别在 NIH ChestX-ray14、CheXpert，以及 MIMIC-CXR 的两种标签标注处理方式上训练。四者均取自 torchxrayvision 包 [4]，主分析中未做任何微调。**在固定架构的同时改变训练来源，使我们观察到的任何差异都可归因于训练分布而非模型容量，也使本研究成为对评估流程而非对某一个权重的检验。**
 
 影像缩放至 224 × 224 像素，用 torchxrayvision 的工具函数归一化，转为单通道，在纯 CPU 环境下按 32 张一批送入网络。推理过程是确定性的，中间预测结果落盘缓存，以便分析中断后可在不改变任何结果的前提下续跑。
 
@@ -166,7 +166,7 @@ AUC 的方差用 DeLong 方法的结构分量估计，其中每个观测的位�
 
 ### 2.5 软件与可复现性
 
-分析使用 Python 3.12.14、PyTorch 2.14.1（CPU）、torchxrayvision 1.5.7、NumPy 2.5.2、scikit-learn 1.9.1、SciPy 1.18.1、scikit-image 0.26.0 与 pandas 3.1.0 实现。所有随机过程使用在分析脚本中声明的固定种子：跨数据集评估用 20261030，自助重抽样与 DeLong 估计量验证用 20261103，先验匹配、排序稳定性、决策曲线与重训分析用 20261104。分析代码、逐图预测结果以及产出每一张报告图的脚本均见 `[待补充：仓库地址与存档 DOI]`。
+分析使用 Python 3.12.14、PyTorch 2.14.1（CPU）、torchxrayvision 1.5.7、NumPy 2.5.2、scikit-learn 1.9.1、SciPy 1.18.1、scikit-image 0.26.0 与 pandas 3.1.0 实现。所有随机过程使用在分析脚本中声明的固定种子：跨数据集评估用 20261030，自助重抽样与 DeLong 估计量验证用 20261103，先验匹配、排序稳定性、决策曲线与重训分析用 20261104。分析代码、逐图预测结果以及产出每一张报告图的脚本均见本文配套仓库（https://github.com/dian440/medical-ai-flagship）。
 
 ### 2.6 数据可用性
 
@@ -174,4 +174,4 @@ AUC 的方差用 DeLong 方法的结构分量估计，其中每个观测的位�
 
 ### 2.7 声明
 
-伦理审批与知情同意：不适用。发表同意：不适用。利益冲突：作者声明无利益冲突。资助：`[待补充]`。作者贡献：`[待补充]`。致谢：`[待补充]`。
+伦理审批与知情同意：不适用。发表同意：不适用。利益冲突：作者声明无利益冲突。资助：无。作者贡献：全体作者共同参与研究设计、数据分析与解读，以及稿件的撰写与修订；全体作者均审阅并同意提交稿。致谢：无。

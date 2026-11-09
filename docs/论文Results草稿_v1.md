@@ -209,15 +209,18 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 MIMIC_CH/PNEUMONIA 用橙色菱形并带箭头标注 "not above noise baseline"；
 模型名用分组横线标在图内顶部；图注直接写出"基线本身即达 82–84%"这一数字，让审稿人立刻明白本文贡献是**给出了基线**。
 
-### 表（Table）—— 待制作
+### 表（Table）—— ✅ 已全部完成（程序化生成）
+
+表格文件：`docs/论文Tables草稿_v1.md`，由 `code/make_tables.py` 从 `results/*.json` **程序化生成**（手抄必错）。
+核验脚本：`code/verify_tables.py`（32 条断言，全部通过 —— 表内每个数字都回查 JSON）。
 
 | 表号 | 内容 | 来源 |
 |---|---|---|
-| **Table 1** | 数据集特征与标签构成（人口、场景、标注方式、n、先验、排除规则） | Methods + §3.1 |
-| **Table 2** | 四模型 × 三库 × 两类的 AUC 与 ECE | `multi_model_metrics.json` |
-| **Table 3** | 先验匹配：跨度收缩 + 排序翻转（含宽松/严格口径并列） | `multi_model_prior_matched.json` + `label_sensitivity_noise_baseline.json` |
-| **Table 4** | 噪声基线对照（观测 vs 基线2 vs 基线3 vs p）+ 方向一致性与置换零分布 | `noise_baseline.json` + `flip_criteria_validation.json` |
-| **Table 5** | DeLong 全表（16 组 Δ/SE/z/p/CI）+ DCA 翻转计数 + 重训基线 + F1/敏感度/特异度 | `multi_model_metrics.json` + `multi_model_dca.json` + `retrain_baseline.json` + `operating_points.json` |
+| **Table 1** | 数据集特征与标签构成（人口、场景、标注方式、n、先验、排除规则、标签不对称性） | `multi_model_metrics.json` + Methods §2.2.3 |
+| **Table 2** | 四模型 × 三库 × 两类的 AUC 与 ECE + **判别/校准最优库分歧对照表（4/8）** | `multi_model_metrics.json` |
+| **Table 3** | 先验匹配：跨度收缩 + 排序翻转（宽松/严格口径并列，附唯一扩大组的说明） | `multi_model_prior_matched.json` + `label_sensitivity_noise_baseline.json` |
+| **Table 4** 🔴 | 噪声基线对照（观测 vs 基线2 vs 基线3 vs p）+ **方向一致性与置换零分布并列** | `noise_baseline.json` + `flip_criteria_validation.json` |
+| **Table 5** | 四部分：(a) DeLong 全表 16 组 Δ/SE/z/p；(b) DCA 翻转计数；(c) 重训基线 + 零样本对照；(d) 最佳工作点 F1/敏感度/特异度 | `multi_model_metrics.json` + `multi_model_dca.json` + `retrain_baseline.json` + `operating_points.json` |
 
-**Table 4 是审稿人最会盯的表**，务必把 `flip_criteria_validation.json` 里的置换零分布一并列出——
-主动展示"我们的检验在标签打乱零分布下也会显著"这一点，比被审稿人发现强得多。
+**Table 4 是审稿人最会盯的表**，已按要求把 `flip_criteria_validation.json` 的**置换零分布方向一致性**与**经验 p**并列列出——
+主动展示"我们的检验在标签打乱零分布下也会显著"这一点，比被审稿人发现强得多。表中同时用加粗标出唯一的例外（MIMIC_CH/PNEUMONIA）。

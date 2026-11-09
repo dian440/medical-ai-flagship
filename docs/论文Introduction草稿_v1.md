@@ -12,13 +12,13 @@
 
 ## 1. Introduction
 
-Chest radiography is the most frequently performed imaging examination worldwide and is interpreted with substantial interobserver variability, which has motivated the development of convolutional classifiers for automated detection of radiographic findings [refs]. Models of this kind are now evaluated on large public collections such as the NIH ChestX-ray14 dataset, and several are distributed with pre-trained weights precisely so that they can be applied without local retraining. That distribution model — an institution releases a checkpoint, a downstream site applies it to its own images — makes cross-dataset evaluation the central evidence for whether a released model is likely to be useful elsewhere, and cross-dataset evaluation is therefore the step at which most of the field's claims of generalisability are settled.
+Chest radiography is the most frequently performed imaging examination worldwide and is interpreted with substantial interobserver variability, which has motivated the development of convolutional classifiers for automated detection of radiographic findings [1,3]. Models of this kind are now evaluated on large public collections such as the NIH ChestX-ray14 dataset, and several are distributed with pre-trained weights precisely so that they can be applied without local retraining [4]. That distribution model — an institution releases a checkpoint, a downstream site applies it to its own images — makes cross-dataset evaluation the central evidence for whether a released model is likely to be useful elsewhere, and cross-dataset evaluation is therefore the step at which most of the field's claims of generalisability are settled.
 
-External validation has repeatedly shown that performance falls when a model is applied to images from a site other than the one that trained it [refs]. The reasons usually given are differences in acquisition hardware, patient population, disease spectrum, and annotation practice, and the standard remedies are additional external cohorts, harmonised labels, or recalibration. A related line of work has shown something more uncomfortable: under some conditions the performance change is attributable less to the model than to the evaluation itself. Zech and colleagues demonstrated that convolutional pneumonia classifiers could identify the acquiring hospital system from the image with near-perfect accuracy, and that models trained on sites with differing disease prevalence performed well on similarly pooled data but not on new external data, implying that a substantial part of the measured "generalisation gap" reflected confounding information in the evaluation cohort rather than a deficiency of the model [refs].
+External validation has repeatedly shown that performance falls when a model is applied to images from a site other than the one that trained it [1,2,9]. The reasons usually given are differences in acquisition hardware, patient population, disease spectrum, and annotation practice, and the standard remedies are additional external cohorts, harmonised labels, or recalibration. A related line of work has shown something more uncomfortable: under some conditions the performance change is attributable less to the model than to the evaluation itself. Zech and colleagues demonstrated that convolutional pneumonia classifiers could identify the acquiring hospital system from the image with near-perfect accuracy, and that models trained on sites with differing disease prevalence performed well on similarly pooled data but not on new external data, implying that a substantial part of the measured "generalisation gap" reflected confounding information in the evaluation cohort rather than a deficiency of the model [9].
 
 Two further developments have made the evaluation protocol itself a subject of scrutiny. The first is the recognition that discrimination and calibration are separate properties that can move in opposite directions, so that reporting a single area under the receiver operating characteristic curve leaves unresolved whether a model's probability statements can be trusted. The second is the observation that calibration metrics computed on an evaluation cohort are entangled with that cohort's class prevalence: expected calibration error compares predicted probabilities with observed frequencies, and the observed frequency is itself determined by how many positive cases the cohort happens to contain. A cohort with 2% and a cohort with 73% prevalence can therefore differ in expected calibration error for reasons that have nothing to do with either model's behaviour.
 
-The consequences of this entanglement for the comparison of models have only recently begun to be drawn out. A recent audit of medical vision-language models for chest radiograph tuberculosis screening formalised the idea that an evaluation result is only interpretable together with a full specification of the conditions under which it was obtained — the checkpoint, the text prompt, the cohort, the definition of the negative class, the specified prevalence, the operating threshold, and the performance criterion — and reported that no model led every cohort and every reliability criterion, and that the ordering of two models by Brier score reversed between specified prevalences of 10% and 50% across three cohorts [refs]. That work establishes that the phenomenon is real and that it is not confined to supervised convolutional models. It also makes clear what remains open.
+The consequences of this entanglement for the comparison of models have only recently begun to be drawn out. A recent audit of medical vision-language models for chest radiograph tuberculosis screening formalised the idea that an evaluation result is only interpretable together with a full specification of the conditions under which it was obtained — the checkpoint, the text prompt, the cohort, the definition of the negative class, the specified prevalence, the operating threshold, and the performance criterion — and reported that no model led every cohort and every reliability criterion, and that the ordering of two models by Brier score reversed between specified prevalences of 10% and 50% across three cohorts [10]. That work establishes that the phenomenon is real and that it is not confined to supervised convolutional models. It also makes clear what remains open.
 
 Four gaps follow from this state of the art, and they define what this study addresses. First, the reversal of model rankings under prevalence variation has been reported through point estimates of a single summary statistic, and the null distribution against which such a reversal should be judged has not been established. This is not a technicality: when the same resampling procedure is applied to three datasets of *identical* calibration, it reorders them in more than four fifths of cases, so that a reported reversal carries no information about the datasets unless it is shown to exceed that noise. No procedure we could identify establishes whether a reversal observed in a given comparison is a systematic property of the evaluation or an artefact of the sampling. Second, the degree to which calibration differences between datasets are arithmetic consequences of prevalence, rather than evidence about model behaviour, has not been quantified directly; existing work reweights a fixed sample to a specified prevalence, which preserves the conditional score distributions of that sample and therefore cannot separate a genuine calibration difference from a difference in how the two classes are weighted. Third, the widely used statistical machinery for comparing ROC curves is itself subject to implementation error: the variance estimator of DeLong's test depends on an implementation detail that is frequently transcribed incorrectly, with consequences that grow as the classes become imbalanced, and such errors can convert a significant result into a non-significant one while leaving the point estimates untouched. Fourth, and consequently, the question of whether these effects are properties of a particular architecture, of a particular task, or of the evaluation protocol in general has not been separated, because audits of this kind have so far been conducted within a single model family.
 
@@ -32,13 +32,13 @@ The contribution of this work is not a further demonstration that models degrade
 
 ### 1. 引言
 
-胸部X线摄影是全球范围内检查量最大的影像学检查，且存在显著的阅片者间变异，这促成了用于自动检出影像所见的卷积分类器的发展 [refs]。此类模型如今已在 NIH ChestX-ray14 等大型公开数据集上完成评估，其中若干模型以发布预训练权重的方式分发，其目的正是使它们无需在本地重新训练即可被使用。这种分发模式——一家机构发布一个权重，下游机构将其应用于自身影像——使跨数据集评估成为判断一个已发布模型在别处是否可能有用的核心证据，因此，跨数据集评估也正是本领域绝大多数泛化性主张得以落定的那一步。
+胸部X线摄影是全球范围内检查量最大的影像学检查，且存在显著的阅片者间变异，这促成了用于自动检出影像所见的卷积分类器的发展 [1,3]。此类模型如今已在 NIH ChestX-ray14 等大型公开数据集上完成评估，其中若干模型以发布预训练权重的方式分发，其目的正是使它们无需在本地重新训练即可被使用 [4]。这种分发模式——一家机构发布一个权重，下游机构将其应用于自身影像——使跨数据集评估成为判断一个已发布模型在别处是否可能有用的核心证据，因此，跨数据集评估也正是本领域绝大多数泛化性主张得以落定的那一步。
 
-外部验证已反复显示，当模型被应用于训练机构之外的影像时，性能会下降 [refs]。通常给出的原因包括采集硬件、患者人群、疾病谱与标注实践的差异，而标准的应对手段是增加外部队列、统一标签口径或进行再校准。另一条相关研究路线则揭示了一个更令人不适的事实：在某些条件下，性能变化归因于评估本身而非模型。Zech 及其同事证明，卷积肺炎分类器能够以近乎完美的准确率从影像中识别出采集医院；当模型在不同患病率的数据源上训练时，它们在同样混合的数据上表现良好，但在新的外部数据上却不然，这意味着所测得的"泛化差距"有相当一部分反映的是评估队列中的混杂信息，而非模型的缺陷 [refs]。
+外部验证已反复显示，当模型被应用于训练机构之外的影像时，性能会下降 [1,2,9]。通常给出的原因包括采集硬件、患者人群、疾病谱与标注实践的差异，而标准的应对手段是增加外部队列、统一标签口径或进行再校准。另一条相关研究路线则揭示了一个更令人不适的事实：在某些条件下，性能变化归因于评估本身而非模型。Zech 及其同事证明，卷积肺炎分类器能够以近乎完美的准确率从影像中识别出采集医院；当模型在不同患病率的数据源上训练时，它们在同样混合的数据上表现良好，但在新的外部数据上却不然，这意味着所测得的"泛化差距"有相当一部分反映的是评估队列中的混杂信息，而非模型的缺陷 [9]。
 
 有两条进一步的发展使评估协议本身成为审视对象。其一是人们认识到判别能力与校准是彼此独立的性质，可以朝相反方向变化，因此只报告单一的受试者工作特征曲线下面积，无法回答模型的概率陈述是否可信。其二是人们观察到，在某个评估队列上计算的校准指标与该队列的类别先验纠缠在一起：期望校准误差比较的是预测概率与实际频率，而实际频率本身由队列中恰好包含多少阳性病例决定。因此，一个患病率为 2% 的队列与一个患病率为 73% 的队列，其期望校准误差可以因完全与两个模型的行为无关的原因而不同。
 
-这种纠缠对模型比较的后果，直到最近才开始被充分揭示。一项针对胸片结核筛查的医学视觉语言模型审计，将"评估结果只有连同其获得条件一起才可解释"这一想法形式化——评估规范由权重、文本提示、队列、阴性类定义、指定患病率、工作阈值与性能判据共同构成——并报告没有任何一个模型在所有队列与所有可靠性判据上均居首位，且两个模型按 Brier 分数排序的结果在指定患病率 10% 与 50% 之间于三个队列上均发生反转 [refs]。该工作确立了此现象确实存在，且不限于有监督的卷积模型；它同时也清楚界定了仍然开放的问题。
+这种纠缠对模型比较的后果，直到最近才开始被充分揭示。一项针对胸片结核筛查的医学视觉语言模型审计，将"评估结果只有连同其获得条件一起才可解释"这一想法形式化——评估规范由权重、文本提示、队列、阴性类定义、指定患病率、工作阈值与性能判据共同构成——并报告没有任何一个模型在所有队列与所有可靠性判据上均居首位，且两个模型按 Brier 分数排序的结果在指定患病率 10% 与 50% 之间于三个队列上均发生反转 [10]。该工作确立了此现象确实存在，且不限于有监督的卷积模型；它同时也清楚界定了仍然开放的问题。
 
 由此产生四个缺口，也正是本研究所要处理的内容。第一，患病率变化下模型排序反转是通过单一汇总统计量的点估计报告的，而**用于判断此类反转应当被视为何种程度噪声的零分布，此前从未被建立**。这不是技术细节：**当同一套重采样流程作用于三个校准水平完全相同的数据集时，它在超过五分之四的情况下会改变它们的排序**——因此在未证明超出该噪声之前，一次被报告的反转并不携带关于数据集的任何信息。我们未能找到任何程序能够判定在给定比较中观察到的反转究竟是该评估的系统性属性，还是所抽取特定样本的偶然产物。第二，数据集之间校准差异在多大程度上是患病率的算术后果、而非关于模型行为的证据，尚未被直接量化；已有工作是把固定样本重新加权到指定患病率，这保留了样本自身的条件分数分布，因而无法把真正的校准差异与两类被赋予权重方式的差异分离开来。第三，用于比较 ROC 曲线的常用统计工具本身存在实现层面的错误：DeLong 检验的方差估计量依赖一个常被错误转写的实现细节，其后果随类别不平衡程度加剧而放大，这类错误可以在完全不触及点估计的情况下，把显著结果变为不显著。第四，正因如此，这些效应究竟是特定架构的属性、特定任务的属性，还是评估协议的一般属性，尚未被区分开来——因为迄今为止此类审计都局限于单一的模型家族。
 
@@ -48,19 +48,27 @@ The contribution of this work is not a further demonstration that models degrade
 
 ---
 
-## [Reference placeholders to be resolved]
+## [Reference list — resolved 2026-11-09 · 见 `参考文献总表_v1.md`]
 
-| # | 用于之处 | 需要的文献 | 状态 |
+> **全部经 CrossRef / Europe PMC / PMLR 官方页 / arXiv API 直接核实**（未用 Google Scholar、ResearchGate、PubMed 网页版——本机网络阻断）。
+> **编号与 `参考文献总表_v1.md` 一致**，投稿时全文统一。
+
+| # | 用于之处 | 文献（编号对应总表） | 状态 |
 |---|---|---|---|
-| R1 | 引言第 1 段 | 卷积胸片分类器的奠基性工作（及阅片者间变异文献） | 待补 |
-| R2 | 第 1 段 | 公开数据集与权重分发的引用 | 待补 |
-| R3 | 第 2 段 | 外部验证性能下降的代表性研究 | 待补 |
-| R4 | 第 2 段 | **Zech JR, Badgeley MA, Liu M, Costa AB, Titano JJ, Oermann EK. Variable generalization performance of a deep learning model to detect pneumonia in chest radiographs: a cross-sectional study. PLoS Med 2018;15(11):e1002683.** | ✅ 已核实 |
-| R5 | 第 3 段 | 判别与校准分离的文献 | 待补 |
-| R6 | 第 3 段 | 校准指标与队列患病率纠缠的文献 | 待补 |
-| R7 | 第 4 段 | **Akhtar M, Tanveer M, Arshad M. Beyond Benchmark Scores: Auditing Medical Vision-Language Models for Chest X-Ray Tuberculosis Screening. arXiv:2609.21763 (2026).** | ✅ 已核实（arXiv 预印本，投稿时需确认是否已正式发表） |
-| R8 | 第 4 段 | DeLong 1988 原始方法文献；Sun & Xu 2014 快速算法 | 待补 |
-| R9 | 第 5 段 | 本研究自述的一般性方法学参考 | 待补 |
+| R1 | 引言第 1 段 | 卷积胸片分类器的奠基性工作与数据集 | **[1]** Wang X, et al. ChestX-ray8, CVPR 2017；**[3]** Nguyen HQ, et al. VinDr-CXR, Scientific Data 2022 |
+| R2 | 第 1 段 | 公开数据集与权重分发 | **[4]** Cohen JP, et al. TorchXRayVision, MIDL 2022 (PMLR 172:231-249) |
+| R3 | 第 2 段 | 外部验证性能下降的代表性研究 | **[9]** Zech JR, et al. PLoS Med 2018;15(11):e1002683 |
+| R4 | 第 2 段 | 同上（已核实，保留原编号位） | **[9]** |
+| R5 | 第 3 段 | 判别与校准分离 | **[11]** Van Calster B, et al. BMC Med 2019;17:230；**[12]** Steyerberg EW, et al. Epidemiology 2010;21(1):128-138 |
+| R6 | 第 3 段 | 校准指标与队列患病率纠缠 | **[13]** Guo C, et al. ICML 2017 (PMLR 70:1321-1330) |
+| R7 | 第 4 段 | 最近相关工作 | **[10]** Akhtar M, Tanveer M, Arshad M. arXiv:2609.21763v1 (2026) ⚠️ **仍为预印本，投稿前须重查** |
+| R8 | 第 4 段 | DeLong 原始与快速算法 | **[5]** DeLong ER, et al. Biometrics 1988;44(3):837-845；**[6]** Sun X, Xu W. IEEE Signal Process Lett 2014;21(11):1389-1393 |
+| R9 | 第 5 段 | 报告规范 | **[14]** von Elm E, et al. STROBE, Lancet 2007;370(9596):1453-1457；**[15]** Collins GS, et al. TRIPOD+AI, BMJ 2024;385:e078378 |
+
+> 🔴 **核实中发现两处"广泛流传但错误"的引用，已规避**（详见总表第二节）：
+> ① fastDeLong 实为 **IEEE Signal Processing Letters** 版，非 Statistics in Medicine；DOI `10.1002/sim.2929` 实为 Pencina 2007 的论文。
+> ② "Kermany et al., Labeling Medical Images..., arXiv:1711.06925" **该论文不存在**——那个 arXiv 编号实际指向一篇聚合物纳米管电极论文。已改引 **Cell 2018;172(5):1122-1131.e9**。
+> ③ 另修正：CVPR 2017 作者列表（6 位，无 Ananthakrishnan T）、页码（3462-3471）、VinDr 正式标题、TRIPOD+AI 文章号。
 
 ### [与 arXiv 2609.21763 的定位区分（作者内部说明，不进稿件）]
 
