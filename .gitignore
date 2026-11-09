@@ -40,3 +40,6 @@ results/feat_*.npz
 
 # 已被取代的历史结果（样本集不一致版本）
 results/retrain_baseline_v1_SUPERSEDED_samplemismatch.json
+
+# 内部工作文档（含个人申请策略与路线对比，不随公开仓库发布）
+docs/选刊与投稿策略_2027见刊版.md
