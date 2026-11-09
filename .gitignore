@@ -66,3 +66,14 @@ docs/终审报告_*.md
 
 # ── 投稿信不入库（致编辑的文书，非论文本体）──────────────────
 docs/论文CoverLetter_v1.md
+
+# ── 内部沟通与评审材料（不随公开仓库发布）──────────────────
+docs/导师接触方案_*.md
+docs/给老师的项目一页纸.md
+docs/三重身份同行评议_*.md
+docs/多模型结果与判据修正报告_*.md
+docs/方法学补做报告_*.md
+docs/首轮结果与解读.md
+docs/三数据集全量结果与解读.md
+docs/论文Results_S3_S4_草稿.md
+docs/论文Discussion提纲_v1.md
