@@ -316,10 +316,20 @@ def build_domain(data, model, label, nih_sets, nih_label_of,
         dom["NIH"]["y"].append(y)
         dom["NIH"]["s"].append(data[model]["NIH"]["p_pneu"][i]
                               if label == "PNEUMONIA" else data[model]["NIH"]["p_norm"][i])
+    # 🔴 KEM/VIN 的 y 必须**按任务定义**，不能两个任务共用一套：
+    #    NORMAL 任务的正类是 NORMAL（y=1），PNEUMONIA 任务的正类是 PNEUMONIA。
+    #    若沿用同一套 y，NORMAL 任务就会「正类标签与分数方向相反」，
+    #    导致 ECE 算错、跨度算错、排序反转数不对。
+    #    验证锚点：主分析中 KEM 的 NORMAL 任务 prior 应为 27.11%（1579/5824），
+    #    PNEUMONIA 任务为 72.89%（4245/5824）。
     for ds in ("KEM", "VIN"):
         for i in range(len(data[model][ds]["fn"])):
+            is_pneu = (data[model][ds]["gt"][i] == "PNEUMONIA")
             dom[ds]["fn"].append(data[model][ds]["fn"][i])
-            dom[ds]["y"].append(1 if data[model][ds]["gt"][i] == "PNEUMONIA" else 0)
+            if label == "PNEUMONIA":
+                dom[ds]["y"].append(1 if is_pneu else 0)
+            else:
+                dom[ds]["y"].append(0 if is_pneu else 1)
             dom[ds]["s"].append(data[model][ds]["p_pneu"][i]
                                if label == "PNEUMONIA" else data[model][ds]["p_norm"][i])
     return dom

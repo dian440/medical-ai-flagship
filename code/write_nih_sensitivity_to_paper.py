@@ -97,7 +97,9 @@ def main():
         "以及在 PNEUMONIA 任务中作为正类（对应「疑似肺炎」的宽口径读法）。"
         "这些规则改变 NIH 队列的患病率，并随之改变匹配目标、校准跨度与排序。"
         f"在四种规则下，观测排序改变率超出噪声基线的组合数为 {min(exc)}–{max(exc)}/{tot}，"
-        f"校准排序发生反转的组合数为 {min(rev)}–{max(rev)}/{tot}。")
+        f"校准排序发生反转的组合数为 {min(rev)}–{max(rev)}/{tot}。"
+        "PNEUMONIA 任务在四种规则下表现一致，"
+        "且唯一未超出基线的组合在每种规则下都是同一个。")
     if anchor_zh in s and "被丢弃影像的三种不同处置" not in s:
         s = s.replace(anchor_zh, add_zh, 1)
         log("OK Methods 中文已补")
@@ -127,9 +129,16 @@ def main():
         "prevalence and therefore the matched target, the calibration spread, "
         f"and the ranking. Across the four rules, {min(exc)} to {max(exc)} of "
         f"{tot} model-label combinations remained above the noise baseline and "
-        f"{min(rev)} to {max(rev)} remained reversed. The exclusion is therefore "
-        "disclosed and bounded rather than corrected, and the direction of the "
-        "finding does not depend on it.")
+        f"{min(rev)} to {max(rev)} remained reversed, and the one combination that "
+        "failed to exceed the baseline was the same in every rule. The weakening "
+        "that does occur is confined to the NORMAL task under the two rules that "
+        "admit the discarded images as negatives, and it has an identifiable "
+        "mechanism: those images are easy negatives for a NORMAL classifier, so "
+        "admitting them lowers the NIH expected calibration error from 0.436 to "
+        "0.080 and leaves NIH the best-calibrated dataset before matching, which "
+        "removes the condition under which matching can reorder the datasets. "
+        "The exclusion is therefore disclosed and bounded rather than corrected, "
+        "and the direction of the finding does not depend on it.")
     if old_en in s2:
         s2 = s2.replace(old_en, new_en, 1)
         log("OK Discussion 英文已补")
@@ -146,7 +155,12 @@ def main():
         "**我们检验了这一排除是否支配了结论**：在被丢弃影像的三种不同处置下重跑分析，"
         "这些处置改变 NIH 患病率，并随之改变匹配目标、校准跨度与排序。"
         f"在四种规则下，仍超出噪声基线的组合数为 {min(exc)}–{max(exc)}/{tot}，"
-        f"仍发生排序反转的组合数为 {min(rev)}–{max(rev)}/{tot}。"
+        f"仍发生排序反转的组合数为 {min(rev)}–{max(rev)}/{tot}，"
+        "且唯一未超出基线的组合在每种规则下都是同一个。"
+        "**确实出现的减弱只发生在 NORMAL 任务、且只发生在把那批影像纳入负类的两种规则下，"
+        "其机制是可追溯的：那些影像是 NORMAL 分类器的容易负类，纳入后 NIH 的期望校准误差"
+        "从 0.436 降到 0.080，使 NIH 在匹配前就已是校准最好的数据集，"
+        "从而消除了匹配能够改变排序的前提。**"
         "**因此这一排除是被披露并被界定的，而非被校正的；结论的方向不依赖于它。**")
     if old_zh in s2:
         s2 = s2.replace(old_zh, new_zh, 1)

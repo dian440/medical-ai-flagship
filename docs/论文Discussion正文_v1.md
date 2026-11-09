@@ -73,7 +73,7 @@ The classifiers are four variants of one architecture. Architecture is therefore
 
 The prior-matched analysis is underpowered by the structure of the available data. The matched sample is capped at 169 images per replicate, by the NIH minority-class counts of 65 positive and 65 negative cases. The intervals obtained at that size overlap. We therefore claim contraction and reversal, not equivalence, and the individual replicate estimates should not be read as precise values.
 
-The NIH cohort discards 43.6% of the images available in the source dataset, and the discarded images are not missing at random with respect to class. This shifts the prevalence and is a source of confounding that we disclose rather than correct; the matching procedure then operates on the retained cohort.
+The NIH cohort discards 43.6% of the images available in the source dataset, and the discarded images are not missing at random with respect to class. This shifts the prevalence and is a source of confounding that we disclose rather than correct; the matching procedure then operates on the retained cohort. We tested whether this exclusion governs the findings by re-running the analysis under three further assignments of the discarded images. These move the NIH prevalence and hence the matched target, the calibration spread, and the ranking. Across the four rules, 6 to 7 of 8 model-label combinations remained above the noise baseline and 7 to 8 remained reversed. The one combination that failed to exceed the baseline was the same in every rule. The weakening that does occur is confined to the NORMAL task under the two rules that admit the discarded images as negatives, and it has an identifiable mechanism. Those images are easy negatives for a NORMAL classifier, so admitting them lowers the NIH expected calibration error from 0.436 to 0.080. NIH then becomes the best-calibrated dataset before matching, which removes the condition under which matching can reorder the datasets. The exclusion is therefore disclosed and bounded rather than corrected, and the direction of the finding does not depend on it.
 
 Label semantics differ across the three datasets in three dimensions that cannot be separated without per-image re-annotation: population, care setting, and annotation modality. The PNEUMONIA label denotes a native report-level diagnosis in one dataset, a curated binary folder in the second, and a radiologist finding category in the third. The composition of the positive class is correspondingly different. The strict VinDr-CXR definition restricts the PNEUMONIA class to consolidation and infiltration, and excludes the 136 images carrying other abnormalities. Under it, the calibration spread still contracted in all eight combinations and the ranking still reversed in six of eight. The two PNEUMONIA combinations in which the ranking had not reversed were those in which VinDr-CXR was already the best-calibrated dataset before matching. The strict definition reduces the VinDr-CXR PNEUMONIA prevalence from 38.7% to 24.0%. The matched target prevalence consequently changes from 0.387 to 0.240, and the matched sample size rises from 169 to 272. We do not claim that the reversal is robust to label redefinition in every configuration.
 
@@ -145,7 +145,8 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 
 **先验匹配分析在结构上功效不足。**匹配后的样本量被 NIH 的少数类计数（65 阳性、65 阴性）限制在每次重复 169 张，该规模下所得区间相互重叠。因此我们主张的是收缩与反转，而非等价。单次重复的估计不应被当作精确值读取。
 
-**NIH 队列丢弃了源数据集中 43.6% 的影像**，且被丢弃的影像与类别并非随机相关。这改变了患病率，是一项我们披露而非校正的混杂因素；随后的匹配过程是在保留下来的队列上进行的。
+**NIH 队列丢弃了源数据集中 43.6% 的影像**，且被丢弃的影像与类别并非随机相关。这改变了患病率，是一项我们披露而非校正的混杂因素；随后的匹配过程是在保留下来的队列上进行的。**我们检验了这一排除是否支配了结论**：在被丢弃影像的三种不同处置下重跑分析。这些处置改变 NIH 患病率，并随之改变匹配目标、校准跨度与排序。在四种规则下，仍超出噪声基线的组合数为 6–7/8，仍发生排序反转的组合数为 7–8/8，且唯一未超出基线的组合在每种规则下都是同一个。**确实出现的减弱只发生在 NORMAL 任务、且只发生在把那批影像纳入负类的两种规则下。**
+**其机制是可追溯的：那些影像是 NORMAL 分类器的容易负类，纳入后 NIH 的期望校准误差从 0.436 降到 0.080。这使 NIH 在匹配前就已是校准最好的数据集，从而消除了匹配能够改变排序的前提。****因此这一排除是被披露并被界定的，而非被校正的；结论的方向不依赖于它。**
 
 **三个数据集的标签语义在三个维度上存在差异**，若无逐图重标注则无法分离：人群、诊疗场景与标注方式。PNEUMONIA 标签在一个数据集中指称报告层面的原生诊断，在第二个中指经整理的二值文件夹，在第三个中指放射科医师的所见类别。其阳性类的构成相应不同。在严格的 VinDr-CXR 定义下（把 PNEUMONIA 类限制为实变与浸润，排除携带其他异常的 136 张影像），校准跨度仍在 8 个组合中全部收缩、排序仍在 8 个中的 6 个反转。但两个排序未反转的 PNEUMONIA 组合，正是匹配前 VinDr-CXR 已是最好校准数据集的那两个。严格定义把 VinDr-CXR 的 PNEUMONIA 患病率从 38.7% 降到 24.0%，相应地把匹配目标先验从 0.387 改为 0.240、匹配样本量从 169 提到 272。**我们不主张反转在所有配置下都能抵抗标签重定义。**
 
@@ -176,6 +177,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 | §4.4 | CHEX 0.9555、其余 0.6166–0.7832 | `multi_model_metrics.json` | `per_model.*.per_dataset.KEM_PNEUMONIA.auc` |
 | §4.7 | 169 上限、65/65 少数类 | `multi_model_prior_matched.json` + `multi_model_metrics.json` | `matched_n`、`n_pos` |
 | §4.7 | 43.6% 丢弃 | `multi_model_metrics.json` | 由 n=4,999 → 2,819 推得 |
+| §4.7 | 纳入规则敏感性（四规则） | `nih_inclusion_sensitivity.json` | `summary.*.exceeds_baseline` / `rank_reversed` |
 | §4.7 | 严格口径 8/8 收缩、6/8 反转 | `label_sensitivity_noise_baseline.json` | `ece_span_*`、`rank_reversed` |
 | §4.7 | 38.7%→24.0%、136 张排除、566 张 | `label_sensitivity_noise_baseline.json` + `multi_model_predictions.csv` | `gt_strict` 计数 |
 | §4.7 | 目标先验 0.387→0.240、n 169→272 | `label_sensitivity_noise_baseline.json` | `matched_prior`、`n_target` |
