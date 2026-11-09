@@ -9,6 +9,7 @@ datasets/
 *.png
 !code/sample_cxr.png
 !results/*.png
+!figures/*.png
 !paper/figures/*.png
 
 # 缓存
@@ -41,5 +42,25 @@ results/feat_*.npz
 # 已被取代的历史结果（样本集不一致版本）
 results/retrain_baseline_v1_SUPERSEDED_samplemismatch.json
 
-# 内部工作文档（含个人申请策略与路线对比，不随公开仓库发布）
+
+
+# 临时备份
+*.bak
+
+
+
+
+# ── 论文稿件入库（投稿后即为论文本体）─────────────────────
+!docs/论文*草稿_v1.md
+!docs/论文Discussion正文_v1.md
+!docs/论文Tables草稿_v1.md
+!docs/论文Title候选与裁决_v1.md
+!docs/论文CoverLetter_v1.md
+!docs/参考文献总表_v1.md
+
+# ── 内部工作文档排除（个人申请策略与路线对比，不随公开仓库发布）──
+#    ⚠️ 必须排在上面的白名单**之后**：gitignore 规则是「最后一条匹配者生效」
+docs/论文的申请定位策略_v1.md
 docs/选刊与投稿策略_2027见刊版.md
+docs/审稿自检记录_*.md
+docs/终审报告_*.md
