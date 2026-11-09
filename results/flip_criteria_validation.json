@@ -1,0 +1,396 @@
+{
+ "seed": 20261104,
+ "n_reps": 500,
+ "n_perm": 150,
+ "n_perm_reps": 20,
+ "models": [
+  "NIH",
+  "CHEX",
+  "MIMIC_CH",
+  "MIMIC_NB"
+ ],
+ "NIH": {
+  "PNEUMONIA": {
+   "matched_prior": 0.38746438746438744,
+   "n_target": 169,
+   "observed": {
+    "valid": 500,
+    "order_changed_rate": 0.976,
+    "dir_consistency": 0.8934426229508197,
+    "new_best_concentration": 0.834,
+    "new_best_distribution": {
+     "NIH": 31,
+     "KEM": 417,
+     "VIN": 52
+    },
+    "best_transfer_rate": 0.896,
+    "raw_rank": [
+     "VIN",
+     "NIH",
+     "KEM"
+    ]
+   },
+   "null_order_changed_rate": [
+    0.9843333333333336,
+    0.9,
+    1.0
+   ],
+   "null_dir_consistency": [
+    0.8412865497076024,
+    0.5434868421052632,
+    1.0
+   ],
+   "null_new_best_concentration": [
+    0.7913333333333334,
+    0.5,
+    1.0
+   ],
+   "null_best_transfer_rate": [
+    0.8426666666666667,
+    0.53625,
+    1.0
+   ],
+   "emp_p_order_changed": 0.7682119205298014,
+   "emp_p_dir_consistency": 0.46357615894039733,
+   "emp_p_new_best_concentration": 0.4370860927152318,
+   "emp_p_best_transfer": 0.48344370860927155,
+   "binom_p_new_best_concentration": 5.692735507602364e-118,
+   "binom_p_transfer": 0.0
+  },
+  "NORMAL": {
+   "matched_prior": 0.6125356125356125,
+   "n_target": 169,
+   "observed": {
+    "valid": 500,
+    "order_changed_rate": 0.974,
+    "dir_consistency": 0.5626283367556468,
+    "new_best_concentration": 0.54,
+    "new_best_distribution": {
+     "NIH": 270,
+     "KEM": 4,
+     "VIN": 226
+    },
+    "best_transfer_rate": 0.548,
+    "raw_rank": [
+     "VIN",
+     "KEM",
+     "NIH"
+    ]
+   },
+   "null_order_changed_rate": [
+    0.9146666666666666,
+    0.6725,
+    1.0
+   ],
+   "null_dir_consistency": [
+    0.7384648918046751,
+    0.1935294117647059,
+    1.0
+   ],
+   "null_new_best_concentration": [
+    0.6480000000000001,
+    0.4,
+    0.95
+   ],
+   "null_best_transfer_rate": [
+    0.8243333333333334,
+    0.38625000000000004,
+    1.0
+   ],
+   "emp_p_order_changed": 0.2913907284768212,
+   "emp_p_dir_consistency": 0.8079470198675497,
+   "emp_p_new_best_concentration": 0.7152317880794702,
+   "emp_p_best_transfer": 0.9602649006622517,
+   "binom_p_new_best_concentration": 3.2907497424359252e-21,
+   "binom_p_transfer": 0.0
+  }
+ },
+ "CHEX": {
+  "PNEUMONIA": {
+   "matched_prior": 0.38746438746438744,
+   "n_target": 169,
+   "observed": {
+    "valid": 500,
+    "order_changed_rate": 0.986,
+    "dir_consistency": 0.4908722109533469,
+    "new_best_concentration": 0.924,
+    "new_best_distribution": {
+     "NIH": 31,
+     "KEM": 462,
+     "VIN": 7
+    },
+    "best_transfer_rate": 0.986,
+    "raw_rank": [
+     "VIN",
+     "KEM",
+     "NIH"
+    ]
+   },
+   "null_order_changed_rate": [
+    0.797,
+    0.4,
+    1.0
+   ],
+   "null_dir_consistency": [
+    0.5030297646396719,
+    0.09083333333333334,
+    0.9480921052631579
+   ],
+   "null_new_best_concentration": [
+    0.5806666666666667,
+    0.4,
+    0.9
+   ],
+   "null_best_transfer_rate": [
+    0.6080000000000001,
+    0.13625,
+    1.0
+   ],
+   "emp_p_order_changed": 0.06622516556291391,
+   "emp_p_dir_consistency": 0.5629139072847682,
+   "emp_p_new_best_concentration": 0.019867549668874173,
+   "emp_p_best_transfer": 0.039735099337748346,
+   "binom_p_new_best_concentration": 1.2958200642822652e-170,
+   "binom_p_transfer": 0.0
+  },
+  "NORMAL": {
+   "matched_prior": 0.6125356125356125,
+   "n_target": 169,
+   "observed": {
+    "valid": 500,
+    "order_changed_rate": 0.982,
+    "dir_consistency": 0.0,
+    "new_best_concentration": 1.0,
+    "new_best_distribution": {
+     "NIH": 0,
+     "KEM": 0,
+     "VIN": 500
+    },
+    "best_transfer_rate": 0.0,
+    "raw_rank": [
+     "VIN",
+     "KEM",
+     "NIH"
+    ]
+   },
+   "null_order_changed_rate": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "null_dir_consistency": [
+    0.9993333333333334,
+    1.0,
+    1.0
+   ],
+   "null_new_best_concentration": [
+    0.7033333333333334,
+    0.5,
+    0.95
+   ],
+   "null_best_transfer_rate": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "emp_p_order_changed": 1.0,
+   "emp_p_dir_consistency": 1.0,
+   "emp_p_new_best_concentration": 0.019867549668874173,
+   "emp_p_best_transfer": 1.0,
+   "binom_p_new_best_concentration": 2.7502529562030617e-239,
+   "binom_p_transfer": 1.0
+  }
+ },
+ "MIMIC_CH": {
+  "PNEUMONIA": {
+   "matched_prior": 0.38746438746438744,
+   "n_target": 169,
+   "observed": {
+    "valid": 500,
+    "order_changed_rate": 0.83,
+    "dir_consistency": 0.14457831325301204,
+    "new_best_concentration": 0.878,
+    "new_best_distribution": {
+     "NIH": 60,
+     "KEM": 1,
+     "VIN": 439
+    },
+    "best_transfer_rate": 0.122,
+    "raw_rank": [
+     "VIN",
+     "KEM",
+     "NIH"
+    ]
+   },
+   "null_order_changed_rate": [
+    0.6806666666666668,
+    0.3,
+    0.9637500000000002
+   ],
+   "null_dir_consistency": [
+    0.4384124184209323,
+    0.0,
+    0.8442763157894737
+   ],
+   "null_new_best_concentration": [
+    0.579,
+    0.4,
+    0.85
+   ],
+   "null_best_transfer_rate": [
+    0.6076666666666667,
+    0.23625000000000002,
+    0.9
+   ],
+   "emp_p_order_changed": 0.25165562913907286,
+   "emp_p_dir_consistency": 0.8543046357615894,
+   "emp_p_new_best_concentration": 0.019867549668874173,
+   "emp_p_best_transfer": 1.0,
+   "binom_p_new_best_concentration": 1.2799965904177774e-141,
+   "binom_p_transfer": 0.0
+  },
+  "NORMAL": {
+   "matched_prior": 0.6125356125356125,
+   "n_target": 169,
+   "observed": {
+    "valid": 500,
+    "order_changed_rate": 1.0,
+    "dir_consistency": 1.0,
+    "new_best_concentration": 0.572,
+    "new_best_distribution": {
+     "NIH": 214,
+     "KEM": 0,
+     "VIN": 286
+    },
+    "best_transfer_rate": 1.0,
+    "raw_rank": [
+     "KEM",
+     "VIN",
+     "NIH"
+    ]
+   },
+   "null_order_changed_rate": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "null_dir_consistency": [
+    0.975,
+    0.83625,
+    1.0
+   ],
+   "null_new_best_concentration": [
+    0.7716666666666666,
+    0.5,
+    1.0
+   ],
+   "null_best_transfer_rate": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "emp_p_order_changed": 1.0,
+   "emp_p_dir_consistency": 0.7019867549668874,
+   "emp_p_new_best_concentration": 0.8940397350993378,
+   "emp_p_best_transfer": 1.0,
+   "binom_p_new_best_concentration": 1.0263882201685529e-27,
+   "binom_p_transfer": 0.0
+  }
+ },
+ "MIMIC_NB": {
+  "PNEUMONIA": {
+   "matched_prior": 0.38746438746438744,
+   "n_target": 169,
+   "observed": {
+    "valid": 500,
+    "order_changed_rate": 0.998,
+    "dir_consistency": 0.9919839679358717,
+    "new_best_concentration": 0.91,
+    "new_best_distribution": {
+     "NIH": 455,
+     "KEM": 43,
+     "VIN": 2
+    },
+    "best_transfer_rate": 0.996,
+    "raw_rank": [
+     "VIN",
+     "KEM",
+     "NIH"
+    ]
+   },
+   "null_order_changed_rate": [
+    0.7366666666666667,
+    0.35,
+    1.0
+   ],
+   "null_dir_consistency": [
+    0.5798772922410693,
+    0.0,
+    1.0
+   ],
+   "null_new_best_concentration": [
+    0.5796666666666667,
+    0.35,
+    0.95
+   ],
+   "null_best_transfer_rate": [
+    0.6070000000000001,
+    0.23625000000000002,
+    0.9637500000000002
+   ],
+   "emp_p_order_changed": 0.0728476821192053,
+   "emp_p_dir_consistency": 0.039735099337748346,
+   "emp_p_new_best_concentration": 0.039735099337748346,
+   "emp_p_best_transfer": 0.033112582781456956,
+   "binom_p_new_best_concentration": 3.139749888263619e-161,
+   "binom_p_transfer": 0.0
+  },
+  "NORMAL": {
+   "matched_prior": 0.6125356125356125,
+   "n_target": 169,
+   "observed": {
+    "valid": 500,
+    "order_changed_rate": 1.0,
+    "dir_consistency": 1.0,
+    "new_best_concentration": 0.69,
+    "new_best_distribution": {
+     "NIH": 345,
+     "KEM": 0,
+     "VIN": 155
+    },
+    "best_transfer_rate": 1.0,
+    "raw_rank": [
+     "KEM",
+     "VIN",
+     "NIH"
+    ]
+   },
+   "null_order_changed_rate": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "null_dir_consistency": [
+    0.9936666666666667,
+    0.95,
+    1.0
+   ],
+   "null_new_best_concentration": [
+    0.7093333333333334,
+    0.5,
+    1.0
+   ],
+   "null_best_transfer_rate": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "emp_p_order_changed": 1.0,
+   "emp_p_dir_consistency": 0.8940397350993378,
+   "emp_p_new_best_concentration": 0.5629139072847682,
+   "emp_p_best_transfer": 1.0,
+   "binom_p_new_best_concentration": 1.9083156716417943e-59,
+   "binom_p_transfer": 0.0
+  }
+ }
+}

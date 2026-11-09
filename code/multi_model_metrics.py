@@ -47,8 +47,9 @@ REPO = os.path.dirname(HERE)
 RESULTS = os.path.join(REPO, "results")
 PRED = os.path.join(RESULTS, "multi_model_predictions.csv")
 
-SEED = 20261109
+SEED = 20261104   # 与单模型版 prior_matched_ece.py 一致，使同一模型的结果可直接对照
 N_REPS = 500
+N_PERM = 200         # 置换检验次数（零分布）
 DATASETS = ["NIH", "KEM", "VIN"]
 LABELS = ["PNEUMONIA", "NORMAL"]
 # NORMAL 派生用的共同病种（跨模型一致）
@@ -197,8 +198,13 @@ def load():
     return data
 
 
-def vectors(dom, label, norm_col="p_normal_common"):
-    """取某模型某标签在三个库上的 (y, s) 字典。"""
+def vectors(dom, label, norm_col="s_norm_common"):
+    """取某模型某标签在三个库上的 (y, s) 字典。
+
+    ⚠️ norm_col 必须用 load() 里实际存的键名（s_norm_common / s_norm_self），
+    写错会触发 defaultdict 返回空列表 → np.array([]) → 越界报错且不报错信息，
+    很难定位。
+    """
     key_s = "s_pneu" if label == "PNEUMONIA" else norm_col
     out = {}
     for ds in DATASETS:
@@ -213,8 +219,13 @@ def vectors(dom, label, norm_col="p_normal_common"):
 def match_target(priors, counts):
     """目标先验 = 三库并集中位先验；目标 n = 可行域最大值。"""
     med = float(np.median(list(priors.values())))
-    min_pos = min(int(counts[ds][0] * priors[ds]) for ds in DATASETS)
-    min_neg = min(int(counts[ds][1] * (1 - priors[ds])) for ds in DATASETS)
+    # ⚠️ counts[ds] = (该库正类实际数量, 负类实际数量)
+    # 约束是「目标正类数 <= 各库实际拥有的正类数」，因此直接取各库正类数的最小值，
+    # **不能再乘一次先验**（乘了会得到 min(n_pos × prior)，语义错误）。
+    # 单模型版 prior_matched_ece.py 用的等价写法是 min(int(n_total_of_ds × prior)),
+    # 两者数值相同，因为 n_total × prior ≈ 该库正类数。
+    min_pos = min(int(counts[ds][0]) for ds in DATASETS)
+    min_neg = min(int(counts[ds][1]) for ds in DATASETS)
     n_total = 0
     for cand in range(100, 6000):
         npos = int(round(med * cand))
@@ -288,7 +299,8 @@ def main():
                         bins[f"ece_{nb}bins"] = v
                 if bins:
                     vals = list(bins.values())
-                    rec["ece_bin_spread_ratio"] = max(vals) / min(vals)
+                    rec["ece_bin_spread_ratio"] = (max(vals) / min(vals)
+                                                 if min(vals) > 0 else None)
                     mres["ece_bin_sensitivity"][key] = bins
                 mres["per_dataset"][key] = rec
 
@@ -362,6 +374,8 @@ def main():
             flip_full = flip_part = same = 0
             best_changed = 0
             valid = 0
+            # 新最优者的身份分布（用于检验"翻转方向是否一致"）
+            new_best_counter = {ds: 0 for ds in DATASETS}
             for _ in range(N_REPS):
                 subs = {}
                 ok = True
@@ -387,15 +401,90 @@ def main():
                     flip_part += 1
                 if m_rank[0] != raw_rank[0]:
                     best_changed += 1
+                new_best_counter[m_rank[0]] += 1
+
+            # ---- 判据 1（主）：排序改变率 ----------------------------------------
+            # 排序发生改变 = 完全首尾互换 + 部分重排。这是与判据无关的量，
+            # 在三个数据集的情形下不依赖"完全反转"这一严格定义。
+            # 零假设：改变是重采样噪声的偶然产物 → 用**同分布置换检验**：
+            # 在每个数据集内部打乱标签（保留边际分布），重跑同一流程，
+            # 得到纯噪声下排序改变率的零分布。
+            changed = flip_full + flip_part
+            p_order = binomial_two_sided(changed, valid, p0=0.0) \
+                if False else None   # 二项检验 p0=0 无意义，改用置换检验
+
+            # 置换检验：零分布 = 「模型无判别力时，先验匹配仍会改变排序」的概率
+            # ⚠️ 关键：每个置换必须用**它自己的原始排序**作参照。
+            #    若拿打乱后的排序去比「未打乱的原始排序」，得到的是一个无意义的量
+            #    （零分布会接近 100%，因为两者的驱动量根本不同）。
+            #    正确做法：置换内先算该置换数据自身的原始排序，再看先验匹配后
+            #    排序相对它是否改变。这样零分布才回答
+            #    「排序改变是否只是先验算术的必然结果」。
+            rng_perm = np.random.default_rng(SEED + 1)
+            perm_rates = []
+            for _ in range(N_PERM):
+                perm_changed = 0
+                perm_valid = 0
+                for _ in range(20):          # 每次置换做 20 次重采样（控制耗时）
+                    subs = {}
+                    perm_ece_raw = {}
+                    ok = True
+                    for ds in DATASETS:
+                        y, s = vs[ds]
+                        yp = rng_perm.permutation(y)      # 标签打乱，保留边际分布
+                        e_raw = ece(yp, s, 10)
+                        if e_raw is None:
+                            ok = False
+                            break
+                        perm_ece_raw[ds] = e_raw
+                        outp = resample_to_prior(yp, s, med, rng_perm, n_total)
+                        if outp is None:
+                            ok = False
+                            break
+                        subs[ds] = outp
+                    if not ok:
+                        break
+                    # 该置换自身的原始排序（打乱标签、未做先验匹配）
+                    perm_raw_rank = sorted(DATASETS, key=lambda d: perm_ece_raw[d])
+                    e = {ds: ece(subs[ds][0], subs[ds][1], 10) for ds in DATASETS}
+                    if any(v is None for v in e.values()):
+                        continue
+                    perm_valid += 1
+                    m_rank = sorted(DATASETS, key=lambda d: e[d])
+                    if m_rank != perm_raw_rank:
+                        perm_changed += 1
+                if perm_valid:
+                    perm_rates.append(perm_changed / perm_valid)
+            p_order = None
+            if perm_rates:
+                obs = changed / valid if valid else 0.0
+                p_order = (1 + sum(1 for r in perm_rates if r >= obs)) / (1 + len(perm_rates))
+
+            # ---- 判据 2：方向一致性（新最优者身份的集中度） -------------------
+            # 在排序改变的重采样中，若"新的最优者"高度集中于同一个数据集，
+            # 说明翻转方向是系统性的；若分散在各方向，则方向不统一。
+            n_new_best = max(new_best_counter.values()) if new_best_counter else 0
+            p_dir_new = binomial_two_sided(n_new_best, valid, p0=1.0 / len(DATASETS)) \
+                if valid else None
+            # 保持与单模型版可比的旧判据（完全首尾互换的方向一致性）
             flipped = flip_full + flip_part
             p_dir = binomial_two_sided(flip_full, flipped) if flipped else None
             p_best = binomial_two_sided(best_changed, valid) if valid else None
             flipres[label] = {
                 "n_target": n_total, "target_prior": med,
                 "raw_rank_best_to_worst": raw_rank, "raw_span": raw_span,
-                "matched_span_median": (float(np.median(
-                    [matched[d]["ece_median"] for d in DATASETS
-                     if matched[d]["ece_median"] is not None])) if mat_vals else None),
+                # ---- 新判据（跨模型可比，主判据）----
+                "order_changed": changed,
+                "order_changed_rate": (changed / valid) if valid else None,
+                "order_changed_perm_p": p_order,
+                "perm_null_mean_rate": (float(np.mean(perm_rates)) if perm_rates else None),
+                "perm_null_p95_rate": (float(np.percentile(perm_rates, 95)) if perm_rates else None),
+                "new_best_distribution": new_best_counter,
+                "new_best_concentration": (n_new_best / valid) if valid else None,
+                "new_best_concentration_p": p_dir_new,
+                # 注意：跨度 = max(ECE)/min(ECE)，不是 ECE 的中位数
+                "matched_span_median": ((max(mat_vals) / min(mat_vals))
+                                        if mat_vals else None),
                 "flip_full_reversal": flip_full, "flip_partial": flip_part,
                 "same_order": same, "n_valid_reps": valid,
                 "direction_consistency": (flip_full / flipped) if flipped else None,
@@ -403,8 +492,11 @@ def main():
                 "n_best_changed": best_changed,
                 "best_changed_rate": (best_changed / valid) if valid else None,
                 "best_changed_p": p_best,
+                # 判定以**排序改变率的置换检验**为主判据（不依赖"完全反转"这一
+                # 严格定义），旧的方向一致性判据作为补充保留。
                 "verdict": ("systematic_flip_confirmed"
-                            if (p_dir is not None and p_dir < 0.05 and flipped > valid * 0.5)
+                            if (p_order is not None and p_order < 0.05
+                                and valid and changed / valid > 0.5)
                             else "flip_not_confirmed"),
             }
             log(f"             符号检验: 完全翻转 {flip_full}/{flipped} "

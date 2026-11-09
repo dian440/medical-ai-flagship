@@ -18,9 +18,9 @@
 
 ### 2.1 Study design and scope
 
-We conducted a cross-dataset generalisation audit of a publicly released chest radiograph classifier, designed to test whether the relative standing of evaluation datasets is stable under changes in the metric, the label definition, and the class prevalence. The analysis is a retrospective evaluation of existing public data and involved no new data collection, no prospective patient enrolment, and no intervention; consequently, institutional review board approval was not required under the policies of the authors' institution, and all data were obtained from publicly released datasets under their original terms of use.
+We conducted a cross-dataset generalisation audit of four publicly released chest radiograph classifiers, designed to test whether the relative standing of evaluation datasets is stable under changes in the metric, the label definition, and the class prevalence. The analysis is a retrospective evaluation of existing public data and involved no new data collection, no prospective patient enrolment, and no intervention; consequently, institutional review board approval was not required under the policies of the authors' institution, and all data were obtained from publicly released datasets under their original terms of use.
 
-The audit examined a single model and a single two-class task across three datasets that differ in patient population, care setting, and annotation modality. We deliberately held the model fixed so that any variation observed across datasets could be attributed to the evaluation protocol rather than to variation in modelling, and we asked three questions in sequence: whether discrimination differed across datasets, whether calibration differed, and whether the observed differences persisted when class prevalence was held constant.
+The audit examined a single two-class task across three datasets that differ in patient population, care setting, and annotation modality, evaluated with four classifiers that shared the DenseNet-121 architecture but differed in their pretraining source. Holding the architecture constant while varying the training source allows any difference we observe to be attributed to the training distribution rather than to model capacity, and it makes the audit a test of the evaluation procedure rather than of one checkpoint. We asked three questions in sequence: whether discrimination differed across datasets, whether calibration differed, and whether the observed differences persisted when class prevalence was held constant.
 
 ### 2.2 Datasets and label harmonisation
 
@@ -70,7 +70,9 @@ Calibration spread was expressed as the ratio of the worst to the best dataset w
 
 #### 2.4.3 Testing the stability of the dataset ranking
 
-Because a reversal observed in a single resample is descriptive, we tested whether the ranking of datasets by calibration changed systematically under resampling. Within each of 500 replicates, all three datasets were resampled simultaneously so that their prevalences remained comparable, and we counted the replicates in which the ordering differed from the ordering observed in the unmodified data. The test statistic was the direction of the change: under a null hypothesis of random direction, complete and partial reversals would occur equally often in either direction, so we assessed the departure from a binomial null with p = 0.5. We also recorded whether the identity of the best-calibrated dataset changed, which is the quantity a deployment decision actually depends upon.
+Because a reversal observed in a single resample is descriptive, we tested whether the ranking of datasets by calibration changed systematically under resampling. Within each of 500 replicates, all three datasets were resampled simultaneously so that their prevalences remained comparable, and we counted the replicates in which the ordering differed from the ordering observed in the unmodified data. We also recorded whether the identity of the best-calibrated dataset changed, which is the quantity a deployment decision actually depends upon.
+
+The observed rate of ranking change was then compared against three null distributions constructed by resampling. The first null permuted the labels within each dataset, which destroys discrimination and yields the behaviour of a model with no predictive power; we note that under this null the direction of complete reversal is itself highly structured, with a mean consistency of 84.1%, so a test against an expectation of a random direction is not interpretable. The second, and most conservative, null assumed the three datasets were of identical calibration and differed only in resampling noise, using the pooled distribution of matched expected calibration errors and sampling three independent replicates; this null answers what would happen if three equally well-calibrated datasets were compared. The third retained each dataset's own calibration distribution but sampled it independently rather than synchronously. We report the observed rate against the second null as the primary comparison, because it is the most comparable to the observation and the most conservative; a change can be attributed to the datasets themselves only if the observed rate exceeds it.
 
 #### 2.4.4 Decision curve analysis
 
@@ -98,9 +100,9 @@ Ethics approval and consent to participate: not applicable. Consent for publicat
 
 ### 2.1 研究设计与范围
 
-我们开展了一项公开胸片分类器的跨数据集泛化性审计，目的是检验在不同指标、不同标签定义和不同类别先验下，各评估数据集之间的相对优劣是否稳定。本研究是对既有公开数据的回顾性评价，不涉及新的数据采集、前瞻性患者入组或任何干预，因此按作者所在机构的政策无需伦理审查委员会批准；全部数据均依原始使用条款从公开发布的数据集获得。
+我们开展了一项四个公开胸片分类器的跨数据集泛化性审计，目的是检验在不同指标、不同标签定义和不同类别先验下，各评估数据集之间的相对优劣是否稳定。本研究是对既有公开数据的回顾性评价，不涉及新的数据采集、前瞻性患者入组或任何干预，因此按作者所在机构的政策无需伦理审查委员会批准；全部数据均依原始使用条款从公开发布的数据集获得。
 
-本研究在三个患者人群、诊疗场景和标注方式均不同的数据集上，考察了单一模型与单一二分类任务。我们有意固定模型，使跨数据集的任何差异只能归因于评估方案本身，而非建模差异；并依次追问三个问题：判别能力是否跨库不同、校准是否跨库不同，以及在控制类别先验后这些差异是否依然存在。
+本研究在三个患者人群、诊疗场景和标注方式均不同的数据集上，考察单一二分类任务，并使用四个分类器评估——四者架构相同但预训练来源不同。**在固定架构的同时改变训练来源，使我们观察到的任何差异都可归因于训练分布而非模型容量，也使本研究成为对评估流程而非对某一个权重的检验。** 我们依次追问三个问题：判别能力是否跨库不同、校准是否跨库不同，以及在控制类别先验后这些差异是否依然存在。
 
 ### 2.2 数据集与标签统一
 
@@ -150,7 +152,9 @@ AUC 的方差用 DeLong 方法的结构分量估计，其中每个观测的位�
 
 #### 2.4.3 检验数据集排序的稳定性
 
-由于单次重采样中观察到的排序反转只是描述性观察，我们检验了在重采样下数据集校准排序是否系统性改变。500 次重采样中的每一次，三个数据集同步重采样以保持先验可比，我们统计排序与未重采样数据排序不同的重复次数。检验统计量是变化的方向：在"方向随机"的原假设下，完全反转与部分反转应在两个方向上等频出现，因此我们以 p = 0.5 的二项分布评估其偏离程度。我们同时记录校准最优的数据集身份是否改变——这才是部署决策实际依赖的量。
+由于单次重采样中观察到的排序反转只是描述性观察，我们检验了在重采样下数据集校准排序是否系统性改变。500 次重采样中的每一次，三个数据集同步重采样以保持先验可比，我们统计排序与未重采样数据排序不同的重复次数。我们同时记录校准最优的数据集身份是否改变——这才是部署决策实际依赖的量。
+
+随后将观测到的排序改变率与三个由重采样构造的零分布比较。第一个零分布在各数据集内部置换标签，破坏判别能力，刻画一个毫无预测力的模型会怎样；**须注意在该零分布下"完全首尾互换"的方向本身就高度结构化，方向一致性均值达 84.1%，因此以"方向随机"（p=0.5）为期望的检验无法解读**。第二个、也是最保守的零分布，假设三个数据集校准水平完全相同、仅存在重采样噪声，构造方式是把先验匹配后 ECE 的合并池作为共同分布并独立抽取三个副本——它回答的是"三个同样校准良好的数据集相互比较会怎样"。第三个零分布保留各库自身的校准分布，但独立抽样而非同步抽样。**主比较以第二个零分布为准**，因为它与观测最可比且最保守；只有当观测改变率超出它时，改变才可归因于数据集本身而非噪声。
 
 #### 2.4.4 决策曲线分析
 

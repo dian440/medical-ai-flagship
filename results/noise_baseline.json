@@ -1,0 +1,314 @@
+{
+ "seed": 20261104,
+ "n_reps": 500,
+ "models": [
+  "NIH",
+  "CHEX",
+  "MIMIC_CH",
+  "MIMIC_NB"
+ ],
+ "NIH": {
+  "PNEUMONIA": {
+   "matched_prior": 0.38746438746438744,
+   "n_target": 169,
+   "observed_change_rate": 0.976,
+   "n_valid": 500,
+   "n_changed": 488,
+   "raw_rank": [
+    "VIN",
+    "NIH",
+    "KEM"
+   ],
+   "baseline_same_dist": 0.84425,
+   "baseline_actual_dist": 0.495,
+   "p_vs_same": 2.876227105873868e-22,
+   "p_vs_actual": 1.3550367892680052e-129,
+   "exceeds_same": true,
+   "exceeds_actual": true,
+   "ece_dist_medians": {
+    "NIH": 0.10605742011561359,
+    "KEM": 0.06349428590716376,
+    "VIN": 0.09839197471080012
+   },
+   "ece_dist_iqr": {
+    "NIH": [
+     0.09174062200639305,
+     0.1221679535867343
+    ],
+    "KEM": [
+     0.04942361018520549,
+     0.08060378393626044
+    ],
+    "VIN": [
+     0.08606793869763116,
+     0.1097230109559736
+    ]
+   }
+  },
+  "NORMAL": {
+   "matched_prior": 0.6125356125356125,
+   "n_target": 169,
+   "observed_change_rate": 0.974,
+   "n_valid": 500,
+   "n_changed": 487,
+   "raw_rank": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "baseline_same_dist": 0.8365,
+   "baseline_actual_dist": 0.5015,
+   "p_vs_same": 4.536243176128039e-23,
+   "p_vs_actual": 2.3010720764312364e-125,
+   "exceeds_same": true,
+   "exceeds_actual": true,
+   "ece_dist_medians": {
+    "NIH": 0.16941154184448115,
+    "KEM": 0.22964631033422062,
+    "VIN": 0.17127732075916152
+   },
+   "ece_dist_iqr": {
+    "NIH": [
+     0.15458302360755455,
+     0.1825840360369291
+    ],
+    "KEM": [
+     0.21499874962482748,
+     0.2456030350346559
+    ],
+    "VIN": [
+     0.15376049876157966,
+     0.1894844724747115
+    ]
+   }
+  }
+ },
+ "CHEX": {
+  "PNEUMONIA": {
+   "matched_prior": 0.38746438746438744,
+   "n_target": 169,
+   "observed_change_rate": 0.986,
+   "n_valid": 500,
+   "n_changed": 493,
+   "raw_rank": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "baseline_same_dist": 0.83025,
+   "baseline_actual_dist": 0.50775,
+   "p_vs_same": 2.22935656002364e-30,
+   "p_vs_actual": 8.535566405149826e-133,
+   "exceeds_same": true,
+   "exceeds_actual": true,
+   "ece_dist_medians": {
+    "NIH": 0.1608681759417998,
+    "KEM": 0.11054042710360559,
+    "VIN": 0.15890591951485272
+   },
+   "ece_dist_iqr": {
+    "NIH": [
+     0.14213653843396637,
+     0.17864782723495543
+    ],
+    "KEM": [
+     0.09824574844065789,
+     0.12285824562216277
+    ],
+    "VIN": [
+     0.15074606476260002,
+     0.16856735081001345
+    ]
+   }
+  },
+  "NORMAL": {
+   "matched_prior": 0.6125356125356125,
+   "n_target": 169,
+   "observed_change_rate": 0.982,
+   "n_valid": 500,
+   "n_changed": 491,
+   "raw_rank": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "baseline_same_dist": 0.82875,
+   "baseline_actual_dist": 0.022,
+   "p_vs_same": 9.819446901396063e-29,
+   "p_vs_actual": 0.0,
+   "exceeds_same": true,
+   "exceeds_actual": true,
+   "ece_dist_medians": {
+    "NIH": 0.2156388265791641,
+    "KEM": 0.27451938510866913,
+    "VIN": 0.12433357843192372
+   },
+   "ece_dist_iqr": {
+    "NIH": [
+     0.20035490695078523,
+     0.23379839044725578
+    ],
+    "KEM": [
+     0.26587118947404553,
+     0.2832669091835266
+    ],
+    "VIN": [
+     0.11106442195534179,
+     0.13704591124048512
+    ]
+   }
+  }
+ },
+ "MIMIC_CH": {
+  "PNEUMONIA": {
+   "matched_prior": 0.38746438746438744,
+   "n_target": 169,
+   "observed_change_rate": 0.83,
+   "n_valid": 500,
+   "n_changed": 415,
+   "raw_rank": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "baseline_same_dist": 0.838,
+   "baseline_actual_dist": 0.298,
+   "p_vs_same": 0.627249560217433,
+   "p_vs_actual": 2.808066658423577e-134,
+   "exceeds_same": false,
+   "exceeds_actual": true,
+   "ece_dist_medians": {
+    "NIH": 0.12838096617577743,
+    "KEM": 0.16161613283160878,
+    "VIN": 0.07949967202372274
+   },
+   "ece_dist_iqr": {
+    "NIH": [
+     0.10801112834541901,
+     0.15066291732553766
+    ],
+    "KEM": [
+     0.1498525085798382,
+     0.17229392030965207
+    ],
+    "VIN": [
+     0.06719461342143501,
+     0.09312831970570976
+    ]
+   }
+  },
+  "NORMAL": {
+   "matched_prior": 0.6125356125356125,
+   "n_target": 169,
+   "observed_change_rate": 1.0,
+   "n_valid": 500,
+   "n_changed": 500,
+   "raw_rank": [
+    "KEM",
+    "VIN",
+    "NIH"
+   ],
+   "baseline_same_dist": 0.82325,
+   "baseline_actual_dist": 0.44825,
+   "p_vs_same": 1.2779747739964622e-42,
+   "p_vs_actual": 5.756375513458744e-175,
+   "exceeds_same": true,
+   "exceeds_actual": true,
+   "ece_dist_medians": {
+    "NIH": 0.23171767547792763,
+    "KEM": 0.31328248289915234,
+    "VIN": 0.22703815449977066
+   },
+   "ece_dist_iqr": {
+    "NIH": [
+     0.21754209239851438,
+     0.2460340260494963
+    ],
+    "KEM": [
+     0.30550361552534727,
+     0.3228769608326918
+    ],
+    "VIN": [
+     0.21974993151055994,
+     0.2355206491723216
+    ]
+   }
+  }
+ },
+ "MIMIC_NB": {
+  "PNEUMONIA": {
+   "matched_prior": 0.38746438746438744,
+   "n_target": 169,
+   "observed_change_rate": 0.998,
+   "n_valid": 500,
+   "n_changed": 499,
+   "raw_rank": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "baseline_same_dist": 0.82725,
+   "baseline_actual_dist": 0.286,
+   "p_vs_same": 1.2680666340659991e-39,
+   "p_vs_actual": 1.9039981865384273e-269,
+   "exceeds_same": true,
+   "exceeds_actual": true,
+   "ece_dist_medians": {
+    "NIH": 0.11603699838907934,
+    "KEM": 0.16046022709745628,
+    "VIN": 0.18902679735563208
+   },
+   "ece_dist_iqr": {
+    "NIH": [
+     0.0982167601086662,
+     0.13605391848060858
+    ],
+    "KEM": [
+     0.14881703844459274,
+     0.175952714173531
+    ],
+    "VIN": [
+     0.17150310133776725,
+     0.20490979339332271
+    ]
+   }
+  },
+  "NORMAL": {
+   "matched_prior": 0.6125356125356125,
+   "n_target": 169,
+   "observed_change_rate": 1.0,
+   "n_valid": 500,
+   "n_changed": 500,
+   "raw_rank": [
+    "KEM",
+    "VIN",
+    "NIH"
+   ],
+   "baseline_same_dist": 0.83825,
+   "baseline_actual_dist": 0.291,
+   "p_vs_same": 7.628095633119011e-39,
+   "p_vs_actual": 8.840859585279218e-269,
+   "exceeds_same": true,
+   "exceeds_actual": true,
+   "ece_dist_medians": {
+    "NIH": 0.23818267438803198,
+    "KEM": 0.30804198975922786,
+    "VIN": 0.2501730161041198
+   },
+   "ece_dist_iqr": {
+    "NIH": [
+     0.22515039669471026,
+     0.25106986642390844
+    ],
+    "KEM": [
+     0.30109925219822214,
+     0.31558035219297603
+    ],
+    "VIN": [
+     0.2434037402492656,
+     0.2569083840139872
+    ]
+   }
+  }
+ }
+}

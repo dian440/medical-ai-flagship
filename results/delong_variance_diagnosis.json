@@ -1,0 +1,188 @@
+{
+ "tally": {
+  "V1": 0,
+  "V2": 16,
+  "V3ok": 16,
+  "V3bad": 0,
+  "repo": 16
+ },
+ "n": 16,
+ "rows": [
+  {
+   "model": "NIH",
+   "label": "PNEUMONIA",
+   "other": "KEM",
+   "se_V1_mine": 0.4788597941764956,
+   "se_V2_correct": 0.03406103637794284,
+   "se_V3_midrank_ok": 0.03406104080117545,
+   "se_V3_midrank_buggy": 0.3575387299536398,
+   "se_bootstrap": 0.033563280796471584,
+   "se_repo": 0.03406103637794284
+  },
+  {
+   "model": "NIH",
+   "label": "PNEUMONIA",
+   "other": "VIN",
+   "se_V1_mine": 0.5104033734043274,
+   "se_V2_correct": 0.038837773195085336,
+   "se_V3_midrank_ok": 0.038837791044354676,
+   "se_V3_midrank_buggy": 0.3604308882031857,
+   "se_bootstrap": 0.03856267732331989,
+   "se_repo": 0.038837773195085336
+  },
+  {
+   "model": "NIH",
+   "label": "NORMAL",
+   "other": "KEM",
+   "se_V1_mine": 0.3969655210167459,
+   "se_V2_correct": 0.03198173001594476,
+   "se_V3_midrank_ok": 0.03198173102676267,
+   "se_V3_midrank_buggy": 0.30760193196666524,
+   "se_bootstrap": 0.032599381330826474,
+   "se_repo": 0.03198173001594476
+  },
+  {
+   "model": "NIH",
+   "label": "NORMAL",
+   "other": "VIN",
+   "se_V1_mine": 0.45347124361530744,
+   "se_V2_correct": 0.03570891191921854,
+   "se_V3_midrank_ok": 0.03570891360085082,
+   "se_V3_midrank_buggy": 0.31039899716943636,
+   "se_bootstrap": 0.036336386534537655,
+   "se_repo": 0.03570891191921854
+  },
+  {
+   "model": "CHEX",
+   "label": "PNEUMONIA",
+   "other": "KEM",
+   "se_V1_mine": 0.37496169812295066,
+   "se_V2_correct": 0.030052909423630567,
+   "se_V3_midrank_ok": 0.030052909683690517,
+   "se_V3_midrank_buggy": 0.356150874012726,
+   "se_bootstrap": 0.029610166283338395,
+   "se_repo": 0.030052909423630567
+  },
+  {
+   "model": "CHEX",
+   "label": "PNEUMONIA",
+   "other": "VIN",
+   "se_V1_mine": 0.42162541523474456,
+   "se_V2_correct": 0.03265759860479699,
+   "se_V3_midrank_ok": 0.03265760052802273,
+   "se_V3_midrank_buggy": 0.35835800809483814,
+   "se_bootstrap": 0.03332498715047589,
+   "se_repo": 0.03265759860479699
+  },
+  {
+   "model": "CHEX",
+   "label": "NORMAL",
+   "other": "KEM",
+   "se_V1_mine": 0.3665603555491839,
+   "se_V2_correct": 0.0305466483932949,
+   "se_V3_midrank_ok": 0.030546324066049717,
+   "se_V3_midrank_buggy": 0.3140618702705576,
+   "se_bootstrap": 0.030155889081579568,
+   "se_repo": 0.0305466483932949
+  },
+  {
+   "model": "CHEX",
+   "label": "NORMAL",
+   "other": "VIN",
+   "se_V1_mine": 0.42775340706028864,
+   "se_V2_correct": 0.03358953048789852,
+   "se_V3_midrank_ok": 0.033589236988270044,
+   "se_V3_midrank_buggy": 0.31649535441692606,
+   "se_bootstrap": 0.03321693890578932,
+   "se_repo": 0.03358953048789852
+  },
+  {
+   "model": "MIMIC_CH",
+   "label": "PNEUMONIA",
+   "other": "KEM",
+   "se_V1_mine": 0.5476360730431642,
+   "se_V2_correct": 0.037333917940705355,
+   "se_V3_midrank_ok": 0.03733391828917727,
+   "se_V3_midrank_buggy": 0.34775243450978816,
+   "se_bootstrap": 0.03613364805114756,
+   "se_repo": 0.037333917940705355
+  },
+  {
+   "model": "MIMIC_CH",
+   "label": "PNEUMONIA",
+   "other": "VIN",
+   "se_V1_mine": 0.5243052271057783,
+   "se_V2_correct": 0.041399988418092414,
+   "se_V3_midrank_ok": 0.041399990564968805,
+   "se_V3_midrank_buggy": 0.35042068575361685,
+   "se_bootstrap": 0.04149497229406585,
+   "se_repo": 0.041399988418092414
+  },
+  {
+   "model": "MIMIC_CH",
+   "label": "NORMAL",
+   "other": "KEM",
+   "se_V1_mine": 0.4782972560441628,
+   "se_V2_correct": 0.03316853363625864,
+   "se_V3_midrank_ok": 0.03316853434348825,
+   "se_V3_midrank_buggy": 0.3265517801537844,
+   "se_bootstrap": 0.03159172080057818,
+   "se_repo": 0.03316853363625864
+  },
+  {
+   "model": "MIMIC_CH",
+   "label": "NORMAL",
+   "other": "VIN",
+   "se_V1_mine": 0.5075483185826638,
+   "se_V2_correct": 0.03787385860794911,
+   "se_V3_midrank_ok": 0.03787384343174066,
+   "se_V3_midrank_buggy": 0.3296323050364345,
+   "se_bootstrap": 0.037363541693452046,
+   "se_repo": 0.03787385860794911
+  },
+  {
+   "model": "MIMIC_NB",
+   "label": "PNEUMONIA",
+   "other": "KEM",
+   "se_V1_mine": 0.5133657723681431,
+   "se_V2_correct": 0.03544386514609661,
+   "se_V3_midrank_ok": 0.035443865924458424,
+   "se_V3_midrank_buggy": 0.34928970982390933,
+   "se_bootstrap": 0.03522175831690924,
+   "se_repo": 0.03544386514609661
+  },
+  {
+   "model": "MIMIC_NB",
+   "label": "PNEUMONIA",
+   "other": "VIN",
+   "se_V1_mine": 0.501218464517395,
+   "se_V2_correct": 0.039542732649509846,
+   "se_V3_midrank_ok": 0.039542737874680926,
+   "se_V3_midrank_buggy": 0.35192687471667417,
+   "se_bootstrap": 0.03941536391889611,
+   "se_repo": 0.039542732649509846
+  },
+  {
+   "model": "MIMIC_NB",
+   "label": "NORMAL",
+   "other": "KEM",
+   "se_V1_mine": 0.44465040143136375,
+   "se_V2_correct": 0.0331099716642478,
+   "se_V3_midrank_ok": 0.03310997882965134,
+   "se_V3_midrank_buggy": 0.32134372950659396,
+   "se_bootstrap": 0.03252236464281968,
+   "se_repo": 0.0331099716642478
+  },
+  {
+   "model": "MIMIC_NB",
+   "label": "NORMAL",
+   "other": "VIN",
+   "se_V1_mine": 0.4842835815575416,
+   "se_V2_correct": 0.03743992521571053,
+   "se_V3_midrank_ok": 0.03743993253117287,
+   "se_V3_midrank_buggy": 0.3242486299968929,
+   "se_bootstrap": 0.03736088822268149,
+   "se_repo": 0.03743992521571053
+  }
+ ]
+}

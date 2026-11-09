@@ -1,0 +1,282 @@
+{
+ "seed": 20261104,
+ "n_reps": 500,
+ "models": [
+  "NIH",
+  "CHEX",
+  "MIMIC_CH",
+  "MIMIC_NB"
+ ],
+ "NIH": {
+  "PNEUMONIA": {
+   "n_target": 169,
+   "target_prior": 0.38746438746438744,
+   "raw_rank_best_to_worst": [
+    "VIN",
+    "NIH",
+    "KEM"
+   ],
+   "raw_span": 3.293946108778308,
+   "order_changed": 488,
+   "order_changed_rate": 0.976,
+   "order_changed_perm_p": 0.7661691542288557,
+   "perm_null_mean_rate": 0.986,
+   "perm_null_p95_rate": 1.0,
+   "new_best_distribution": {
+    "NIH": 31,
+    "KEM": 417,
+    "VIN": 52
+   },
+   "new_best_concentration": 0.834,
+   "new_best_concentration_p": 5.692735507602364e-118,
+   "matched_span_median": 1.6727805637470199,
+   "flip_full_reversal": 436,
+   "flip_partial": 52,
+   "same_order": 12,
+   "n_valid_reps": 500,
+   "direction_consistency": 0.8934426229508197,
+   "direction_consistency_p": 1.3197879142172531e-76,
+   "n_best_changed": 448,
+   "best_changed_rate": 0.896,
+   "best_changed_p": 1.2180290036070915e-79,
+   "verdict": "flip_not_confirmed"
+  },
+  "NORMAL": {
+   "n_target": 169,
+   "target_prior": 0.6125356125356125,
+   "raw_rank_best_to_worst": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "raw_span": 2.759551875954947,
+   "order_changed": 487,
+   "order_changed_rate": 0.974,
+   "order_changed_perm_p": 0.06965174129353234,
+   "perm_null_mean_rate": 0.8909999999999999,
+   "perm_null_p95_rate": 1.0,
+   "new_best_distribution": {
+    "NIH": 270,
+    "KEM": 4,
+    "VIN": 226
+   },
+   "new_best_concentration": 0.54,
+   "new_best_concentration_p": 3.2907497424359252e-21,
+   "matched_span_median": 1.3659333483145315,
+   "flip_full_reversal": 274,
+   "flip_partial": 213,
+   "same_order": 13,
+   "n_valid_reps": 500,
+   "direction_consistency": 0.5626283367556468,
+   "direction_consistency_p": 0.006491775062465416,
+   "n_best_changed": 274,
+   "best_changed_rate": 0.548,
+   "best_changed_p": 0.035456638012682916,
+   "verdict": "flip_not_confirmed"
+  }
+ },
+ "CHEX": {
+  "PNEUMONIA": {
+   "n_target": 169,
+   "target_prior": 0.38746438746438744,
+   "raw_rank_best_to_worst": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "raw_span": 1.2934408378856128,
+   "order_changed": 493,
+   "order_changed_rate": 0.986,
+   "order_changed_perm_p": 0.014925373134328358,
+   "perm_null_mean_rate": 0.79125,
+   "perm_null_p95_rate": 0.95,
+   "new_best_distribution": {
+    "NIH": 31,
+    "KEM": 462,
+    "VIN": 7
+   },
+   "new_best_concentration": 0.924,
+   "new_best_concentration_p": 1.2958200642822652e-170,
+   "matched_span_median": 1.4516050858288887,
+   "flip_full_reversal": 242,
+   "flip_partial": 251,
+   "same_order": 7,
+   "n_valid_reps": 500,
+   "direction_consistency": 0.4908722109533469,
+   "direction_consistency_p": 0.7186611559990164,
+   "n_best_changed": 493,
+   "best_changed_rate": 0.986,
+   "best_changed_p": 9.209940032071494e-136,
+   "verdict": "systematic_flip_confirmed"
+  },
+  "NORMAL": {
+   "n_target": 169,
+   "target_prior": 0.6125356125356125,
+   "raw_rank_best_to_worst": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "raw_span": 4.436677642263751,
+   "order_changed": 491,
+   "order_changed_rate": 0.982,
+   "order_changed_perm_p": 1.0,
+   "perm_null_mean_rate": 1.0,
+   "perm_null_p95_rate": 1.0,
+   "new_best_distribution": {
+    "NIH": 0,
+    "KEM": 0,
+    "VIN": 500
+   },
+   "new_best_concentration": 1.0,
+   "new_best_concentration_p": 2.7502529562030617e-239,
+   "matched_span_median": 2.2164650809486095,
+   "flip_full_reversal": 0,
+   "flip_partial": 491,
+   "same_order": 9,
+   "n_valid_reps": 500,
+   "direction_consistency": 0.0,
+   "direction_consistency_p": 3.1282548362235952e-148,
+   "n_best_changed": 0,
+   "best_changed_rate": 0.0,
+   "best_changed_p": 6.10987272699921e-151,
+   "verdict": "flip_not_confirmed"
+  }
+ },
+ "MIMIC_CH": {
+  "PNEUMONIA": {
+   "n_target": 169,
+   "target_prior": 0.38746438746438744,
+   "raw_rank_best_to_worst": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "raw_span": 5.0432458208518645,
+   "order_changed": 415,
+   "order_changed_rate": 0.83,
+   "order_changed_perm_p": 0.0845771144278607,
+   "perm_null_mean_rate": 0.66425,
+   "perm_null_p95_rate": 0.85,
+   "new_best_distribution": {
+    "NIH": 60,
+    "KEM": 1,
+    "VIN": 439
+   },
+   "new_best_concentration": 0.878,
+   "new_best_concentration_p": 1.2799965904177774e-141,
+   "matched_span_median": 1.9669901366744877,
+   "flip_full_reversal": 60,
+   "flip_partial": 355,
+   "same_order": 85,
+   "n_valid_reps": 500,
+   "direction_consistency": 0.14457831325301204,
+   "direction_consistency_p": 4.659544116340285e-52,
+   "n_best_changed": 61,
+   "best_changed_rate": 0.122,
+   "best_changed_p": 1.331956765192782e-71,
+   "verdict": "flip_not_confirmed"
+  },
+  "NORMAL": {
+   "n_target": 169,
+   "target_prior": 0.6125356125356125,
+   "raw_rank_best_to_worst": [
+    "KEM",
+    "VIN",
+    "NIH"
+   ],
+   "raw_span": 5.018330865254193,
+   "order_changed": 500,
+   "order_changed_rate": 1.0,
+   "order_changed_perm_p": 1.0,
+   "perm_null_mean_rate": 1.0,
+   "perm_null_p95_rate": 1.0,
+   "new_best_distribution": {
+    "NIH": 214,
+    "KEM": 0,
+    "VIN": 286
+   },
+   "new_best_concentration": 0.572,
+   "new_best_concentration_p": 1.0263882201685529e-27,
+   "matched_span_median": 1.3854635260034578,
+   "flip_full_reversal": 500,
+   "flip_partial": 0,
+   "same_order": 0,
+   "n_valid_reps": 500,
+   "direction_consistency": 1.0,
+   "direction_consistency_p": 6.10987272699921e-151,
+   "n_best_changed": 500,
+   "best_changed_rate": 1.0,
+   "best_changed_p": 6.10987272699921e-151,
+   "verdict": "flip_not_confirmed"
+  }
+ },
+ "MIMIC_NB": {
+  "PNEUMONIA": {
+   "n_target": 169,
+   "target_prior": 0.38746438746438744,
+   "raw_rank_best_to_worst": [
+    "VIN",
+    "KEM",
+    "NIH"
+   ],
+   "raw_span": 2.0518043541941036,
+   "order_changed": 499,
+   "order_changed_rate": 0.998,
+   "order_changed_perm_p": 0.009950248756218905,
+   "perm_null_mean_rate": 0.7275,
+   "perm_null_p95_rate": 0.9,
+   "new_best_distribution": {
+    "NIH": 455,
+    "KEM": 43,
+    "VIN": 2
+   },
+   "new_best_concentration": 0.91,
+   "new_best_concentration_p": 3.139749888263619e-161,
+   "matched_span_median": 1.5911151386955613,
+   "flip_full_reversal": 495,
+   "flip_partial": 4,
+   "same_order": 1,
+   "n_valid_reps": 500,
+   "direction_consistency": 0.9919839679358717,
+   "direction_consistency_p": 3.144330981818032e-141,
+   "n_best_changed": 498,
+   "best_changed_rate": 0.996,
+   "best_changed_p": 7.65267668929378e-146,
+   "verdict": "systematic_flip_confirmed"
+  },
+  "NORMAL": {
+   "n_target": 169,
+   "target_prior": 0.6125356125356125,
+   "raw_rank_best_to_worst": [
+    "KEM",
+    "VIN",
+    "NIH"
+   ],
+   "raw_span": 5.387171307213912,
+   "order_changed": 500,
+   "order_changed_rate": 1.0,
+   "order_changed_perm_p": 1.0,
+   "perm_null_mean_rate": 1.0,
+   "perm_null_p95_rate": 1.0,
+   "new_best_distribution": {
+    "NIH": 345,
+    "KEM": 0,
+    "VIN": 155
+   },
+   "new_best_concentration": 0.69,
+   "new_best_concentration_p": 1.9083156716417943e-59,
+   "matched_span_median": 1.295272822472788,
+   "flip_full_reversal": 500,
+   "flip_partial": 0,
+   "same_order": 0,
+   "n_valid_reps": 500,
+   "direction_consistency": 1.0,
+   "direction_consistency_p": 6.10987272699921e-151,
+   "n_best_changed": 500,
+   "best_changed_rate": 1.0,
+   "best_changed_p": 6.10987272699921e-151,
+   "verdict": "flip_not_confirmed"
+  }
+ }
+}
