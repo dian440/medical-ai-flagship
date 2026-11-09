@@ -145,7 +145,8 @@ def gate_numbers():
     r = Review("闸门 2 · 数字一致性")
     py = sys.executable
     for script in ("verify_results_draft.py", "verify_figures.py",
-                   "verify_tables.py", "verify_discussion.py"):
+                   "verify_tables.py", "verify_discussion.py",
+                   "verify_teacher_brief.py"):
         p = os.path.join(HERE, script)
         if not os.path.exists(p):
             r.add("MINOR", f"{script} 不存在", "无法机械核验", False)
