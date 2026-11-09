@@ -73,6 +73,26 @@ def build_map():
     new_mm = json.load(open(os.path.join(RESULTS, "multi_model_metrics.json"),
                            encoding="utf-8"))
 
+    # 🔴 映射来源必须覆盖**所有**受重算影响的 JSON，不能只看 metrics。
+    #    本轮教训：方向一致性（43.8%→40.6%）来自 flip_criteria_validation.json，
+    #    只比对 metrics 就漏掉了它 → 正文里留了三处旧值。
+    for extra, old_extra in (
+            ("flip_criteria_validation.json", "results_all/flip_criteria_validation.json"),
+            ("label_sensitivity_noise_baseline.json",
+             "results_all/label_sensitivity_noise_baseline.json"),
+            ("noise_baseline.json", "results_all/noise_baseline.json"),
+    ):
+        op = os.path.join(old_dir, old_extra)
+        np_ = os.path.join(RESULTS, extra)
+        if os.path.exists(op) and os.path.exists(np_):
+            try:
+                o = json.load(open(op, encoding="utf-8"))
+                n = json.load(open(np_, encoding="utf-8"))
+            except Exception:
+                continue
+            old_mm[f"__extra__{extra}"] = o
+            new_mm[f"__extra__{extra}"] = n
+
     def collect(o, p=""):
         out = {}
         if isinstance(o, dict):

@@ -170,7 +170,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 | §4.1 | 重训 0.783→0.892、0.723→0.737 | `retrain_baseline.json` | `summary_table.*.*.retrained_auc` |
 | §4.2 | Zech 2018 | 参考文献总表 [9] | PLoS Med 2018;15(11):e1002683 |
 | §4.2 | Akhtar 2026（10%/50%、三队列） | 参考文献总表 [10] | arXiv:2609.21763v1 |
-| §4.2 | 方向一致性 43.8%–99.9%（一组 84.1%） | `flip_criteria_validation.json` | `null_dir_consistency` |
+| §4.2 | 方向一致性 40.6%–100.0%（一组 84.8%） | `flip_criteria_validation.json` | `null_dir_consistency` |
 | §4.3 | 单模型版 1/4 显著 | `final_metrics.json` | `cross_dataset_delong` |
 | §4.3 | DeLong 1988 / fastDeLong 2014 / Hanley-McNeil | 参考文献总表 [5][6][7] | Biometrics / IEEE SPL / Radiology |
 | §4.4 | CHEX 0.9555、其余 0.6166–0.7832 | `multi_model_metrics.json` | `per_model.*.per_dataset.KEM_PNEUMONIA.auc` |

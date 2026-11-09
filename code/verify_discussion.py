@@ -127,8 +127,16 @@ def main():
         t2 = open(fp, encoding="utf-8").read()
         ck(f"{fn} 不得称 84.1% 为均值", False,
            "mean consistency of 84.1" in t2 or "方向一致性均值达 84.1" in t2)
-        ck(f"{fn} 已含范围 43.8–99.9", True,
-           "43.8" in t2 and "99.9" in t2)
+        # ⚠️ 动态取值：范围随重算变化，写死会在数据更新后误报
+        _lo = round(min(nulls), 1)
+        _hi = round(max(nulls), 1)
+        ck(f"{fn} 已含方向一致性范围 {_lo}–{_hi}", True,
+           f"{_lo}" in t2 and f"{_hi}" in t2)
+        # 反向：旧范围不得残留在稿件本体（勘误块除外）
+        _body2 = "\n".join(ln for ln in t2.splitlines()
+                            if not ln.lstrip().startswith(">"))
+        ck(f"{fn} 未残留旧范围 43.8–99.9", True,
+           "43.8" not in _body2 and "99.9" not in _body2)
 
     # ---------- §4.4 CHEX AUC ----------
     kem = {m: mm["per_model"][m]["per_dataset"]["KEM_PNEUMONIA"]["auc"] for m in MODELS}
