@@ -21,7 +21,7 @@
 
 ### 3.1 Experimental cohorts and label composition
 
-The analysis comprised 12 model–dataset combinations: four DenseNet-121 classifiers differing in their pretraining source, each evaluated without fine-tuning on three chest radiograph datasets. The evaluated cohorts were identical for every classifier: 2,819 NIH images (65 PNEUMONIA, 2,754 NORMAL), 5,828 Kermany images (4,247 PNEUMONIA, 1,581 NORMAL), and 702 VinDr-CXR images (272 PNEUMONIA, 430 NORMAL). No image was counted twice and no cohort varied between models.
+The analysis comprised 12 model–dataset combinations: four DenseNet-121 classifiers differing in their pretraining source, each evaluated without fine-tuning on three chest radiograph datasets (Figure 1). The evaluated cohorts were identical for every classifier: 2,819 NIH images (65 PNEUMONIA, 2,754 NORMAL), 5,828 Kermany images (4,247 PNEUMONIA, 1,581 NORMAL), and 702 VinDr-CXR images (272 PNEUMONIA, 430 NORMAL). No image was counted twice and no cohort varied between models.
 
 The three cohorts differed in class prevalence by more than an order of magnitude, from 2.3% PNEUMONIA in NIH to 72.9% in Kermany, with VinDr-CXR intermediate at 38.7%. Because the NORMAL class was defined as the absence of any abnormal finding, these prevalences are complements of one another rather than independent quantities. The construction of the two labels was also asymmetric. Of the 65 NIH images labelled PNEUMONIA, 47 (72.3%) carried concurrent findings such as infiltration, atelectasis, oedema, effusion, or nodule, whereas the Kermany label denotes triage status irrespective of comorbidity; the two labels therefore did not denote identical clinical constructs. Exclusion of images carrying findings belonging to neither class reduced the NIH material from 4,999 to 2,819 images (56.4% retained), and the excluded images were disproportionately non-pneumonia.
 
@@ -37,7 +37,7 @@ The direction of these findings is worth stating plainly, because it runs agains
 
 Expected calibration error varied more across datasets than AUC did within any single comparison. For the NIH-pretrained classifier, the largest AUC difference between two datasets was 0.1460, whereas the ECE difference between NIH and VinDr-CXR on the NORMAL task was 0.2780. The within-label ECE spread, expressed as the ratio of the worst-calibrated to the best-calibrated dataset, ranged from 1.29× to 5.39× across the eight model–label combinations, whereas the largest AUC difference across all sixteen comparisons was 0.2211.
 
-Discrimination and calibration also disagreed about which dataset was most difficult in four of the eight model–label combinations. For the NIH-pretrained classifier on PNEUMONIA, Kermany yielded the highest AUC (0.7834) and the worst calibration (ECE 0.2925), while VinDr-CXR yielded the lowest AUC (0.7036) and the best calibration (ECE 0.0888); the ECE spread was 3.29×. The same opposition appeared for the NIH-pretrained classifier on NORMAL and for the CheXpert-pretrained classifier on both tasks (NORMAL: Kermany AUC 0.9594, ECE 0.1141; NIH AUC 0.7420, ECE 0.4736; spread 4.44×). In the remaining four combinations, all involving the two MIMIC-CXR classifiers, the two metrics agreed on which dataset was best, but the agreement was itself unstable across tasks: within the same classifier, VinDr-CXR was the best PNEUMONIA dataset by both measures while Kermany was the best NORMAL dataset by both. A model may therefore be well ordered and badly calibrated on the same images, or the reverse, and reporting AUC alone conceals this.
+Discrimination and calibration also disagreed about which dataset was most difficult in four of the eight model–label combinations (Figure 2). For the NIH-pretrained classifier on PNEUMONIA, Kermany yielded the highest AUC (0.7834) and the worst calibration (ECE 0.2925), while VinDr-CXR yielded the lowest AUC (0.7036) and the best calibration (ECE 0.0888); the ECE spread was 3.29×. The same opposition appeared for the NIH-pretrained classifier on NORMAL and for the CheXpert-pretrained classifier on both tasks (NORMAL: Kermany AUC 0.9594, ECE 0.1141; NIH AUC 0.7420, ECE 0.4736; spread 4.44×). In the remaining four combinations, all involving the two MIMIC-CXR classifiers, the two metrics agreed on which dataset was best, but the agreement was itself unstable across tasks: within the same classifier, VinDr-CXR was the best PNEUMONIA dataset by both measures while Kermany was the best NORMAL dataset by both. A model may therefore be well ordered and badly calibrated on the same images, or the reverse, and reporting AUC alone conceals this.
 
 These ECE values were not artefacts of the binning scheme. Recomputation with 5, 15, and 20 bins left 15 of the 24 values within 2% of the 10-bin estimate, and for 14 of the 24 the value was identical to three decimal places across all four partitions. The largest single discrepancy was 1.48-fold for MIMIC_CH/KEM on the NORMAL task.
 
@@ -47,13 +47,13 @@ To separate model miscalibration from the arithmetic consequences of differing p
 
 The calibration spread contracted in seven of the eight model–label combinations, retaining between 24% and 78% of the original spread. For the NIH-pretrained classifier, the PNEUMONIA spread fell from 3.29× to 1.67× (50.8% retained) and the NORMAL spread from 2.76× to 1.37× (49.5% retained). The largest contractions occurred for the MIMIC-CXR classifiers on NORMAL, from 5.02× to 1.39× (27.6% retained) and from 5.39× to 1.30× (24.0% retained). The single exception was PNEUMONIA for the CheXpert-pretrained classifier, whose raw spread was only 1.29× and which widened slightly to 1.45× after matching; this case is informative rather than anomalous, because when three datasets are already almost equally calibrated there is little spread for prior matching to contract, and the slight widening reflects resampling noise acting on a quantity that was already close to unity.
 
-More consequential than the contraction was the change in ordering. The ranking of datasets by calibration reversed in all eight model–label combinations, although in the CheXpert/PNEUMONIA case the raw spread was already close to unity, so the reversal there changed the ordering without materially changing the spread. For the NIH-pretrained classifier on PNEUMONIA, the best-calibrated dataset changed from VinDr-CXR to Kermany, and on NORMAL from VinDr-CXR to NIH. We note that prior matching was limited to 169 images per replicate by the NIH minority-class counts, so the intervals are wide and partially overlapping; the defensible claim is that the spread contracted substantially and the ordering changed, not that prior-matched calibration is equivalent across datasets.
+More consequential than the contraction was the change in ordering (Figure 4B). The ranking of datasets by calibration reversed in all eight model–label combinations, although in the CheXpert/PNEUMONIA case the raw spread was already close to unity, so the reversal there changed the ordering without materially changing the spread. For the NIH-pretrained classifier on PNEUMONIA, the best-calibrated dataset changed from VinDr-CXR to Kermany, and on NORMAL from VinDr-CXR to NIH. We note that prior matching was limited to 169 images per replicate by the NIH minority-class counts, so the intervals are wide and partially overlapping; the defensible claim is that the spread contracted substantially and the ordering changed, not that prior-matched calibration is equivalent across datasets.
 
 ### 3.5 The change in ranking exceeded a noise baseline, but the baseline itself was large
 
 A reversal observed in a single resample is descriptive. To test whether the ranking changes observed above could be attributed to resampling noise, we compared the observed rate of ranking change against three null distributions, of which the most conservative assumed the three datasets were of identical calibration and differed only in resampling noise. Under that null, prior matching alone reordered the datasets in 82.3% to 84.4% of replicates. This quantity is the baseline against which any reported reversal must be judged, and it has not previously been reported for this type of comparison.
 
-The observed rate of ranking change exceeded this baseline in seven of the eight model–label combinations (97.6% observed against 84.4% for NIH/PNEUMONIA, p = 2.9 × 10⁻²²; 100% against 82.3% for MIMIC_CH/NORMAL, p = 1.3 × 10⁻⁴²). The single exception was PNEUMONIA for the MIMIC_CXR classifier with CheXpert labels (83.0% observed against 83.8%, p = 0.63). All eight combinations exceeded the less conservative null, in which each dataset retained its own calibration distribution but was sampled independently rather than synchronously.
+The observed rate of ranking change exceeded this baseline in seven of the eight model–label combinations (Figure 4A; 97.6% observed against 84.4% for NIH/PNEUMONIA, p = 2.9 × 10⁻²²; 100% against 82.3% for MIMIC_CH/NORMAL, p = 1.3 × 10⁻⁴²). The single exception was PNEUMONIA for the MIMIC_CXR classifier with CheXpert labels (83.0% observed against 83.8%, p = 0.63). All eight combinations exceeded the less conservative null, in which each dataset retained its own calibration distribution but was sampled independently rather than synchronously.
 
 An earlier analysis of the same data applied a binomial test against a chance expectation of 0.5 and reported a p-value of 9.15 × 10⁻⁸⁴ for the consistency of the direction of reversal. That reference point is inappropriate: under label permutation the direction of complete reversal is itself highly structured, with a mean consistency of 84.1%, so a test against 0.5 substantially overstates the evidence. We therefore report the null-distribution comparison throughout. This correction is not merely internal, because point estimates of reversal without any null distribution are the prevailing practice in this literature and cannot be interpreted without one.
 
@@ -65,7 +65,9 @@ Two exceptions were informative. For PNEUMONIA with the NIH-pretrained and CheXp
 
 ### 3.7 Decision curve analysis showed the same instability in a clinical metric
 
-Net benefit was computed at threshold probabilities of 0.10, 0.30, and 0.50. The identity of the dataset offering the highest net benefit changed with prior matching in 15 of the 24 model–label–threshold combinations. For the NIH-pretrained classifier on PNEUMONIA, Kermany offered the highest net benefit at all three thresholds before matching, whereas after matching VinDr-CXR took the lead at 0.10 and 0.30 and NIH at 0.50. Across the four classifiers, the NORMAL task produced two or three threshold changes in every model, whereas the PNEUMONIA task produced between zero and three.
+Net benefit was computed at threshold probabilities of 0.10, 0.30, and 0.50 (Figure 3). The identity of the dataset offering the highest net benefit changed with prior matching in 15 of the 24 model–label–threshold combinations. Two combinations changed at every threshold, and both deserve separate mention because the pattern they show is the clearest illustration of the effect. For NORMAL with the CheXpert-pretrained classifier, NIH offered the highest net benefit at all three thresholds before matching, whereas after matching Kermany led at 0.10 and 0.30 and VinDr-CXR at 0.50; the dataset best suited to a clinical decision on "no abnormal finding" therefore changed identity entirely. For PNEUMONIA with the MIMIC_CXR classifier trained with CheXpert labels, the change ran in the opposite direction: Kermany led at all three thresholds before matching, and VinDr-CXR led at all three afterwards. These are the two configurations in which the clinical conclusion is fully determined by the sampling frame rather than by the images.
+
+Of the remaining six model–label combinations, three changed at two of the three thresholds and three changed at one. The NIH-pretrained classifier on PNEUMONIA changed at a single threshold, with Kermany leading before matching at all three and NIH taking over at 0.50 afterwards; the CheXpert-pretrained classifier on PNEUMONIA did not change at any threshold, the only such case in the study. Across the four classifiers, the NORMAL task produced two or three threshold changes in every model, whereas the PNEUMONIA task produced between zero and three.
 
 ### 3.8 Retraining recovered performance in one direction only
 
@@ -121,7 +123,15 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 ### 3.7 决策曲线分析显示同一临床指标上的不稳定性
 
-我们在阈值概率 0.10、0.30、0.50 上计算净获益。**在 24 个"模型×标签×阈值"组合中，有 15 个在先验匹配后改变了净获益最高的数据集**。NIH 预训练分类器在 PNEUMONIA 上，匹配前三个阈值均为 Kermany 最高，匹配后 0.10 与 0.30 由 VinDr-CXR 领先、0.50 由 NIH 领先。四个分类器中，NORMAL 任务在每个模型上都产生 2–3 个阈值变化，PNEUMONIA 任务则在 0–3 之间。
+我们在阈值概率 0.10、0.30、0.50 上计算净获益。**在 24 个"模型×标签×阈值"组合中，有 15 个在先验匹配后改变了净获益最高的数据集**。其中**两个组合在全部三个阈值上都发生了改变**，值得单独列出——它们呈现的模式是这一效应最清晰的例证。
+
+**其一，CheXpert 预训练分类器的 NORMAL 任务**：匹配前三个阈值均由 NIH 净获益最高，匹配后 0.10 与 0.30 转为 Kermany 领先、0.50 转为 VinDr-CXR 领先——**用于"无异常发现"这一临床决策的最适数据集，整体换了一个身份**。
+
+**其二，MIMIC_CXR（CheXpert 标签）分类器的 PNEUMONIA 任务**：变化方向相反——匹配前三个阈值均由 Kermany 领先，匹配后三个阈值全部转为 VinDr-CXR 领先。
+
+这两例中，**临床结论完全由抽样框决定，而非由影像本身决定**。
+
+其余 6 个"模型×标签"组合中，3 个在三个阈值中的 2 个发生改变，另 3 个仅在 1 个阈值改变。NIH 预训练分类器的 PNEUMONIA 只在单个阈值改变：匹配前三个阈值均为 Kermany 领先，匹配后 0.50 转为 NIH 领先；**CheXpert 预训练分类器的 PNEUMONIA 在任何阈值都未改变，是全研究中唯一如此的情形**。四个分类器中，NORMAL 任务在每个模型上都产生 2–3 个阈值变化，PNEUMONIA 任务则在 0–3 之间。
 
 ### 3.8 重训只在一个方向上救回了性能
 
@@ -182,20 +192,24 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 ## 【表格与图件规划】
 
-### 图（Figure）
+### 图（Figure）—— ✅ 已全部完成
 
-| 图号 | 内容 | 必要性 | 正文位置 |
+图件目录 `figures/`，每张均输出 **300 dpi PNG + 矢量 PDF**（投稿双份）。
+核验脚本：`code/verify_figures.py`（89 条断言，全部通过 —— 图上每个数字都对得上 JSON）。
+
+| 图号 | 文件 | 内容 | 正文位置 |
 |---|---|---|---|
-| **Figure 1** | 研究流程图：三库 → 标签统一 → 四模型推理 → 四层分析 | 必需 | §3.1 前 |
-| **Figure 2** | 校准曲线（可靠性图），4 模型 × 3 库，PNEUMONIA 与 NORMAL 分面 | 必需 | §3.3 |
-| **Figure 3** | 决策曲线：匹配前后叠加，横轴阈值概率 | 重要 | §3.7 |
-| **Figure 4** | 🔴 **观测排序改变率 vs 三条噪声基线**（散点+误差棒，横轴 8 个模型–标签组合，纵轴改变率，标注 7/8 超出） | **本文最关键** | §3.5 |
+| **Figure 1** | `Figure1_flowchart.png/.pdf` | 研究流程图：3 数据集 → 标签统一 → 4 模型 → 结局与分析；红字标出排除规则，"Ranking stability" 框加粗并标注 **methodological contribution** | §3.1 |
+| **Figure 2** | `Figure2_calibration.png/.pdf` | 校准可靠性曲线，2 行（标签）× 3 列（库），实线=匹配前、虚线=匹配后，点大小∝箱内样本数，n<20 的箱不画，每格标 ECE | §3.3 |
+| **Figure 3** | `Figure3_decision_curve.png/.pdf` | 决策曲线，2 行（标签）× 4 列（模型），3 个库的净获益实线/虚线对照 + treat-all 参考线 | §3.7 |
+| **Figure 4** 🔴 | `Figure4_noise_baseline.png/.pdf` | **全文最关键**：A = 观测排序改变率 vs 三条噪声基线（8 个组合），B = 跨度收缩对照。橙色菱形标出唯一例外 | §3.4–3.5 |
+| **Figure S1** | `FigureS1_calibration_all_models.png/.pdf` | 补充图：四模型版校准曲线（Figure 2 的主图只画 NIH-pretrained） | 补充材料 |
 
-**Figure 4 的设计要点**：纵轴用同一尺度画 4 条横线——观测值、基线2（同分布）、基线3（实际噪声）、置换零分布 p95；
-MIMIC_CH/PNEUMONIA 那一组必须用不同标记（未超出），一眼可见；图注须写明"82–84% 的基线本身"这一数字，
-让审稿人立刻明白本文贡献是**给出了基线**，而不仅是报告了反转。
+**Figure 4 的设计要点（已实现）**：纵轴同一尺度画 4 条参考线——观测值、基线2（同分布，灰色带）、基线3（独立抽样，虚线）、100% 参考线；
+MIMIC_CH/PNEUMONIA 用橙色菱形并带箭头标注 "not above noise baseline"；
+模型名用分组横线标在图内顶部；图注直接写出"基线本身即达 82–84%"这一数字，让审稿人立刻明白本文贡献是**给出了基线**。
 
-### 表（Table）
+### 表（Table）—— 待制作
 
 | 表号 | 内容 | 来源 |
 |---|---|---|
@@ -203,7 +217,7 @@ MIMIC_CH/PNEUMONIA 那一组必须用不同标记（未超出），一眼可见�
 | **Table 2** | 四模型 × 三库 × 两类的 AUC 与 ECE | `multi_model_metrics.json` |
 | **Table 3** | 先验匹配：跨度收缩 + 排序翻转（含宽松/严格口径并列） | `multi_model_prior_matched.json` + `label_sensitivity_noise_baseline.json` |
 | **Table 4** | 噪声基线对照（观测 vs 基线2 vs 基线3 vs p）+ 方向一致性与置换零分布 | `noise_baseline.json` + `flip_criteria_validation.json` |
-| **Table 5** | DeLong 全表（16 组 Δ/SE/z/p/CI）+ DCA 翻转计数 + 重训基线 | `multi_model_metrics.json` + `multi_model_dca.json` + `retrain_baseline.json` |
+| **Table 5** | DeLong 全表（16 组 Δ/SE/z/p/CI）+ DCA 翻转计数 + 重训基线 + F1/敏感度/特异度 | `multi_model_metrics.json` + `multi_model_dca.json` + `retrain_baseline.json` + `operating_points.json` |
 
 **Table 4 是审稿人最会盯的表**，务必把 `flip_criteria_validation.json` 里的置换零分布一并列出——
 主动展示"我们的检验在标签打乱零分布下也会显著"这一点，比被审稿人发现强得多。
