@@ -1,16 +1,16 @@
 {
- "max_rel_diff": 13.668593687727423,
+ "max_rel_diff": 13.667055092635431,
  "all_consistent": false,
  "rows": [
   {
    "model": "NIH",
    "comparison": "PNEUMONIA_NIH_vs_KEM",
-   "delta": 0.060503666764677444,
-   "se_bruteforce": 0.4788597941764956,
-   "se_authoritative": 0.03406103637794284,
-   "rel_diff": 13.058873278635598,
-   "p_bruteforce": 0.8994553224567985,
-   "p_authoritative": 0.07567841547178933,
+   "delta": 0.06032862828790053,
+   "se_bruteforce": 0.4789459259719736,
+   "se_authoritative": 0.03406215874577249,
+   "rel_diff": 13.060938695831085,
+   "p_bruteforce": 0.8997625969485801,
+   "p_authoritative": 0.07653851489591701,
    "consistent": false
   },
   {
@@ -27,12 +27,12 @@
   {
    "model": "NIH",
    "comparison": "NORMAL_NIH_vs_KEM",
-   "delta": 0.14597404135659142,
-   "se_bruteforce": 0.3969655210167459,
-   "se_authoritative": 0.03198173001594476,
-   "rel_diff": 11.412259149796943,
-   "p_bruteforce": 0.7130784943961972,
-   "p_authoritative": 5.011763266615787e-06,
+   "delta": 0.1458728195875365,
+   "se_bruteforce": 0.3970292395702442,
+   "se_authoritative": 0.031982243094989385,
+   "rel_diff": 11.414052334948522,
+   "p_bruteforce": 0.7133126374089918,
+   "p_authoritative": 5.089686844428343e-06,
    "consistent": false
   },
   {
@@ -49,12 +49,12 @@
   {
    "model": "CHEX",
    "comparison": "PNEUMONIA_NIH_vs_KEM",
-   "delta": 0.22111576868386262,
-   "se_bruteforce": 0.37496169812295066,
-   "se_authoritative": 0.030052909423630567,
-   "rel_diff": 11.476718737524916,
-   "p_bruteforce": 0.5553902656887857,
-   "p_authoritative": 1.8740564655672642e-13,
+   "delta": 0.22106553027110276,
+   "se_bruteforce": 0.3749885187049209,
+   "se_authoritative": 0.030053173181958926,
+   "rel_diff": 11.477501674599486,
+   "p_bruteforce": 0.555508388788275,
+   "p_authoritative": 1.8984813721090177e-13,
    "consistent": false
   },
   {
@@ -71,12 +71,12 @@
   {
    "model": "CHEX",
    "comparison": "NORMAL_NIH_vs_KEM",
-   "delta": 0.21747622329483363,
-   "se_bruteforce": 0.3665603555491839,
-   "se_authoritative": 0.0305466483932949,
-   "rel_diff": 11.000018818092176,
-   "p_bruteforce": 0.5529877654790516,
-   "p_authoritative": 1.0833556274292278e-12,
+   "delta": 0.21742972579132513,
+   "se_bruteforce": 0.3665854285001115,
+   "se_authoritative": 0.030546883937057945,
+   "rel_diff": 11.000747089472798,
+   "p_bruteforce": 0.5530997943075469,
+   "p_authoritative": 1.0957901253050295e-12,
    "consistent": false
   },
   {
@@ -93,12 +93,12 @@
   {
    "model": "MIMIC_CH",
    "comparison": "PNEUMONIA_NIH_vs_KEM",
-   "delta": -0.052505693399224396,
-   "se_bruteforce": 0.5476360730431642,
-   "se_authoritative": 0.037333917940705355,
-   "rel_diff": 13.668593687727423,
-   "p_bruteforce": 0.9236182768013177,
-   "p_authoritative": 0.15961117374374112,
+   "delta": -0.0521537400628167,
+   "se_bruteforce": 0.5475817360151479,
+   "se_authoritative": 0.0373341296229328,
+   "rel_diff": 13.667055092635431,
+   "p_bruteforce": 0.9241212174007996,
+   "p_authoritative": 0.1624299953740065,
    "consistent": false
   },
   {
@@ -115,12 +115,12 @@
   {
    "model": "MIMIC_CH",
    "comparison": "NORMAL_NIH_vs_KEM",
-   "delta": 0.13752110488045088,
-   "se_bruteforce": 0.47829725604416284,
-   "se_authoritative": 0.03316853363625864,
-   "rel_diff": 13.420211073826476,
-   "p_bruteforce": 0.7737124651542919,
-   "p_authoritative": 3.381395530910325e-05,
+   "delta": 0.13752475586689172,
+   "se_bruteforce": 0.4782886241244311,
+   "se_authoritative": 0.033169305537524896,
+   "rel_diff": 13.419615254933106,
+   "p_bruteforce": 0.7737026485658665,
+   "p_authoritative": 3.381195030138784e-05,
    "consistent": false
   },
   {
@@ -137,12 +137,12 @@
   {
    "model": "MIMIC_NB",
    "comparison": "PNEUMONIA_NIH_vs_KEM",
-   "delta": 0.0364232348744391,
-   "se_bruteforce": 0.5133657723681431,
-   "se_authoritative": 0.03544386514609661,
-   "rel_diff": 13.483910551292666,
-   "p_bruteforce": 0.9434376527315305,
-   "p_authoritative": 0.30412316683303287,
+   "delta": 0.03663070820184333,
+   "se_bruteforce": 0.5133018453955432,
+   "se_authoritative": 0.035443756764467337,
+   "rel_diff": 13.482151223600898,
+   "p_bruteforce": 0.9431089359044325,
+   "p_authoritative": 0.3013754393927228,
    "consistent": false
   },
   {
@@ -159,12 +159,12 @@
   {
    "model": "MIMIC_NB",
    "comparison": "NORMAL_NIH_vs_KEM",
-   "delta": 0.12747157652490237,
-   "se_bruteforce": 0.44465040143136375,
-   "se_authoritative": 0.0331099716642478,
-   "rel_diff": 12.429501116471748,
-   "p_bruteforce": 0.7743587314741598,
-   "p_authoritative": 0.00011814425445821897,
+   "delta": 0.1273627008974857,
+   "se_bruteforce": 0.444696901659855,
+   "se_authoritative": 0.033110705262433746,
+   "rel_diff": 12.430607960030153,
+   "p_bruteforce": 0.7745691772873229,
+   "p_authoritative": 0.00011978210296770264,
    "consistent": false
   },
   {

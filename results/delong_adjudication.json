@@ -8,12 +8,12 @@
    "model": "NIH",
    "label": "PNEUMONIA",
    "other": "KEM",
-   "se_bruteforce": 0.4788597941764956,
-   "se_fastdelong": 0.3575388003863836,
-   "se_bootstrap": 0.033563280796471584,
-   "se_repo": 0.03406103637794284,
-   "boot_ci_low": -0.0008303437737418368,
-   "boot_ci_high": 0.12800311194268899
+   "se_bruteforce": 0.4789459259719736,
+   "se_fastdelong": 0.35753927836056143,
+   "se_bootstrap": 0.03320874489594065,
+   "se_repo": 0.03406215874577249,
+   "boot_ci_low": -0.0021624688718981234,
+   "boot_ci_high": 0.12478180108669261
   },
   {
    "model": "NIH",
@@ -30,12 +30,12 @@
    "model": "NIH",
    "label": "NORMAL",
    "other": "KEM",
-   "se_bruteforce": 0.3969655210167459,
-   "se_fastdelong": 0.30760213784226115,
-   "se_bootstrap": 0.032599381330826474,
-   "se_repo": 0.03198173001594476,
-   "boot_ci_low": 0.08573535377607368,
-   "boot_ci_high": 0.21133476246308322
+   "se_bruteforce": 0.3970292395702442,
+   "se_fastdelong": 0.30760328079173144,
+   "se_bootstrap": 0.0313136911214613,
+   "se_repo": 0.031982243094989385,
+   "boot_ci_low": 0.08668831129056426,
+   "boot_ci_high": 0.20954528339928677
   },
   {
    "model": "NIH",
@@ -52,12 +52,12 @@
    "model": "CHEX",
    "label": "PNEUMONIA",
    "other": "KEM",
-   "se_bruteforce": 0.37496169812295066,
-   "se_fastdelong": 0.3561509116472417,
-   "se_bootstrap": 0.029610166283338395,
-   "se_repo": 0.030052909423630567,
-   "boot_ci_low": 0.16415490695558246,
-   "boot_ci_high": 0.2810754089059376
+   "se_bruteforce": 0.3749885187049209,
+   "se_fastdelong": 0.35615110240142767,
+   "se_bootstrap": 0.02989995924361075,
+   "se_repo": 0.030053173181958926,
+   "boot_ci_low": 0.1655246098403671,
+   "boot_ci_high": 0.281169665360225
   },
   {
    "model": "CHEX",
@@ -74,12 +74,12 @@
    "model": "CHEX",
    "label": "NORMAL",
    "other": "KEM",
-   "se_bruteforce": 0.3665603555491839,
-   "se_fastdelong": 0.31406193115713193,
-   "se_bootstrap": 0.030155889081579568,
-   "se_repo": 0.0305466483932949,
-   "boot_ci_low": 0.15921039053766597,
-   "boot_ci_high": 0.27833269553308293
+   "se_bruteforce": 0.3665854285001115,
+   "se_fastdelong": 0.31406333488509464,
+   "se_bootstrap": 0.030098852368029196,
+   "se_repo": 0.030546883937057945,
+   "boot_ci_low": 0.1578434164635836,
+   "boot_ci_high": 0.2760671426196135
   },
   {
    "model": "CHEX",
@@ -96,12 +96,12 @@
    "model": "MIMIC_CH",
    "label": "PNEUMONIA",
    "other": "KEM",
-   "se_bruteforce": 0.5476360730431642,
-   "se_fastdelong": 0.3477524653524295,
-   "se_bootstrap": 0.03613364805114756,
-   "se_repo": 0.037333917940705355,
-   "boot_ci_low": -0.12320613641673253,
-   "boot_ci_high": 0.020965406298694356
+   "se_bruteforce": 0.5475817360151479,
+   "se_fastdelong": 0.3477535767866989,
+   "se_bootstrap": 0.03702521348337622,
+   "se_repo": 0.0373341296229328,
+   "boot_ci_low": -0.12456858464681875,
+   "boot_ci_high": 0.019904791035944988
   },
   {
    "model": "MIMIC_CH",
@@ -118,12 +118,12 @@
    "model": "MIMIC_CH",
    "label": "NORMAL",
    "other": "KEM",
-   "se_bruteforce": 0.47829725604416284,
-   "se_fastdelong": 0.32655164655435276,
-   "se_bootstrap": 0.03159172080057818,
-   "se_repo": 0.03316853363625864,
-   "boot_ci_low": 0.07270592839922015,
-   "boot_ci_high": 0.19972735397556343
+   "se_bruteforce": 0.4782886241244311,
+   "se_fastdelong": 0.32655294723458334,
+   "se_bootstrap": 0.03249936107321706,
+   "se_repo": 0.033169305537524896,
+   "boot_ci_low": 0.07662524467953266,
+   "boot_ci_high": 0.20454303716605735
   },
   {
    "model": "MIMIC_CH",
@@ -140,12 +140,12 @@
    "model": "MIMIC_NB",
    "label": "PNEUMONIA",
    "other": "KEM",
-   "se_bruteforce": 0.5133657723681431,
-   "se_fastdelong": 0.3492900220274388,
-   "se_bootstrap": 0.03522175831690924,
-   "se_repo": 0.03544386514609661,
-   "boot_ci_low": -0.030462957058750732,
-   "boot_ci_high": 0.10689469825358877
+   "se_bruteforce": 0.5133018453955432,
+   "se_fastdelong": 0.34929107578729524,
+   "se_bootstrap": 0.03523445660977566,
+   "se_repo": 0.035443756764467337,
+   "boot_ci_low": -0.030171207641866662,
+   "boot_ci_high": 0.10677082206003943
   },
   {
    "model": "MIMIC_NB",
@@ -162,12 +162,12 @@
    "model": "MIMIC_NB",
    "label": "NORMAL",
    "other": "KEM",
-   "se_bruteforce": 0.44465040143136375,
-   "se_fastdelong": 0.32134371276788576,
-   "se_bootstrap": 0.03252236464281968,
-   "se_repo": 0.0331099716642478,
-   "boot_ci_low": 0.06494545782048418,
-   "boot_ci_high": 0.19262173436401445
+   "se_bruteforce": 0.444696901659855,
+   "se_fastdelong": 0.32134516244676015,
+   "se_bootstrap": 0.032500966516001144,
+   "se_repo": 0.033110705262433746,
+   "boot_ci_low": 0.06405033546272855,
+   "boot_ci_high": 0.19313857748790514
   },
   {
    "model": "MIMIC_NB",

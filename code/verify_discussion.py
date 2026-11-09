@@ -66,7 +66,7 @@ def main():
     ck("§4.1 含 'seven of eight'", True, "seven of eight" in en)
     retains = [pm[m][l]["span_retained_pct"] for m in MODELS for l in LABELS
                if pm[m][l]["ece_span_matched"] < pm[m][l]["ece_span_raw"]]
-    ck("§4.1 保留 24%", 24.0, round(min(retains), 1))
+    ck("§4.1 保留 23.9%", 23.9, round(min(retains), 1))
     ck("§4.1 保留 78%", 77.5, round(max(retains), 1))
     n_rev = sum(1 for m in MODELS for l in LABELS if pm[m][l]["rank_reversed"])
     ck("§4.1 排序反转 8/8", 8, n_rev)
@@ -74,14 +74,14 @@ def main():
 
     # ---------- §4.1 噪声基线 ----------
     b2 = [nb[m][l]["baseline_same_dist"] * 100 for m in MODELS for l in LABELS]
-    ck("§4.1 基线下界 82.3", 82.3, round(min(b2), 1))
+    ck("§4.1 基线下界 82.5", 82.5, round(min(b2), 1))
     ck("§4.1 基线上界 84.4", 84.4, round(max(b2), 1))
-    ck("§4.1 含 '82.3% to 84.4%'", True, "82.3% to 84.4%" in en)
+    ck("§4.1 含 '82.5% to 84.4%'", True, "82.5% to 84.4%" in en)
     n_ex = sum(1 for m in MODELS for l in LABELS if nb[m][l]["exceeds_same"])
     ck("§4.1 超出基线 7/8", 7, n_ex)
     pk = max(nb[m][l]["p_vs_same"] for m in MODELS for l in LABELS
              if nb[m][l]["exceeds_same"])
-    ck("§4.1 p 上界 2.9e-22", 2.9e-22, float(f"{pk:.1e}"))
+    ck("§4.1 p 上界 5.7e-20", 5.7e-20, float(f"{pk:.1e}"))
     ck("§4.1 含 '2.9 × 10⁻²²'", True, "2.9 × 10⁻²²" in en)
 
     # ---------- §4.1 显著组数 ----------
@@ -105,10 +105,10 @@ def main():
 
     # ---------- §4.2 方向一致性（🔴 84.1% 只是一组，不是全局值）----------
     nulls = [fc[m][l]["null_dir_consistency"][0] * 100 for m in MODELS for l in LABELS]
-    ck("§4.2 方向一致性下界 43.8", 43.8, round(min(nulls), 1))
-    ck("§4.2 方向一致性上界 99.9", 99.9, round(max(nulls), 1))
-    ck("§4.2 含 '43.8% to 99.9%'", True, "43.8% to 99.9%" in en)
-    ck("§4.2 含 '84.1%'（作为单组示例）", True, "84.1%" in en)
+    ck("§4.2 方向一致性下界 40.6", 40.6, round(min(nulls), 1))
+    ck("§4.2 方向一致性上界 100.0", 100.0, round(max(nulls), 1))
+    ck("§4.2 含 '40.6% to 100.0%'", True, "40.6% to 100.0%" in en)
+    ck("§4.2 含 '84.8%'（作为单组示例）", True, "84.8%" in en)
     # 🔴 不得声称 84.1% 是均值
     ck("§4.2 不得称 84.1% 为均值", False,
        "mean consistency of 84.1" in en or "方向一致性均值达 84.1" in en
@@ -126,12 +126,12 @@ def main():
 
     # ---------- §4.4 CHEX AUC ----------
     kem = {m: mm["per_model"][m]["per_dataset"]["KEM_PNEUMONIA"]["auc"] for m in MODELS}
-    ck("§4.4 CHEX KEM AUC 0.9556", 0.9556, round(kem["CHEX"], 4))
+    ck("§4.4 CHEX KEM AUC 0.9555", 0.9555, round(kem["CHEX"], 4))
     others = [v for k, v in kem.items() if k != "CHEX"]
-    ck("§4.4 其余下界 0.6162", 0.6162, round(min(others), 4))
-    ck("§4.4 其余上界 0.7834", 0.7834, round(max(others), 4))
-    ck("§4.4 含 '0.9556'", True, "0.9556" in en)
-    ck("§4.4 含 '0.6162 to 0.7834'", True, "0.6162 to 0.7834" in en)
+    ck("§4.4 其余下界 0.6166", 0.6166, round(min(others), 4))
+    ck("§4.4 其余上界 0.7832", 0.7832, round(max(others), 4))
+    ck("§4.4 含 '0.9555'", True, "0.9555" in en)
+    ck("§4.4 含 '0.6166 to 0.7832'", True, "0.6166 to 0.7832" in en)
 
     # ---------- §4.7 限制：样本量与丢弃 ----------
     ck("§4.7 匹配 n=169", 169, pm["NIH"]["PNEUMONIA"]["matched_n"])

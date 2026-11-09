@@ -49,7 +49,7 @@ def main():
     ck("F1 NIH n", 2819, pd_["NIH_PNEUMONIA"]["n"])
     ck("F1 NIH PNEU prior", 2.3, round(pd_["NIH_PNEUMONIA"]["prior"] * 100, 1))
     ck("F1 NIH NORMAL prior", 97.7, round(pd_["NIH_NORMAL"]["prior"] * 100, 1))
-    ck("F1 KEM n", 5828, pd_["KEM_PNEUMONIA"]["n"])
+    ck("F1 KEM n", 5824, pd_["KEM_PNEUMONIA"]["n"])
     ck("F1 KEM PNEU prior", 72.9, round(pd_["KEM_PNEUMONIA"]["prior"] * 100, 1))
     ck("F1 KEM NORMAL prior", 27.1, round(pd_["KEM_NORMAL"]["prior"] * 100, 1))
     ck("F1 VIN n", 702, pd_["VIN_PNEUMONIA"]["n"])
@@ -95,7 +95,7 @@ def main():
 
     # ---------- Figure 4：噪声基线（本图是全文核心，逐项核对） ----------
     b2 = [nb[m][l]["baseline_same_dist"] for m in nb["models"] for l in ("PNEUMONIA", "NORMAL")]
-    ck("F4 基线下界 82.3", 82.3, round(min(b2) * 100, 1))
+    ck("F4 基线下界 82.5", 82.5, round(min(b2) * 100, 1))
     ck("F4 基线上界 84.4", 84.4, round(max(b2) * 100, 1))
     n_ex = sum(1 for m in nb["models"] for l in ("PNEUMONIA", "NORMAL")
                if nb[m][l]["exceeds_same"])
@@ -103,26 +103,26 @@ def main():
     # 例外组
     ck("F4 例外组是 MIMIC_CH/PNEUMONIA", False,
        nb["MIMIC_CH"]["PNEUMONIA"]["exceeds_same"])
-    ck("F4 例外组观测 83.0", 83.0,
+    ck("F4 例外组观测 82.2", 82.2,
        round(nb["MIMIC_CH"]["PNEUMONIA"]["observed_change_rate"] * 100, 1))
-    ck("F4 例外组基线 83.8", 83.8,
+    ck("F4 例外组基线 83.6", 83.6,
        round(nb["MIMIC_CH"]["PNEUMONIA"]["baseline_same_dist"] * 100, 1))
     # p 上界
     pk = max(nb[m][l]["p_vs_same"] for m in nb["models"] for l in ("PNEUMONIA", "NORMAL")
              if nb[m][l]["exceeds_same"])
-    ck("F4 p 上界 2.9e-22", 2.9e-22, float(f"{pk:.1e}"))
+    ck("F4 p 上界 5.7e-20", 5.7e-20, float(f"{pk:.1e}"))
     # 跨度收缩 7/8，保留 24-78
     retains = [pm[m][l]["span_retained_pct"] for m in mm["models"]
                for l in ("PNEUMONIA", "NORMAL")
                if pm[m][l]["ece_span_matched"] < pm[m][l]["ece_span_raw"]]
     ck("F4 收缩组数 7", 7, len(retains))
-    ck("F4 保留下界 24.0", 24.0, round(min(retains), 1))
+    ck("F4 保留下界 23.9", 23.9, round(min(retains), 1))
     ck("F4 保留上界 77.5", 77.5, round(max(retains), 1))
     # 唯一扩大的一组是 CheXpert/PNEUMONIA
     widened = [(m, l) for m in mm["models"] for l in ("PNEUMONIA", "NORMAL")
                if pm[m][l]["ece_span_matched"] > pm[m][l]["ece_span_raw"]]
     ck("F4 扩大组 = CheXpert/PNEUMONIA", [("CHEX", "PNEUMONIA")], widened)
-    ck("F4 扩大组 1.29->1.45", (1.29, 1.45),
+    ck("F4 扩大组 1.29->1.47", (1.29, 1.47),
        (round(pm["CHEX"]["PNEUMONIA"]["ece_span_raw"], 2),
         round(pm["CHEX"]["PNEUMONIA"]["ece_span_matched"], 2)))
 

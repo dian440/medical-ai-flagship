@@ -21,7 +21,7 @@
 
 ### 3.1 Experimental cohorts and label composition
 
-The analysis comprised 12 model–dataset combinations: four DenseNet-121 classifiers differing in their pretraining source, each evaluated without fine-tuning on three chest radiograph datasets (Figure 1). The evaluated cohorts were identical for every classifier: 2,819 NIH images (65 PNEUMONIA, 2,754 NORMAL), 5,828 Kermany images (4,247 PNEUMONIA, 1,581 NORMAL), and 702 VinDr-CXR images (272 PNEUMONIA, 430 NORMAL). No image was counted twice and no cohort varied between models.
+The analysis comprised 12 model–dataset combinations: four DenseNet-121 classifiers differing in their pretraining source, each evaluated without fine-tuning on three chest radiograph datasets (Figure 1). The evaluated cohorts were identical for every classifier: 2,819 NIH images (65 PNEUMONIA, 2,754 NORMAL), 5,824 Kermany images (4,245 PNEUMONIA, 1,579 NORMAL), and 702 VinDr-CXR images (272 PNEUMONIA, 430 NORMAL). No image was counted twice and no cohort varied between models.
 
 The three cohorts differed in class prevalence by more than an order of magnitude, from 2.3% PNEUMONIA in NIH to 72.9% in Kermany, with VinDr-CXR intermediate at 38.7%. Because the NORMAL class was defined as the absence of any abnormal finding, these prevalences are complements of one another rather than independent quantities. The construction of the two labels was also asymmetric. Of the 65 NIH images labelled PNEUMONIA, 47 (72.3%) carried concurrent findings such as infiltration, atelectasis, oedema, effusion, or nodule, whereas the Kermany label denotes triage status irrespective of comorbidity; the two labels therefore did not denote identical clinical constructs. Exclusion of images carrying findings belonging to neither class reduced the NIH material from 4,999 to 2,819 images (56.4% retained), and the excluded images were disproportionately non-pneumonia.
 
@@ -51,9 +51,9 @@ More consequential than the contraction was the change in ordering (Figure 4B). 
 
 ### 3.5 The change in ranking exceeded a noise baseline, but the baseline itself was large
 
-A reversal observed in a single resample is descriptive. To test whether the ranking changes observed above could be attributed to resampling noise, we compared the observed rate of ranking change against three null distributions, of which the most conservative assumed the three datasets were of identical calibration and differed only in resampling noise. Under that null, prior matching alone reordered the datasets in 82.3% to 84.4% of replicates. We refer to this quantity as the **prevalence-matched null baseline**, and it is the baseline against which any reported reversal must be judged; it has not previously been reported for this type of comparison.
+A reversal observed in a single resample is descriptive. To test whether the ranking changes observed above could be attributed to resampling noise, we compared the observed rate of ranking change against three null distributions, of which the most conservative assumed the three datasets were of identical calibration and differed only in resampling noise. Under that null, prior matching alone reordered the datasets in 82.5% to 84.4% of replicates. We refer to this quantity as the **prevalence-matched null baseline**, and it is the baseline against which any reported reversal must be judged; it has not previously been reported for this type of comparison.
 
-The observed rate of ranking change exceeded this baseline in seven of the eight model–label combinations (Figure 4A; 97.6% observed against 84.4% for NIH/PNEUMONIA, p = 2.9 × 10⁻²²; 100% against 82.3% for MIMIC_CH/NORMAL, p = 1.3 × 10⁻⁴²). The single exception was PNEUMONIA for the MIMIC_CXR classifier with CheXpert labels (83.0% observed against 83.8%, p = 0.63). All eight combinations exceeded the less conservative null, in which each dataset retained its own calibration distribution but was sampled independently rather than synchronously.
+The observed rate of ranking change exceeded this baseline in seven of the eight model–label combinations (Figure 4A; 97.0% observed against 84.4% for NIH/PNEUMONIA, p = 5.7 × 10⁻²⁰; 100% against 82.5% for MIMIC_CH/NORMAL, p = 3.5 × 10⁻⁴²). The single exception was PNEUMONIA for the MIMIC_CXR classifier with CheXpert labels (82.2% observed against 83.6%, p = 0.40). All eight combinations exceeded the less conservative null, in which each dataset retained its own calibration distribution but was sampled independently rather than synchronously.
 
 We provide the baseline as an independently implemented procedure, so that it can be applied to other tasks and other metric comparisons rather than only to the setting reported here. Applying that implementation to the present data reproduced every value reported above, including the observed change rates (97.6%, 97.4%, 98.6%, 98.2%, 83.0%, 100%, 99.8% and 100%) and the baseline rates (81.8% to 84.0%).
 
@@ -81,7 +81,7 @@ Retraining a linear classification head on the source domain, with the convoluti
 
 ### 3.1 评估队列与标签构成
 
-分析包含 12 个"模型×数据集"组合：四个预训练数据源不同、架构同为 DenseNet-121 的分类器，均未微调，各自在三个胸片数据集上评估。各分类器的评估队列完全一致：NIH 2,819 张（PNEUMONIA 65、NORMAL 2,754）、Kermany 5,828 张（PNEUMONIA 4,247、NORMAL 1,581）、VinDr-CXR 702 张（PNEUMONIA 272、NORMAL 430）。无图像被重复计数，各模型间队列无差异。
+分析包含 12 个"模型×数据集"组合：四个预训练数据源不同、架构同为 DenseNet-121 的分类器，均未微调，各自在三个胸片数据集上评估。各分类器的评估队列完全一致：NIH 2,819 张（PNEUMONIA 65、NORMAL 2,754）、Kermany 5,824 张（PNEUMONIA 4,245、NORMAL 1,579）、VinDr-CXR 702 张（PNEUMONIA 272、NORMAL 430）。无图像被重复计数，各模型间队列无差异。
 
 三个队列的类别先验相差一个数量级以上：PNEUMONIA 先验从 NIH 的 2.3% 到 Kermany 的 72.9%，VinDr-CXR 居中为 38.7%。由于 NORMAL 类定义为"无任何异常发现"，这些先验互为补数而非彼此独立的量。两个标签的构造也不对称：65 张 NIH PNEUMONIA 影像中有 47 张（72.3%）同时携带浸润、膨胀不全、水肿、胸腔积液或结节等并发所见，而 Kermany 的标签不论合并症只表示分诊状态，因此两个标签并不指称同一临床构念。排除既不属于两类的所见后，NIH 材料从 4,999 张降至 2,819 张（保留 56.4%），且被排除的影像以非肺炎为主。
 
@@ -111,9 +111,9 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 ### 3.5 排序改变超出了噪声基线，但基线本身很大
 
-单次重采样中观察到的反转只是描述性观察。为检验上述排序变化能否归因于重采样噪声，我们将观测到的排序改变率与三个零分布比较，其中最保守的一个假设三个数据集校准水平完全相同、仅存在重采样噪声。**在该零假设下，仅先验匹配本身就会在 82.3%–84.4% 的重复中改变数据集排序。我们把这个量命名为"先验匹配零基线"（prevalence-matched null baseline）**，它是任何反转报告必须据以判断的基线，此前在这一类比较中从未被报告过。
+单次重采样中观察到的反转只是描述性观察。为检验上述排序变化能否归因于重采样噪声，我们将观测到的排序改变率与三个零分布比较，其中最保守的一个假设三个数据集校准水平完全相同、仅存在重采样噪声。**在该零假设下，仅先验匹配本身就会在 82.5%–84.4% 的重复中改变数据集排序。我们把这个量命名为"先验匹配零基线"（prevalence-matched null baseline）**，它是任何反转报告必须据以判断的基线，此前在这一类比较中从未被报告过。
 
-观测到的排序改变率在 8 个"模型×标签"组合中的 7 个超出了该基线（NIH/PNEUMONIA 为 97.6% 对 84.4%，p = 2.9×10⁻²²；MIMIC_CH/NORMAL 为 100% 对 82.3%，p = 1.3×10⁻⁴²）。唯一例外是 MIMIC_CXR（CheXpert 标签）分类器的 PNEUMONIA（83.0% 对 83.8%，p = 0.63）。8 个组合全部超出了较宽松的零分布——该零分布下各库保留自身校准分布但独立抽样而非同步抽样。
+观测到的排序改变率在 8 个"模型×标签"组合中的 7 个超出了该基线（NIH/PNEUMONIA 为 97.0% 对 84.4%，p = 5.7×10⁻²⁰；MIMIC_CH/NORMAL 为 100% 对 82.5%，p = 3.5×10⁻⁴²）。唯一例外是 MIMIC_CXR（CheXpert 标签）分类器的 PNEUMONIA（82.2% 对 83.6%，p = 0.40）。8 个组合全部超出了较宽松的零分布——该零分布下各库保留自身校准分布但独立抽样而非同步抽样。
 
 **我们把该基线作为一个独立实现的过程公开发布**，使其可被应用到其他任务与其他指标比较上，而不仅限于本文的场景。用该独立实现复现本文数据，得到了与上文完全一致的每一个观测改变率（97.6%、97.4%、98.6%、98.2%、83.0%、100%、99.8%、100%）与基线值（81.8%–84.0%）。
 
@@ -154,7 +154,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 | §3.3 | ECE、跨度 | 同上 | `per_model.*.per_dataset.*.ece_10bins` |
 | §3.3 | 分箱敏感性 | 同上 | `per_model.*.ece_bin_sensitivity` |
 | §3.4 | 跨度收缩、排序翻转 | `multi_model_prior_matched.json` | `ece_span_raw/matched`、`span_retained_pct`、`rank_*` |
-| §3.5 | 噪声基线 82.3–84.4% | `noise_baseline.json` | `baseline_same_dist` |
+| §3.5 | 噪声基线 82.5–84.4% | `noise_baseline.json` | `baseline_same_dist` |
 | §3.5 | 7/8 超出、p ≤ 2.9×10⁻²² | 同上 | `exceeds_same`、`p_vs_same` |
 | §3.5 | 方向一致性 43.8%–99.9%（一组 84.1%） | `flip_criteria_validation.json` | `null_dir_consistency` |
 | §3.6 | 严格口径 13/16、6/8 | `label_sensitivity_noise_baseline.json` | `exceeds_same`、`rank_reversed` |
@@ -211,7 +211,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 **Figure 4 的设计要点（已实现）**：纵轴同一尺度画 4 条参考线——观测值、基线2（同分布，灰色带）、基线3（独立抽样，虚线）、100% 参考线；
 MIMIC_CH/PNEUMONIA 用橙色菱形并带箭头标注 "not above noise baseline"；
-模型名用分组横线标在图内顶部；图注直接写出"基线本身即达 82–84%"这一数字，让审稿人立刻明白本文贡献是**给出了基线**。
+模型名用分组横线标在图内顶部；图注直接写出"基线本身即达 83–84%"这一数字，让审稿人立刻明白本文贡献是**给出了基线**。
 
 ### 表（Table）—— ✅ 已全部完成（程序化生成）
 

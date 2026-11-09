@@ -26,7 +26,7 @@ The audit examined a single two-class task across three datasets that differ in 
 
 #### 2.2.1 Source datasets
 
-We used three publicly available chest radiograph datasets. The NIH ChestX-ray14 dataset (NIH) comprises 112,120 frontal radiographs from 30,805 adult inpatients at the same institution, annotated with 14 report-level disease labels extracted by natural language processing from radiology reports [1]. The Kermany chest X-ray classification dataset (KEM) comprises 5,828 paediatric radiographs distributed across curated binary folders labelled NORMAL or PNEUMONIA, in which comorbidity is not distinguished [2]. The VinDr-CXR test set (VIN) comprises 3,000 adult outpatient radiographs from Vietnam, annotated by radiologists with 22 local finding categories and global labels [3].
+We used three publicly available chest radiograph datasets. The NIH ChestX-ray14 dataset (NIH) comprises 112,120 frontal radiographs from 30,805 adult inpatients at the same institution, annotated with 14 report-level disease labels extracted by natural language processing from radiology reports [1]. The Kermany chest X-ray classification dataset (KEM) comprises 5,824 paediatric radiographs distributed across curated binary folders labelled NORMAL or PNEUMONIA, in which comorbidity is not distinguished [2]. The VinDr-CXR test set (VIN) comprises 3,000 adult outpatient radiographs from Vietnam, annotated by radiologists with 22 local finding categories and global labels [3].
 
 #### 2.2.2 Image selection
 
@@ -38,7 +38,7 @@ The three datasets use incompatible annotation schemes, so a single two-class ta
 
 Findings belonging to neither class — the VIN studies with other radiographic abnormalities, and the 2,180 NIH images carrying any of the other 12 disease labels — were excluded rather than reassigned. In particular, abnormal findings that were not pneumonia were not admitted to the NORMAL class, because doing so would have changed NORMAL from a definition of no abnormal finding into a definition of no pneumonia, making the two datasets semantically incomparable. This exclusion reduced the NIH material from 4,999 to 2,819 images (56.4% retained). The two labels do not denote identical clinical constructs: 47 of the 65 NIH PNEUMONIA images (72.3%) carry concurrent findings such as infiltration, atelectasis, oedema, effusion, or nodule, whereas the KEM label denotes triage status irrespective of comorbidity.
 
-The final analysed samples were 2,819 NIH images (65 PNEUMONIA, 2,754 NORMAL), 5,828 KEM images (4,247 PNEUMONIA, 1,581 NORMAL), and 702 VIN images (272 PNEUMONIA, 430 NORMAL). The VIN figure is lower than the 714 images for which an annotation had been matched because the inference run enumerated the available image files at start-up and completed before the final twelve retrievals had been written to disk; these twelve images were therefore absent from the cached predictions and were excluded. Their class composition (four PNEUMONIA, eight NORMAL) was close to that of the full annotated set, so the omission is not expected to bias the estimates. Under the strict VIN definition a further 136 images carrying other abnormalities were excluded, leaving 566 images (136 PNEUMONIA, 430 NORMAL) for the sensitivity analysis.
+The final analysed samples were 2,819 NIH images (65 PNEUMONIA, 2,754 NORMAL), 5,824 KEM images (4,245 PNEUMONIA, 1,579 NORMAL), and 702 VIN images (272 PNEUMONIA, 430 NORMAL). The Kermany figure is lower than the 5,828 images distributed across its four archives because the fourth of these, a small archive of four images, contains files that are byte-identical to four images in the validation archive under different names. We removed these four duplicates, confirmed by checksum comparison against every image in the other archives, so that the images within each dataset are distinct as the DeLong test requires. The VIN figure is lower than the 714 images for which an annotation had been matched because the inference run enumerated the available image files at start-up and completed before the final twelve retrievals had been written to disk; these twelve images were therefore absent from the cached predictions and were excluded. Their class composition (four PNEUMONIA, eight NORMAL) was close to that of the full annotated set, so the omission is not expected to bias the estimates. Under the strict VIN definition a further 136 images carrying other abnormalities were excluded, leaving 566 images (136 PNEUMONIA, 430 NORMAL) for the sensitivity analysis.
 
 #### 2.2.4 Models and inference
 
@@ -110,7 +110,7 @@ Ethics approval and consent to participate: not applicable. Consent for publicat
 
 #### 2.2.1 源数据集
 
-本研究使用三个公开胸片数据集。NIH ChestX-ray14（NIH）含 112,120 张来自同一机构 30,805 名成人住院患者的正位片，附 14 个由放射报告经自然语言处理抽取的疾病标签。Kermany 胸片分类数据集（KEM）含 5,828 张儿童胸片，按人工整理的二值文件夹标注为 NORMAL 或 PNEUMONIA，不区分合并症。VinDr-CXR 测试集（VIN）含 3,000 张越南成人门诊胸片，由放射科医师标注 22 类局部所见与全局标签。
+本研究使用三个公开胸片数据集。NIH ChestX-ray14（NIH）含 112,120 张来自同一机构 30,805 名成人住院患者的正位片，附 14 个由放射报告经自然语言处理抽取的疾病标签。Kermany 胸片分类数据集（KEM）含 5,824 张儿童胸片，按人工整理的二值文件夹标注为 NORMAL 或 PNEUMONIA，不区分合并症。VinDr-CXR 测试集（VIN）含 3,000 张越南成人门诊胸片，由放射科医师标注 22 类局部所见与全局标签。
 
 #### 2.2.2 影像选取
 
@@ -122,7 +122,7 @@ Ethics approval and consent to participate: not applicable. Consent for publicat
 
 不属于任一类的所见——含其他影像学异常的 VIN 影像，以及携带其余 12 类疾病标签的 2,180 张 NIH 影像——一律排除而非重新归类。特别地，非肺炎的异常所见没有被并入 NORMAL 类，否则 NORMAL 就会从"无异常发现"变成"无肺炎"，两个数据集的语义将不再可比。这一排除使 NIH 材料从 4,999 张降至 2,819 张（保留 56.4%）。两个标签并不指称同一临床构念：65 张 NIH PNEUMONIA 影像中有 47 张（72.3%）同时携带浸润、膨胀不全、水肿、胸腔积液或结节等并发所见，而 KEM 的标签不论合并症只表示分诊状态。
 
-最终分析样本为 NIH 2,819 张（PNEUMONIA 65、NORMAL 2,754）、KEM 5,828 张（PNEUMONIA 4,247、NORMAL 1,581）、VIN 702 张（PNEUMONIA 272、NORMAL 430）。VIN 的数字低于完成标注匹配的 714 例，原因是推理运行在启动时枚举了当时可用的影像文件，而这最后 12 例影像在该次写入磁盘时尚未落盘，因此未进入缓存的预测结果，被排除在外。这 12 例的类别构成（PNEUMONIA 4 例、NORMAL 8 例）与完整标注集接近，故预计不会对估计量造成偏倚。在 VIN 严格口径下，另有 136 例携带其他异常的影像被排除，敏感性分析因此基于 566 例（PNEUMONIA 136、NORMAL 430）。
+最终分析样本为 NIH 2,819 张（PNEUMONIA 65、NORMAL 2,754）、KEM 5,824 张（PNEUMONIA 4,245、NORMAL 1,579）、VIN 702 张（PNEUMONIA 272、NORMAL 430）。KEM 的数字低于其四个归档合计的 5,828 例，是因为第四个归档（仅含 4 例的小归档）中的文件与验证归档中另外 4 例影像**逐字节相同、仅文件名不同**。我们通过与全部其他归档的逐张校验和比对确认并剔除了这 4 例重复影像，**以保证每个数据集内的影像互不相同——这是 DeLong 检验的前提**。VIN 的数字低于完成标注匹配的 714 例，原因是推理运行在启动时枚举了当时可用的影像文件，而这最后 12 例影像在该次写入磁盘时尚未落盘，因此未进入缓存的预测结果，被排除在外。这 12 例的类别构成（PNEUMONIA 4 例、NORMAL 8 例）与完整标注集接近，故预计不会对估计量造成偏倚。在 VIN 严格口径下，另有 136 例携带其他异常的影像被排除，敏感性分析因此基于 566 例（PNEUMONIA 136、NORMAL 430）。
 
 #### 2.2.4 模型与推理
 

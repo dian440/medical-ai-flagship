@@ -14,11 +14,11 @@
    "matched_prior": 0.38746438746438744,
    "n_target": 169,
    "n_valid": 500,
-   "n_changed": 488,
-   "observed_change_rate": 0.976,
+   "n_changed": 485,
+   "observed_change_rate": 0.97,
    "raw_ece": {
     "NIH": 0.23889582484630995,
-    "KEM": 0.29254568873447073,
+    "KEM": 0.29266790687391286,
     "VIN": 0.08881313751759376
    },
    "raw_rank_best_to_worst": [
@@ -26,32 +26,32 @@
     "NIH",
     "KEM"
    ],
-   "ece_span_raw": 3.293946108778308,
+   "ece_span_raw": 3.295322235586326,
    "matched_ece_median": {
     "NIH": 0.10605742011561359,
-    "KEM": 0.06349428590716376,
+    "KEM": 0.06357832336088795,
     "VIN": 0.09839197471080012
    },
-   "ece_span_matched": 1.670345899640201,
-   "span_retained_pct": 50.709569752484974,
+   "ece_span_matched": 1.6681380462583555,
+   "span_retained_pct": 50.62139381223667,
    "rank_matched_best_to_worst": [
     "KEM",
     "VIN",
     "NIH"
    ],
    "rank_reversed": true,
-   "flip_full_reversal": 175,
-   "flip_partial": 313,
-   "same_order": 12,
+   "flip_full_reversal": 178,
+   "flip_partial": 307,
+   "same_order": 15,
    "new_best_distribution": {
-    "KEM": 417,
-    "VIN": 40,
-    "NIH": 31
+    "KEM": 419,
+    "VIN": 38,
+    "NIH": 28
    },
-   "baseline_same_dist": 0.84425,
-   "baseline_actual_dist": 0.495,
-   "p_vs_same": 2.876227105873868e-22,
-   "p_vs_actual": 1.3550367892680052e-129,
+   "baseline_same_dist": 0.844,
+   "baseline_actual_dist": 0.49275,
+   "p_vs_same": 5.677797691550482e-20,
+   "p_vs_actual": 9.51247047425031e-126,
    "exceeds_same": true,
    "exceeds_actual": true
   },
@@ -59,11 +59,11 @@
    "matched_prior": 0.24028268551236748,
    "n_target": 272,
    "n_valid": 500,
-   "n_changed": 139,
-   "observed_change_rate": 0.278,
+   "n_changed": 140,
+   "observed_change_rate": 0.28,
    "raw_ece": {
     "NIH": 0.23889582484630995,
-    "KEM": 0.29254568873447073,
+    "KEM": 0.29266790687391286,
     "VIN": 0.07142200658787203
    },
    "raw_rank_best_to_worst": [
@@ -71,14 +71,14 @@
     "NIH",
     "KEM"
    ],
-   "ece_span_raw": 4.096016097987187,
+   "ece_span_raw": 4.097727309212984,
    "matched_ece_median": {
     "NIH": 0.11303909060026404,
-    "KEM": 0.14255006164715753,
+    "KEM": 0.1429750094851924,
     "VIN": 0.0833530434402372
    },
-   "ece_span_matched": 1.7101962419568237,
-   "span_retained_pct": 41.75267384318209,
+   "ece_span_matched": 1.715294410187952,
+   "span_retained_pct": 41.85965245494567,
    "rank_matched_best_to_worst": [
     "VIN",
     "NIH",
@@ -86,28 +86,28 @@
    ],
    "rank_reversed": false,
    "flip_full_reversal": 0,
-   "flip_partial": 139,
-   "same_order": 361,
+   "flip_partial": 140,
+   "same_order": 360,
    "new_best_distribution": {
-    "VIN": 49,
+    "VIN": 50,
     "NIH": 90
    },
-   "baseline_same_dist": 0.83225,
-   "baseline_actual_dist": 0.27825,
-   "p_vs_same": 9.979220271935175e-165,
-   "p_vs_actual": 1.0,
+   "baseline_same_dist": 0.82975,
+   "baseline_actual_dist": 0.26775,
+   "p_vs_same": 1.725949978410675e-161,
+   "p_vs_actual": 0.5445396921544732,
    "exceeds_same": false,
-   "exceeds_actual": false
+   "exceeds_actual": true
   },
   "NORMAL_relaxed": {
    "matched_prior": 0.6125356125356125,
    "n_target": 169,
    "n_valid": 500,
-   "n_changed": 487,
-   "observed_change_rate": 0.974,
+   "n_changed": 493,
+   "observed_change_rate": 0.986,
    "raw_ece": {
     "NIH": 0.4359319597649851,
-    "KEM": 0.184902905769053,
+    "KEM": 0.18497733026423116,
     "VIN": 0.1579720111672589
    },
    "raw_rank_best_to_worst": [
@@ -118,29 +118,29 @@
    "ece_span_raw": 2.759551875954947,
    "matched_ece_median": {
     "NIH": 0.16941154184448115,
-    "KEM": 0.22964631033422062,
+    "KEM": 0.22684873340199507,
     "VIN": 0.17127732075916152
    },
-   "ece_span_matched": 1.355552920621162,
-   "span_retained_pct": 49.12221192261772,
+   "ece_span_matched": 1.3390394239504706,
+   "span_retained_pct": 48.5237996653748,
    "rank_matched_best_to_worst": [
     "NIH",
     "VIN",
     "KEM"
    ],
    "rank_reversed": true,
-   "flip_full_reversal": 11,
-   "flip_partial": 476,
-   "same_order": 13,
+   "flip_full_reversal": 23,
+   "flip_partial": 470,
+   "same_order": 7,
    "new_best_distribution": {
     "NIH": 270,
-    "VIN": 213,
-    "KEM": 4
+    "VIN": 217,
+    "KEM": 6
    },
-   "baseline_same_dist": 0.8365,
-   "baseline_actual_dist": 0.5015,
-   "p_vs_same": 4.536243176128039e-23,
-   "p_vs_actual": 2.3010720764312364e-125,
+   "baseline_same_dist": 0.83925,
+   "baseline_actual_dist": 0.50725,
+   "p_vs_same": 2.252921759221426e-28,
+   "p_vs_actual": 5.7160167861335634e-133,
    "exceeds_same": true,
    "exceeds_actual": true
   },
@@ -148,11 +148,11 @@
    "matched_prior": 0.7597173144876325,
    "n_target": 272,
    "n_valid": 500,
-   "n_changed": 499,
-   "observed_change_rate": 0.998,
+   "n_changed": 500,
+   "observed_change_rate": 1.0,
    "raw_ece": {
     "NIH": 0.4359319597649851,
-    "KEM": 0.184902905769053,
+    "KEM": 0.18497733026423116,
     "VIN": 0.24591001818720049
    },
    "raw_rank_best_to_worst": [
@@ -160,31 +160,31 @@
     "VIN",
     "NIH"
    ],
-   "ece_span_raw": 2.3576263334091236,
+   "ece_span_raw": 2.356677756902845,
    "matched_ece_median": {
     "NIH": 0.25970411181761466,
-    "KEM": 0.30483714967404546,
+    "KEM": 0.3047862877514597,
     "VIN": 0.25107424012864665
    },
-   "ece_span_matched": 1.2141315234802723,
-   "span_retained_pct": 51.4980472636917,
+   "ece_span_matched": 1.213928946256262,
+   "span_retained_pct": 51.510179645927145,
    "rank_matched_best_to_worst": [
     "VIN",
     "NIH",
     "KEM"
    ],
    "rank_reversed": true,
-   "flip_full_reversal": 142,
-   "flip_partial": 357,
-   "same_order": 1,
+   "flip_full_reversal": 140,
+   "flip_partial": 360,
+   "same_order": 0,
    "new_best_distribution": {
-    "VIN": 355,
+    "VIN": 356,
     "NIH": 144
    },
-   "baseline_same_dist": 0.829,
-   "baseline_actual_dist": 0.305,
-   "p_vs_same": 3.5092675289122266e-39,
-   "p_vs_actual": 1.6104811839935525e-255,
+   "baseline_same_dist": 0.83125,
+   "baseline_actual_dist": 0.3055,
+   "p_vs_same": 1.2982861931425713e-40,
+   "p_vs_actual": 3.203371366435198e-258,
    "exceeds_same": true,
    "exceeds_actual": true
   }
@@ -194,11 +194,11 @@
    "matched_prior": 0.38746438746438744,
    "n_target": 169,
    "n_valid": 500,
-   "n_changed": 493,
-   "observed_change_rate": 0.986,
+   "n_changed": 495,
+   "observed_change_rate": 0.99,
    "raw_ece": {
     "NIH": 0.2057183475536257,
-    "KEM": 0.20350941183849625,
+    "KEM": 0.2036449886003898,
     "VIN": 0.1590473576587495
    },
    "raw_rank_best_to_worst": [
@@ -209,28 +209,28 @@
    "ece_span_raw": 1.2934408378856128,
    "matched_ece_median": {
     "NIH": 0.1608681759417998,
-    "KEM": 0.11054042710360559,
+    "KEM": 0.10947747949576941,
     "VIN": 0.15890591951485272
    },
-   "ece_span_matched": 1.455288170643884,
-   "span_retained_pct": 112.5129289270658,
+   "ece_span_matched": 1.46941797237866,
+   "span_retained_pct": 113.6053485662875,
    "rank_matched_best_to_worst": [
     "KEM",
     "VIN",
     "NIH"
    ],
    "rank_reversed": true,
-   "flip_full_reversal": 30,
-   "flip_partial": 463,
-   "same_order": 7,
+   "flip_full_reversal": 31,
+   "flip_partial": 464,
+   "same_order": 5,
    "new_best_distribution": {
-    "KEM": 462,
-    "NIH": 31
+    "KEM": 463,
+    "NIH": 32
    },
-   "baseline_same_dist": 0.83025,
-   "baseline_actual_dist": 0.50775,
-   "p_vs_same": 2.22935656002364e-30,
-   "p_vs_actual": 8.535566405149826e-133,
+   "baseline_same_dist": 0.83875,
+   "baseline_actual_dist": 0.5065,
+   "p_vs_same": 9.433187645972958e-31,
+   "p_vs_actual": 4.4924914035445695e-137,
    "exceeds_same": true,
    "exceeds_actual": true
   },
@@ -238,11 +238,11 @@
    "matched_prior": 0.24028268551236748,
    "n_target": 272,
    "n_valid": 500,
-   "n_changed": 125,
-   "observed_change_rate": 0.25,
+   "n_changed": 118,
+   "observed_change_rate": 0.236,
    "raw_ece": {
     "NIH": 0.2057183475536257,
-    "KEM": 0.20350941183849625,
+    "KEM": 0.2036449886003898,
     "VIN": 0.06723879199424042
    },
    "raw_rank_best_to_worst": [
@@ -253,7 +253,7 @@
    "ece_span_raw": 3.0595187904513104,
    "matched_ece_median": {
     "NIH": 0.12653629402971356,
-    "KEM": 0.1039435101676431,
+    "KEM": 0.10366709714392475,
     "VIN": 0.07667485579697635
    },
    "ece_span_matched": 1.6502971243240798,
@@ -264,18 +264,18 @@
     "NIH"
    ],
    "rank_reversed": false,
-   "flip_full_reversal": 1,
-   "flip_partial": 124,
-   "same_order": 375,
+   "flip_full_reversal": 2,
+   "flip_partial": 116,
+   "same_order": 382,
    "new_best_distribution": {
-    "VIN": 81,
-    "KEM": 37,
-    "NIH": 7
+    "VIN": 79,
+    "KEM": 31,
+    "NIH": 8
    },
-   "baseline_same_dist": 0.83725,
-   "baseline_actual_dist": 0.2535,
-   "p_vs_same": 2.6939888049326034e-185,
-   "p_vs_actual": 0.8775977697563011,
+   "baseline_same_dist": 0.83075,
+   "baseline_actual_dist": 0.24675,
+   "p_vs_same": 1.2629950621286514e-187,
+   "p_vs_actual": 0.6041981174099023,
    "exceeds_same": false,
    "exceeds_actual": false
   },
@@ -283,11 +283,11 @@
    "matched_prior": 0.6125356125356125,
    "n_target": 169,
    "n_valid": 500,
-   "n_changed": 491,
-   "observed_change_rate": 0.982,
+   "n_changed": 489,
+   "observed_change_rate": 0.978,
    "raw_ece": {
     "NIH": 0.473620767725956,
-    "KEM": 0.11410595466016535,
+    "KEM": 0.1140150944254576,
     "VIN": 0.1067512237567699
    },
    "raw_rank_best_to_worst": [
@@ -298,11 +298,11 @@
    "ece_span_raw": 4.436677642263751,
    "matched_ece_median": {
     "NIH": 0.2156388265791641,
-    "KEM": 0.27451938510866913,
+    "KEM": 0.27323852525748443,
     "VIN": 0.12433357843192372
    },
-   "ece_span_matched": 2.2079263588393907,
-   "span_retained_pct": 49.76530946956128,
+   "ece_span_matched": 2.197624557287962,
+   "span_retained_pct": 49.53311316453127,
    "rank_matched_best_to_worst": [
     "VIN",
     "NIH",
@@ -310,14 +310,14 @@
    ],
    "rank_reversed": true,
    "flip_full_reversal": 0,
-   "flip_partial": 491,
-   "same_order": 9,
+   "flip_partial": 489,
+   "same_order": 11,
    "new_best_distribution": {
-    "VIN": 491
+    "VIN": 489
    },
-   "baseline_same_dist": 0.82875,
-   "baseline_actual_dist": 0.022,
-   "p_vs_same": 9.819446901396063e-29,
+   "baseline_same_dist": 0.82775,
+   "baseline_actual_dist": 0.02575,
+   "p_vs_same": 5.44151142058675e-27,
    "p_vs_actual": 0.0,
    "exceeds_same": true,
    "exceeds_actual": true
@@ -330,7 +330,7 @@
    "observed_change_rate": 1.0,
    "raw_ece": {
     "NIH": 0.473620767725956,
-    "KEM": 0.11410595466016535,
+    "KEM": 0.1140150944254576,
     "VIN": 0.1925397277579317
    },
    "raw_rank_best_to_worst": [
@@ -338,14 +338,14 @@
     "VIN",
     "NIH"
    ],
-   "ece_span_raw": 4.1507103563219925,
+   "ece_span_raw": 4.1540181158697935,
    "matched_ece_median": {
     "NIH": 0.31012602978700987,
-    "KEM": 0.35423350903232964,
+    "KEM": 0.35600310703054727,
     "VIN": 0.19676725325167782
    },
-   "ece_span_matched": 1.800266574739662,
-   "span_retained_pct": 43.372493385322734,
+   "ece_span_matched": 1.8092599309459114,
+   "span_retained_pct": 43.55445451799812,
    "rank_matched_best_to_worst": [
     "VIN",
     "NIH",
@@ -358,9 +358,9 @@
    "new_best_distribution": {
     "VIN": 500
    },
-   "baseline_same_dist": 0.82175,
-   "baseline_actual_dist": 0.0155,
-   "p_vs_same": 4.3321035788564304e-43,
+   "baseline_same_dist": 0.827,
+   "baseline_actual_dist": 0.01725,
+   "p_vs_same": 9.836709782975394e-42,
    "p_vs_actual": 0.0,
    "exceeds_same": true,
    "exceeds_actual": true
@@ -371,11 +371,11 @@
    "matched_prior": 0.38746438746438744,
    "n_target": 169,
    "n_valid": 500,
-   "n_changed": 415,
-   "observed_change_rate": 0.83,
+   "n_changed": 411,
+   "observed_change_rate": 0.822,
    "raw_ece": {
     "NIH": 0.30847230204818793,
-    "KEM": 0.20645236462535557,
+    "KEM": 0.2066381727580357,
     "VIN": 0.0611654305591797
    },
    "raw_rank_best_to_worst": [
@@ -386,11 +386,11 @@
    "ece_span_raw": 5.0432458208518645,
    "matched_ece_median": {
     "NIH": 0.12838096617577743,
-    "KEM": 0.16161613283160878,
+    "KEM": 0.16084718264463033,
     "VIN": 0.07949967202372274
    },
-   "ece_span_matched": 2.032915717984125,
-   "span_retained_pct": 40.30966941129079,
+   "ece_span_matched": 2.0232433486849284,
+   "span_retained_pct": 40.117880836179,
    "rank_matched_best_to_worst": [
     "VIN",
     "NIH",
@@ -398,17 +398,16 @@
    ],
    "rank_reversed": true,
    "flip_full_reversal": 1,
-   "flip_partial": 414,
-   "same_order": 85,
+   "flip_partial": 410,
+   "same_order": 89,
    "new_best_distribution": {
-    "VIN": 354,
-    "NIH": 60,
-    "KEM": 1
+    "VIN": 351,
+    "NIH": 60
    },
-   "baseline_same_dist": 0.838,
-   "baseline_actual_dist": 0.298,
-   "p_vs_same": 0.627249560217433,
-   "p_vs_actual": 2.808066658423577e-134,
+   "baseline_same_dist": 0.83625,
+   "baseline_actual_dist": 0.296,
+   "p_vs_same": 0.39734993214419745,
+   "p_vs_actual": 3.5060154250743775e-131,
    "exceeds_same": false,
    "exceeds_actual": true
   },
@@ -420,7 +419,7 @@
    "observed_change_rate": 1.0,
    "raw_ece": {
     "NIH": 0.30847230204818793,
-    "KEM": 0.20645236462535557,
+    "KEM": 0.2066381727580357,
     "VIN": 0.17947987844186833
    },
    "raw_rank_best_to_worst": [
@@ -431,11 +430,11 @@
    "ece_span_raw": 1.7187013091726542,
    "matched_ece_median": {
     "NIH": 0.17239171156389227,
-    "KEM": 0.2811568303389804,
+    "KEM": 0.28086772433701246,
     "VIN": 0.18673002190874233
    },
-   "ece_span_matched": 1.6309184924750708,
-   "span_retained_pct": 94.89249142773737,
+   "ece_span_matched": 1.629241462881564,
+   "span_retained_pct": 94.79491603260868,
    "rank_matched_best_to_worst": [
     "NIH",
     "VIN",
@@ -464,7 +463,7 @@
    "observed_change_rate": 1.0,
    "raw_ece": {
     "NIH": 0.5174145250917856,
-    "KEM": 0.10310490459571901,
+    "KEM": 0.1031333432573784,
     "VIN": 0.21589653833936423
    },
    "raw_rank_best_to_worst": [
@@ -472,14 +471,14 @@
     "VIN",
     "NIH"
    ],
-   "ece_span_raw": 5.018330865254193,
+   "ece_span_raw": 5.016947077925437,
    "matched_ece_median": {
     "NIH": 0.23171767547792763,
-    "KEM": 0.31328248289915234,
+    "KEM": 0.3135816021078437,
     "VIN": 0.22703815449977066
    },
-   "ece_span_matched": 1.3798671134787999,
-   "span_retained_pct": 27.496535213185975,
+   "ece_span_matched": 1.3811845977992234,
+   "span_retained_pct": 27.53038005675672,
    "rank_matched_best_to_worst": [
     "VIN",
     "NIH",
@@ -493,9 +492,9 @@
     "NIH": 214,
     "VIN": 286
    },
-   "baseline_same_dist": 0.82325,
+   "baseline_same_dist": 0.8255,
    "baseline_actual_dist": 0.44825,
-   "p_vs_same": 1.2779747739964622e-42,
+   "p_vs_same": 3.4959036759347016e-42,
    "p_vs_actual": 5.756375513458744e-175,
    "exceeds_same": true,
    "exceeds_actual": true
@@ -508,7 +507,7 @@
    "observed_change_rate": 1.0,
    "raw_ece": {
     "NIH": 0.5174145250917856,
-    "KEM": 0.10310490459571901,
+    "KEM": 0.1031333432573784,
     "VIN": 0.34327611531206664
    },
    "raw_rank_best_to_worst": [
@@ -516,14 +515,14 @@
     "VIN",
     "NIH"
    ],
-   "ece_span_raw": 5.018330865254193,
+   "ece_span_raw": 5.016947077925437,
    "matched_ece_median": {
     "NIH": 0.337190783551812,
-    "KEM": 0.43281721992089467,
+    "KEM": 0.43298923454302196,
     "VIN": 0.3477784449864617
    },
-   "ece_span_matched": 1.283597420314393,
-   "span_retained_pct": 25.57817439263991,
+   "ece_span_matched": 1.284107560657837,
+   "span_retained_pct": 25.59539777303829,
    "rank_matched_best_to_worst": [
     "NIH",
     "VIN",
@@ -550,11 +549,11 @@
    "matched_prior": 0.38746438746438744,
    "n_target": 169,
    "n_valid": 500,
-   "n_changed": 499,
-   "observed_change_rate": 0.998,
+   "n_changed": 498,
+   "observed_change_rate": 0.996,
    "raw_ece": {
     "NIH": 0.3757917639604827,
-    "KEM": 0.19834435634748393,
+    "KEM": 0.19853180459832295,
     "VIN": 0.1831518503176606
    },
    "raw_rank_best_to_worst": [
@@ -565,7 +564,7 @@
    "ece_span_raw": 2.0518043541941036,
    "matched_ece_median": {
     "NIH": 0.11603699838907934,
-    "KEM": 0.16046022709745628,
+    "KEM": 0.1621282556860228,
     "VIN": 0.18902679735563208
    },
    "ece_span_matched": 1.6290217773628834,
@@ -576,18 +575,18 @@
     "VIN"
    ],
    "rank_reversed": true,
-   "flip_full_reversal": 359,
-   "flip_partial": 140,
-   "same_order": 1,
+   "flip_full_reversal": 343,
+   "flip_partial": 155,
+   "same_order": 2,
    "new_best_distribution": {
-    "NIH": 455,
-    "KEM": 43,
+    "NIH": 449,
+    "KEM": 48,
     "VIN": 1
    },
-   "baseline_same_dist": 0.82725,
-   "baseline_actual_dist": 0.286,
-   "p_vs_same": 1.2680666340659991e-39,
-   "p_vs_actual": 1.9039981865384273e-269,
+   "baseline_same_dist": 0.8255,
+   "baseline_actual_dist": 0.2945,
+   "p_vs_same": 2.2408320529949114e-38,
+   "p_vs_actual": 2.5017284265026275e-260,
    "exceeds_same": true,
    "exceeds_actual": true
   },
@@ -599,7 +598,7 @@
    "observed_change_rate": 1.0,
    "raw_ece": {
     "NIH": 0.3757917639604827,
-    "KEM": 0.19834435634748393,
+    "KEM": 0.19853180459832295,
     "VIN": 0.2830396055214291
    },
    "raw_rank_best_to_worst": [
@@ -607,29 +606,29 @@
     "VIN",
     "NIH"
    ],
-   "ece_span_raw": 1.8946430888213661,
+   "ece_span_raw": 1.892854219105089,
    "matched_ece_median": {
     "NIH": 0.1958334364086006,
-    "KEM": 0.26954109530882253,
+    "KEM": 0.2702716648756691,
     "VIN": 0.2863906640559435
    },
    "ece_span_matched": 1.4624196424679898,
-   "span_retained_pct": 77.18707819411743,
+   "span_retained_pct": 77.26002497748603,
    "rank_matched_best_to_worst": [
     "NIH",
     "KEM",
     "VIN"
    ],
    "rank_reversed": true,
-   "flip_full_reversal": 74,
-   "flip_partial": 426,
+   "flip_full_reversal": 69,
+   "flip_partial": 431,
    "same_order": 0,
    "new_best_distribution": {
     "NIH": 500
    },
-   "baseline_same_dist": 0.84275,
-   "baseline_actual_dist": 0.1525,
-   "p_vs_same": 1.651063972364796e-37,
+   "baseline_same_dist": 0.83825,
+   "baseline_actual_dist": 0.1675,
+   "p_vs_same": 7.628095633119011e-39,
    "p_vs_actual": 0.0,
    "exceeds_same": true,
    "exceeds_actual": true
@@ -642,7 +641,7 @@
    "observed_change_rate": 1.0,
    "raw_ece": {
     "NIH": 0.5159214368765977,
-    "KEM": 0.09576852256131749,
+    "KEM": 0.09557520852559809,
     "VIN": 0.2424041824972528
    },
    "raw_rank_best_to_worst": [
@@ -650,14 +649,14 @@
     "VIN",
     "NIH"
    ],
-   "ece_span_raw": 5.387171307213912,
+   "ece_span_raw": 5.3980676038851385,
    "matched_ece_median": {
     "NIH": 0.23818267438803198,
-    "KEM": 0.30804198975922786,
+    "KEM": 0.3080281854204878,
     "VIN": 0.2501730161041198
    },
-   "ece_span_matched": 1.293301414767833,
-   "span_retained_pct": 24.007059382648272,
+   "ece_span_matched": 1.2932434578287924,
+   "span_retained_pct": 23.95752615061748,
    "rank_matched_best_to_worst": [
     "NIH",
     "VIN",
@@ -671,10 +670,10 @@
     "NIH": 345,
     "VIN": 155
    },
-   "baseline_same_dist": 0.83825,
-   "baseline_actual_dist": 0.291,
-   "p_vs_same": 7.628095633119011e-39,
-   "p_vs_actual": 8.840859585279218e-269,
+   "baseline_same_dist": 0.834,
+   "baseline_actual_dist": 0.29125,
+   "p_vs_same": 6.02264950830369e-40,
+   "p_vs_actual": 1.358210291926267e-268,
    "exceeds_same": true,
    "exceeds_actual": true
   },
@@ -686,7 +685,7 @@
    "observed_change_rate": 1.0,
    "raw_ece": {
     "NIH": 0.5159214368765977,
-    "KEM": 0.09576852256131749,
+    "KEM": 0.09557520852559809,
     "VIN": 0.36857453325611966
    },
    "raw_rank_best_to_worst": [
@@ -694,14 +693,14 @@
     "VIN",
     "NIH"
    ],
-   "ece_span_raw": 5.387171307213912,
+   "ece_span_raw": 5.3980676038851385,
    "matched_ece_median": {
     "NIH": 0.3442211515297565,
-    "KEM": 0.4229073211386362,
+    "KEM": 0.422824292745003,
     "VIN": 0.37008940633934206
    },
-   "ece_span_matched": 1.2285919074385456,
-   "span_retained_pct": 22.805881554079217,
+   "ece_span_matched": 1.2283507008965762,
+   "span_retained_pct": 22.755378239659287,
    "rank_matched_best_to_worst": [
     "NIH",
     "VIN",
@@ -715,9 +714,9 @@
     "NIH": 472,
     "VIN": 28
    },
-   "baseline_same_dist": 0.83425,
+   "baseline_same_dist": 0.8355,
    "baseline_actual_dist": 0.0635,
-   "p_vs_same": 6.193449557078449e-40,
+   "p_vs_same": 1.6694782543835223e-39,
    "p_vs_actual": 0.0,
    "exceeds_same": true,
    "exceeds_actual": true

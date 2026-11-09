@@ -2,7 +2,7 @@
 
 **Repository accompanying a manuscript submitted to *BMC Medical Imaging*.**
 
-> Class prevalence determines which chest radiograph dataset looks better:
+> Class prevalence changes which chest radiograph dataset looks better:
 > a cross-dataset audit of four publicly released classifiers
 
 ---

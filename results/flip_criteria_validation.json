@@ -15,15 +15,15 @@
    "n_target": 169,
    "observed": {
     "valid": 500,
-    "order_changed_rate": 0.976,
-    "dir_consistency": 0.8934426229508197,
-    "new_best_concentration": 0.834,
+    "order_changed_rate": 0.97,
+    "dir_consistency": 0.8969072164948454,
+    "new_best_concentration": 0.838,
     "new_best_distribution": {
-     "NIH": 31,
-     "KEM": 417,
-     "VIN": 52
+     "NIH": 28,
+     "KEM": 419,
+     "VIN": 53
     },
-    "best_transfer_rate": 0.896,
+    "best_transfer_rate": 0.894,
     "raw_rank": [
      "VIN",
      "NIH",
@@ -31,30 +31,30 @@
     ]
    },
    "null_order_changed_rate": [
-    0.9843333333333336,
+    0.9873333333333333,
     0.9,
     1.0
    ],
    "null_dir_consistency": [
-    0.8412865497076024,
-    0.5434868421052632,
+    0.8480314184153194,
+    0.63625,
     1.0
    ],
    "null_new_best_concentration": [
-    0.7913333333333334,
-    0.5,
+    0.8036666666666666,
+    0.55,
     1.0
    ],
    "null_best_transfer_rate": [
-    0.8426666666666667,
-    0.53625,
+    0.8483333333333334,
+    0.65,
     1.0
    ],
-   "emp_p_order_changed": 0.7682119205298014,
-   "emp_p_dir_consistency": 0.46357615894039733,
-   "emp_p_new_best_concentration": 0.4370860927152318,
-   "emp_p_best_transfer": 0.48344370860927155,
-   "binom_p_new_best_concentration": 5.692735507602364e-118,
+   "emp_p_order_changed": 0.8013245033112583,
+   "emp_p_dir_consistency": 0.40397350993377484,
+   "emp_p_new_best_concentration": 0.5099337748344371,
+   "emp_p_best_transfer": 0.4503311258278146,
+   "binom_p_new_best_concentration": 5.5130533018360356e-120,
    "binom_p_transfer": 0.0
   },
   "NORMAL": {
@@ -62,15 +62,15 @@
    "n_target": 169,
    "observed": {
     "valid": 500,
-    "order_changed_rate": 0.974,
-    "dir_consistency": 0.5626283367556468,
+    "order_changed_rate": 0.986,
+    "dir_consistency": 0.5557809330628803,
     "new_best_concentration": 0.54,
     "new_best_distribution": {
      "NIH": 270,
-     "KEM": 4,
-     "VIN": 226
+     "KEM": 6,
+     "VIN": 224
     },
-    "best_transfer_rate": 0.548,
+    "best_transfer_rate": 0.552,
     "raw_rank": [
      "VIN",
      "KEM",
@@ -78,29 +78,29 @@
     ]
    },
    "null_order_changed_rate": [
-    0.9146666666666666,
-    0.6725,
+    0.9059999999999998,
+    0.58625,
     1.0
    ],
    "null_dir_consistency": [
-    0.7384648918046751,
-    0.1935294117647059,
+    0.714298988335366,
+    0.20763157894736842,
     1.0
    ],
    "null_new_best_concentration": [
-    0.6480000000000001,
+    0.6336666666666667,
     0.4,
-    0.95
+    0.9
    ],
    "null_best_transfer_rate": [
-    0.8243333333333334,
-    0.38625000000000004,
+    0.8136666666666668,
+    0.4,
     1.0
    ],
-   "emp_p_order_changed": 0.2913907284768212,
-   "emp_p_dir_consistency": 0.8079470198675497,
-   "emp_p_new_best_concentration": 0.7152317880794702,
-   "emp_p_best_transfer": 0.9602649006622517,
+   "emp_p_order_changed": 0.31125827814569534,
+   "emp_p_dir_consistency": 0.7615894039735099,
+   "emp_p_new_best_concentration": 0.7086092715231788,
+   "emp_p_best_transfer": 0.9072847682119205,
    "binom_p_new_best_concentration": 3.2907497424359252e-21,
    "binom_p_transfer": 0.0
   }
@@ -111,15 +111,15 @@
    "n_target": 169,
    "observed": {
     "valid": 500,
-    "order_changed_rate": 0.986,
-    "dir_consistency": 0.4908722109533469,
-    "new_best_concentration": 0.924,
+    "order_changed_rate": 0.99,
+    "dir_consistency": 0.4888888888888889,
+    "new_best_concentration": 0.926,
     "new_best_distribution": {
-     "NIH": 31,
-     "KEM": 462,
-     "VIN": 7
+     "NIH": 32,
+     "KEM": 463,
+     "VIN": 5
     },
-    "best_transfer_rate": 0.986,
+    "best_transfer_rate": 0.99,
     "raw_rank": [
      "VIN",
      "KEM",
@@ -127,30 +127,30 @@
     ]
    },
    "null_order_changed_rate": [
-    0.797,
-    0.4,
+    0.8063333333333333,
+    0.45,
     1.0
    ],
    "null_dir_consistency": [
-    0.5030297646396719,
-    0.09083333333333334,
-    0.9480921052631579
+    0.5042847412305617,
+    0.07142857142857142,
+    0.9103125000000002
    ],
    "null_new_best_concentration": [
-    0.5806666666666667,
-    0.4,
+    0.6010000000000001,
+    0.35,
     0.9
    ],
    "null_best_transfer_rate": [
-    0.6080000000000001,
+    0.616,
     0.13625,
     1.0
    ],
-   "emp_p_order_changed": 0.06622516556291391,
-   "emp_p_dir_consistency": 0.5629139072847682,
+   "emp_p_order_changed": 0.11258278145695365,
+   "emp_p_dir_consistency": 0.5761589403973509,
    "emp_p_new_best_concentration": 0.019867549668874173,
-   "emp_p_best_transfer": 0.039735099337748346,
-   "binom_p_new_best_concentration": 1.2958200642822652e-170,
+   "emp_p_best_transfer": 0.052980132450331126,
+   "binom_p_new_best_concentration": 5.311171783095072e-172,
    "binom_p_transfer": 0.0
   },
   "NORMAL": {
@@ -158,7 +158,7 @@
    "n_target": 169,
    "observed": {
     "valid": 500,
-    "order_changed_rate": 0.982,
+    "order_changed_rate": 0.978,
     "dir_consistency": 0.0,
     "new_best_concentration": 1.0,
     "new_best_distribution": {
@@ -179,12 +179,12 @@
     1.0
    ],
    "null_dir_consistency": [
-    0.9993333333333334,
+    1.0,
     1.0,
     1.0
    ],
    "null_new_best_concentration": [
-    0.7033333333333334,
+    0.6853333333333332,
     0.5,
     0.95
    ],
@@ -195,7 +195,7 @@
    ],
    "emp_p_order_changed": 1.0,
    "emp_p_dir_consistency": 1.0,
-   "emp_p_new_best_concentration": 0.019867549668874173,
+   "emp_p_new_best_concentration": 0.013245033112582781,
    "emp_p_best_transfer": 1.0,
    "binom_p_new_best_concentration": 2.7502529562030617e-239,
    "binom_p_transfer": 1.0
@@ -207,15 +207,15 @@
    "n_target": 169,
    "observed": {
     "valid": 500,
-    "order_changed_rate": 0.83,
-    "dir_consistency": 0.14457831325301204,
-    "new_best_concentration": 0.878,
+    "order_changed_rate": 0.822,
+    "dir_consistency": 0.145985401459854,
+    "new_best_concentration": 0.88,
     "new_best_distribution": {
      "NIH": 60,
-     "KEM": 1,
-     "VIN": 439
+     "KEM": 0,
+     "VIN": 440
     },
-    "best_transfer_rate": 0.122,
+    "best_transfer_rate": 0.12,
     "raw_rank": [
      "VIN",
      "KEM",
@@ -223,30 +223,30 @@
     ]
    },
    "null_order_changed_rate": [
-    0.6806666666666668,
-    0.3,
-    0.9637500000000002
+    0.6566666666666667,
+    0.25,
+    0.95
    ],
    "null_dir_consistency": [
-    0.4384124184209323,
+    0.4063926768106335,
     0.0,
-    0.8442763157894737
+    0.875
    ],
    "null_new_best_concentration": [
-    0.579,
+    0.5746666666666667,
     0.4,
-    0.85
+    0.8
    ],
    "null_best_transfer_rate": [
-    0.6076666666666667,
-    0.23625000000000002,
+    0.5793333333333334,
+    0.2,
     0.9
    ],
-   "emp_p_order_changed": 0.25165562913907286,
-   "emp_p_dir_consistency": 0.8543046357615894,
+   "emp_p_order_changed": 0.2251655629139073,
+   "emp_p_dir_consistency": 0.847682119205298,
    "emp_p_new_best_concentration": 0.019867549668874173,
-   "emp_p_best_transfer": 1.0,
-   "binom_p_new_best_concentration": 1.2799965904177774e-141,
+   "emp_p_best_transfer": 0.9933774834437086,
+   "binom_p_new_best_concentration": 8.860436631390559e-143,
    "binom_p_transfer": 0.0
   },
   "NORMAL": {
@@ -275,12 +275,12 @@
     1.0
    ],
    "null_dir_consistency": [
-    0.975,
-    0.83625,
+    0.9753333333333334,
+    0.85,
     1.0
    ],
    "null_new_best_concentration": [
-    0.7716666666666666,
+    0.7739999999999999,
     0.5,
     1.0
    ],
@@ -290,8 +290,8 @@
     1.0
    ],
    "emp_p_order_changed": 1.0,
-   "emp_p_dir_consistency": 0.7019867549668874,
-   "emp_p_new_best_concentration": 0.8940397350993378,
+   "emp_p_dir_consistency": 0.7417218543046358,
+   "emp_p_new_best_concentration": 0.8874172185430463,
    "emp_p_best_transfer": 1.0,
    "binom_p_new_best_concentration": 1.0263882201685529e-27,
    "binom_p_transfer": 0.0
@@ -303,15 +303,15 @@
    "n_target": 169,
    "observed": {
     "valid": 500,
-    "order_changed_rate": 0.998,
-    "dir_consistency": 0.9919839679358717,
-    "new_best_concentration": 0.91,
+    "order_changed_rate": 0.996,
+    "dir_consistency": 0.9939759036144579,
+    "new_best_concentration": 0.898,
     "new_best_distribution": {
-     "NIH": 455,
-     "KEM": 43,
-     "VIN": 2
+     "NIH": 449,
+     "KEM": 48,
+     "VIN": 3
     },
-    "best_transfer_rate": 0.996,
+    "best_transfer_rate": 0.994,
     "raw_rank": [
      "VIN",
      "KEM",
@@ -319,30 +319,30 @@
     ]
    },
    "null_order_changed_rate": [
-    0.7366666666666667,
-    0.35,
+    0.7436666666666667,
+    0.38625000000000004,
     1.0
    ],
    "null_dir_consistency": [
-    0.5798772922410693,
+    0.5674938459373444,
     0.0,
-    1.0
+    0.9394097222222223
    ],
    "null_new_best_concentration": [
-    0.5796666666666667,
-    0.35,
-    0.95
+    0.564,
+    0.4,
+    0.8
    ],
    "null_best_transfer_rate": [
-    0.6070000000000001,
-    0.23625000000000002,
-    0.9637500000000002
+    0.6183333333333334,
+    0.25,
+    0.9
    ],
-   "emp_p_order_changed": 0.0728476821192053,
-   "emp_p_dir_consistency": 0.039735099337748346,
-   "emp_p_new_best_concentration": 0.039735099337748346,
-   "emp_p_best_transfer": 0.033112582781456956,
-   "binom_p_new_best_concentration": 3.139749888263619e-161,
+   "emp_p_order_changed": 0.052980132450331126,
+   "emp_p_dir_consistency": 0.019867549668874173,
+   "emp_p_new_best_concentration": 0.013245033112582781,
+   "emp_p_best_transfer": 0.013245033112582781,
+   "binom_p_new_best_concentration": 1.340566151510422e-153,
    "binom_p_transfer": 0.0
   },
   "NORMAL": {
@@ -351,7 +351,7 @@
    "observed": {
     "valid": 500,
     "order_changed_rate": 1.0,
-    "dir_consistency": 1.0,
+    "dir_consistency": 0.998,
     "new_best_concentration": 0.69,
     "new_best_distribution": {
      "NIH": 345,
@@ -371,14 +371,14 @@
     1.0
    ],
    "null_dir_consistency": [
-    0.9936666666666667,
-    0.95,
+    0.9940000000000001,
+    0.93625,
     1.0
    ],
    "null_new_best_concentration": [
-    0.7093333333333334,
+    0.7073333333333333,
     0.5,
-    1.0
+    0.95
    ],
    "null_best_transfer_rate": [
     1.0,
@@ -386,8 +386,8 @@
     1.0
    ],
    "emp_p_order_changed": 1.0,
-   "emp_p_dir_consistency": 0.8940397350993378,
-   "emp_p_new_best_concentration": 0.5629139072847682,
+   "emp_p_dir_consistency": 0.9139072847682119,
+   "emp_p_new_best_concentration": 0.5695364238410596,
    "emp_p_best_transfer": 1.0,
    "binom_p_new_best_concentration": 1.9083156716417943e-59,
    "binom_p_transfer": 0.0

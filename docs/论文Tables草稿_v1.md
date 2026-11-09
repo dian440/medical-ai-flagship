@@ -14,8 +14,8 @@
 | Setting | Single US institution | Triage dataset | Vietnamese outpatient cohort |
 | Annotation | NLP-derived report labels (14) | Curated binary folders | Radiologist reports (22 local categories) |
 | Images evaluated | 2,819 | 5,828 | 702 |
-| PNEUMONIA, n (prevalence) | 65 (2.3%) | 4247 (72.9%) | 272 (38.7%) |
-| NORMAL, n (prevalence) | 2754 (97.7%) | 1581 (27.1%) | 430 (61.3%) |
+| PNEUMONIA, n (prevalence) | 65 (2.3%) | 4245 (72.9%) | 272 (38.7%) |
+| NORMAL, n (prevalence) | 2754 (97.7%) | 1579 (27.1%) | 430 (61.3%) |
 | Label asymmetry | 47 of 65 PNEUMONIA images (72.3%) comorbid | Comorbidity not distinguished | 136 'OTHER' findings excluded under the strict definition |
 | Source | National Library of Medicine | Public distribution channel | PhysioNet |
 
@@ -27,14 +27,14 @@
 
 | Classifier | Class | AUC (NIH) | AUC (Kermany) | AUC (VinDr-CXR) | ECE (NIH) | ECE (Kermany) | ECE (VinDr-CXR) |
 |---|---|---|---|---|---|---|---|---|
-| NIH-pretrained | PNEUMONIA | 0.7229 | 0.7834 | 0.7036 | 0.2389 | 0.2925 | 0.0888 |
-| NIH-pretrained | NORMAL | 0.7618 | 0.9078 | 0.8071 | 0.4359 | 0.1849 | 0.1580 |
-| CheXpert-pretrained | PNEUMONIA | 0.7345 | 0.9556 | 0.8820 | 0.2057 | 0.2035 | 0.1590 |
-| CheXpert-pretrained | NORMAL | 0.7420 | 0.9594 | 0.8625 | 0.4736 | 0.1141 | 0.1068 |
-| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 0.6687 | 0.6162 | 0.7082 | 0.3085 | 0.2065 | 0.0612 |
+| NIH-pretrained | PNEUMONIA | 0.7229 | 0.7832 | 0.7036 | 0.2389 | 0.2927 | 0.0888 |
+| NIH-pretrained | NORMAL | 0.7618 | 0.9077 | 0.8071 | 0.4359 | 0.1850 | 0.1580 |
+| CheXpert-pretrained | PNEUMONIA | 0.7345 | 0.9555 | 0.8820 | 0.2057 | 0.2036 | 0.1590 |
+| CheXpert-pretrained | NORMAL | 0.7420 | 0.9594 | 0.8625 | 0.4736 | 0.1140 | 0.1068 |
+| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 0.6687 | 0.6166 | 0.7082 | 0.3085 | 0.2066 | 0.0612 |
 | MIMIC-CXR (CheXpert labels) | NORMAL | 0.6777 | 0.8153 | 0.7443 | 0.5174 | 0.1031 | 0.2159 |
-| MIMIC-CXR (noise-handled labels) | PNEUMONIA | 0.6917 | 0.7282 | 0.7594 | 0.3758 | 0.1983 | 0.1832 |
-| MIMIC-CXR (noise-handled labels) | NORMAL | 0.7192 | 0.8467 | 0.7743 | 0.5159 | 0.0958 | 0.2424 |
+| MIMIC-CXR (noise-handled labels) | PNEUMONIA | 0.6917 | 0.7284 | 0.7594 | 0.3758 | 0.1985 | 0.1832 |
+| MIMIC-CXR (noise-handled labels) | NORMAL | 0.7192 | 0.8465 | 0.7743 | 0.5159 | 0.0956 | 0.2424 |
 
 AUC, area under the receiver operating characteristic curve; ECE, ten-bin expected calibration error. Shaded (bold) values are the best of the three datasets within the same classifier and class; the best AUC and the best ECE frequently fall on different datasets.
 
@@ -63,29 +63,29 @@ Divergence count: **4 of 8**.
 
 | Classifier | Class | Raw spread | Matched spread | Retained | Raw order (best→worst) | Matched order | Reversed |
 |---|---|---|---|---|---|---|---|
-| NIH-pretrained | PNEUMONIA | 3.294× | 1.673× | 50.8% | VinDr-CXR < NIH < Kermany | Kermany < VinDr-CXR < NIH | yes |
-| NIH-pretrained | NORMAL | 2.760× | 1.366× | 49.5% | VinDr-CXR < Kermany < NIH | NIH < VinDr-CXR < Kermany | yes |
-| CheXpert-pretrained | PNEUMONIA | 1.293× | 1.452× | 112.2% | VinDr-CXR < Kermany < NIH | Kermany < VinDr-CXR < NIH | yes |
-| CheXpert-pretrained | NORMAL | 4.437× | 2.216× | 50.0% | VinDr-CXR < Kermany < NIH | VinDr-CXR < NIH < Kermany | yes |
-| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 5.043× | 1.967× | 39.0% | VinDr-CXR < Kermany < NIH | VinDr-CXR < NIH < Kermany | yes |
-| MIMIC-CXR (CheXpert labels) | NORMAL | 5.018× | 1.385× | 27.6% | Kermany < VinDr-CXR < NIH | VinDr-CXR < NIH < Kermany | yes |
+| NIH-pretrained | PNEUMONIA | 3.295× | 1.675× | 50.8% | VinDr-CXR < NIH < Kermany | Kermany < VinDr-CXR < NIH | yes |
+| NIH-pretrained | NORMAL | 2.760× | 1.364× | 49.4% | VinDr-CXR < Kermany < NIH | NIH < VinDr-CXR < Kermany | yes |
+| CheXpert-pretrained | PNEUMONIA | 1.293× | 1.475× | 114.0% | VinDr-CXR < Kermany < NIH | Kermany < VinDr-CXR < NIH | yes |
+| CheXpert-pretrained | NORMAL | 4.437× | 2.206× | 49.7% | VinDr-CXR < Kermany < NIH | VinDr-CXR < NIH < Kermany | yes |
+| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 5.043× | 1.974× | 39.1% | VinDr-CXR < Kermany < NIH | VinDr-CXR < NIH < Kermany | yes |
+| MIMIC-CXR (CheXpert labels) | NORMAL | 5.017× | 1.384× | 27.6% | Kermany < VinDr-CXR < NIH | VinDr-CXR < NIH < Kermany | yes |
 | MIMIC-CXR (noise-handled labels) | PNEUMONIA | 2.052× | 1.591× | 77.5% | VinDr-CXR < Kermany < NIH | NIH < Kermany < VinDr-CXR | yes |
-| MIMIC-CXR (noise-handled labels) | NORMAL | 5.387× | 1.295× | 24.0% | Kermany < VinDr-CXR < NIH | NIH < VinDr-CXR < Kermany | yes |
+| MIMIC-CXR (noise-handled labels) | NORMAL | 5.398× | 1.291× | 23.9% | Kermany < VinDr-CXR < NIH | NIH < VinDr-CXR < Kermany | yes |
 
-Spread contracted in **7 of 8** combinations (retaining 24.0–77.5% of the original spread); the calibration ranking reversed in **8 of 8**. The single combination in which the spread widened rather than contracted was the CheXpert-pretrained classifier on PNEUMONIA (1.293× to 1.452×), where the three datasets were already almost equally calibrated and prior matching had little spread to contract.
+Spread contracted in **7 of 8** combinations (retaining 23.9–77.5% of the original spread); the calibration ranking reversed in **8 of 8**. The single combination in which the spread widened rather than contracted was the CheXpert-pretrained classifier on PNEUMONIA (1.293× to 1.475×), where the three datasets were already almost equally calibrated and prior matching had little spread to contract.
 
 **Strict VinDr-CXR label definition** (PNEUMONIA restricted to consolidation and infiltration; 136 'OTHER' images excluded, leaving 566 images):
 
 | Classifier | Class | Raw spread | Matched spread | Retained | Raw order | Matched order | Reversed |
 |---|---|---|---|---|---|---|---|
-| NIH-pretrained | PNEUMONIA | 4.096× | 1.710× | 41.8% | VinDr-CXR < NIH < Kermany | VinDr-CXR < NIH < Kermany | **no** |
-| NIH-pretrained | NORMAL | 2.358× | 1.214× | 51.5% | Kermany < VinDr-CXR < NIH | VinDr-CXR < NIH < Kermany | yes |
+| NIH-pretrained | PNEUMONIA | 4.098× | 1.715× | 41.9% | VinDr-CXR < NIH < Kermany | VinDr-CXR < NIH < Kermany | **no** |
+| NIH-pretrained | NORMAL | 2.357× | 1.214× | 51.5% | Kermany < VinDr-CXR < NIH | VinDr-CXR < NIH < Kermany | yes |
 | CheXpert-pretrained | PNEUMONIA | 3.060× | 1.650× | 53.9% | VinDr-CXR < Kermany < NIH | VinDr-CXR < Kermany < NIH | **no** |
-| CheXpert-pretrained | NORMAL | 4.151× | 1.800× | 43.4% | Kermany < VinDr-CXR < NIH | VinDr-CXR < NIH < Kermany | yes |
-| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 1.719× | 1.631× | 94.9% | VinDr-CXR < Kermany < NIH | NIH < VinDr-CXR < Kermany | yes |
-| MIMIC-CXR (CheXpert labels) | NORMAL | 5.018× | 1.284× | 25.6% | Kermany < VinDr-CXR < NIH | NIH < VinDr-CXR < Kermany | yes |
-| MIMIC-CXR (noise-handled labels) | PNEUMONIA | 1.895× | 1.462× | 77.2% | Kermany < VinDr-CXR < NIH | NIH < Kermany < VinDr-CXR | yes |
-| MIMIC-CXR (noise-handled labels) | NORMAL | 5.387× | 1.229× | 22.8% | Kermany < VinDr-CXR < NIH | NIH < VinDr-CXR < Kermany | yes |
+| CheXpert-pretrained | NORMAL | 4.154× | 1.809× | 43.6% | Kermany < VinDr-CXR < NIH | VinDr-CXR < NIH < Kermany | yes |
+| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 1.719× | 1.629× | 94.8% | VinDr-CXR < Kermany < NIH | NIH < VinDr-CXR < Kermany | yes |
+| MIMIC-CXR (CheXpert labels) | NORMAL | 5.017× | 1.284× | 25.6% | Kermany < VinDr-CXR < NIH | NIH < VinDr-CXR < Kermany | yes |
+| MIMIC-CXR (noise-handled labels) | PNEUMONIA | 1.893× | 1.462× | 77.3% | Kermany < VinDr-CXR < NIH | NIH < Kermany < VinDr-CXR | yes |
+| MIMIC-CXR (noise-handled labels) | NORMAL | 5.398× | 1.228× | 22.8% | Kermany < VinDr-CXR < NIH | NIH < VinDr-CXR < Kermany | yes |
 
 Under the strict definition the spread still contracted in **8 of 8** combinations and the ranking still reversed in **6 of 8**. The two combinations in which no reversal occurred (NIH- and CheXpert-pretrained classifiers on PNEUMONIA) are those in which VinDr-CXR was already the best-calibrated dataset before matching.
 
@@ -97,18 +97,18 @@ Under the strict definition the spread still contracted in **8 of 8** combinatio
 
 | Classifier | Class | Observed | Null: identical calibration | Null: independent sampling | p (vs identical) | Direction consistency (observed) | Direction consistency (permutation null) | Empirical p | Above baseline? |
 |---|---|---|---|---|---|---|---|---|---|
-| NIH-pretrained | PNEUMONIA | 97.6% | 84.4% | 49.5% | 2.9 × 10⁻22 | 89.3% | 84.1% | 0.464 | **yes** |
-| NIH-pretrained | NORMAL | 97.4% | 83.7% | 50.1% | 4.5 × 10⁻23 | 56.3% | 73.8% | 0.808 | **yes** |
-| CheXpert-pretrained | PNEUMONIA | 98.6% | 83.0% | 50.8% | 2.2 × 10⁻30 | 49.1% | 50.3% | 0.563 | **yes** |
-| CheXpert-pretrained | NORMAL | 98.2% | 82.9% | 2.2% | 9.8 × 10⁻29 | 0.0% | 99.9% | 1.000 | **yes** |
-| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 83.0% | 83.8% | 29.8% | 0.627 | 14.5% | 43.8% | 0.854 | **no** |
-| MIMIC-CXR (CheXpert labels) | NORMAL | 100.0% | 82.3% | 44.8% | 1.3 × 10⁻42 | 100.0% | 97.5% | 0.702 | **yes** |
-| MIMIC-CXR (noise-handled labels) | PNEUMONIA | 99.8% | 82.7% | 28.6% | 1.3 × 10⁻39 | 99.2% | 58.0% | 0.040 | **yes** |
-| MIMIC-CXR (noise-handled labels) | NORMAL | 100.0% | 83.8% | 29.1% | 7.6 × 10⁻39 | 100.0% | 99.4% | 0.894 | **yes** |
+| NIH-pretrained | PNEUMONIA | 97.0% | 84.4% | 49.3% | 5.7 × 10⁻20 | 89.7% | 84.8% | 0.404 | **yes** |
+| NIH-pretrained | NORMAL | 98.6% | 83.9% | 50.7% | 2.3 × 10⁻28 | 55.6% | 71.4% | 0.762 | **yes** |
+| CheXpert-pretrained | PNEUMONIA | 99.0% | 83.9% | 50.6% | 9.4 × 10⁻31 | 48.9% | 50.4% | 0.576 | **yes** |
+| CheXpert-pretrained | NORMAL | 97.8% | 82.8% | 2.6% | 5.4 × 10⁻27 | 0.0% | 100.0% | 1.000 | **yes** |
+| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 82.2% | 83.6% | 29.6% | 0.397 | 14.6% | 40.6% | 0.848 | **no** |
+| MIMIC-CXR (CheXpert labels) | NORMAL | 100.0% | 82.5% | 44.8% | 3.5 × 10⁻42 | 100.0% | 97.5% | 0.742 | **yes** |
+| MIMIC-CXR (noise-handled labels) | PNEUMONIA | 99.6% | 82.5% | 29.4% | 2.2 × 10⁻38 | 99.4% | 56.7% | 0.020 | **yes** |
+| MIMIC-CXR (noise-handled labels) | NORMAL | 100.0% | 83.4% | 29.1% | 6.0 × 10⁻40 | 99.8% | 99.4% | 0.914 | **yes** |
 
-The observed rate exceeded the most conservative null in **7 of 8** combinations. That null assumes the three datasets were of *identical* calibration and differed only in resampling noise; under it, prior matching alone reordered the datasets in **82.3–84.4% of replicates**, which is the baseline against which any reported reversal must be judged.
+The observed rate exceeded the most conservative null in **7 of 8** combinations. That null assumes the three datasets were of *identical* calibration and differed only in resampling noise; under it, prior matching alone reordered the datasets in **82.5–84.4% of replicates**, which is the baseline against which any reported reversal must be judged.
 
-**Why the direction-consistency test is reported but not relied upon.** Under label permutation (a model with no discriminative power), the direction of complete reversal is itself highly structured, with a mean consistency of 43.8–99.9%. A binomial test against an expectation of a random direction (0.5) therefore overstates the evidence by many orders of magnitude. We report the permutation-based null throughout instead.
+**Why the direction-consistency test is reported but not relied upon.** Under label permutation (a model with no discriminative power), the direction of complete reversal is itself highly structured, with a mean consistency of 40.6–100.0%. A binomial test against an expectation of a random direction (0.5) therefore overstates the evidence by many orders of magnitude. We report the permutation-based null throughout instead.
 
 *Source: `noise_baseline.json` → `observed_change_rate`, `baseline_same_dist`, `baseline_actual_dist`, `p_vs_same`, `exceeds_same`; `flip_criteria_validation.json` → `observed.dir_consistency`, `null_dir_consistency`, `emp_p_dir_consistency`.*
 
@@ -120,21 +120,21 @@ The observed rate exceeded the most conservative null in **7 of 8** combinations
 
 | Classifier | Comparison | ΔAUC | SE | 95% CI | z | p (two-sided) | Significant |
 |---|---|---|---|---|---|---|---|
-| NIH-pretrained | PNEUMONIA: NIH vs Kermany | -0.0605 | 0.0341 | [-0.1273, +0.0063] | -1.776 | 0.076 | no |
+| NIH-pretrained | PNEUMONIA: NIH vs Kermany | -0.0603 | 0.0341 | [-0.1271, +0.0064] | -1.771 | 0.077 | no |
 | NIH-pretrained | PNEUMONIA: NIH vs VinDr-CXR | +0.0192 | 0.0388 | [-0.0569, +0.0953] | +0.495 | 0.621 | no |
-| NIH-pretrained | NORMAL: NIH vs Kermany | -0.1460 | 0.0320 | [-0.2087, -0.0833] | -4.564 | 5.0 × 10⁻6 | **yes** |
+| NIH-pretrained | NORMAL: NIH vs Kermany | -0.1459 | 0.0320 | [-0.2086, -0.0832] | -4.561 | 5.1 × 10⁻6 | **yes** |
 | NIH-pretrained | NORMAL: NIH vs VinDr-CXR | -0.0453 | 0.0357 | [-0.1153, +0.0247] | -1.269 | 0.204 | no |
-| CheXpert-pretrained | PNEUMONIA: NIH vs Kermany | -0.2211 | 0.0301 | [-0.2800, -0.1622] | -7.358 | 1.9 × 10⁻13 | **yes** |
+| CheXpert-pretrained | PNEUMONIA: NIH vs Kermany | -0.2211 | 0.0301 | [-0.2800, -0.1622] | -7.356 | 1.9 × 10⁻13 | **yes** |
 | CheXpert-pretrained | PNEUMONIA: NIH vs VinDr-CXR | -0.1475 | 0.0327 | [-0.2115, -0.0835] | -4.517 | 6.3 × 10⁻6 | **yes** |
-| CheXpert-pretrained | NORMAL: NIH vs Kermany | -0.2175 | 0.0305 | [-0.2773, -0.1576] | -7.119 | 1.1 × 10⁻12 | **yes** |
+| CheXpert-pretrained | NORMAL: NIH vs Kermany | -0.2174 | 0.0305 | [-0.2773, -0.1576] | -7.118 | 1.1 × 10⁻12 | **yes** |
 | CheXpert-pretrained | NORMAL: NIH vs VinDr-CXR | -0.1205 | 0.0336 | [-0.1864, -0.0547] | -3.588 | 3.3 × 10⁻4 | **yes** |
-| MIMIC-CXR (CheXpert labels) | PNEUMONIA: NIH vs Kermany | +0.0525 | 0.0373 | [-0.0207, +0.1257] | +1.406 | 0.160 | no |
+| MIMIC-CXR (CheXpert labels) | PNEUMONIA: NIH vs Kermany | +0.0522 | 0.0373 | [-0.0210, +0.1253] | +1.397 | 0.162 | no |
 | MIMIC-CXR (CheXpert labels) | PNEUMONIA: NIH vs VinDr-CXR | -0.0395 | 0.0414 | [-0.1206, +0.0417] | -0.954 | 0.340 | no |
 | MIMIC-CXR (CheXpert labels) | NORMAL: NIH vs Kermany | -0.1375 | 0.0332 | [-0.2025, -0.0725] | -4.146 | 3.4 × 10⁻5 | **yes** |
 | MIMIC-CXR (CheXpert labels) | NORMAL: NIH vs VinDr-CXR | -0.0665 | 0.0379 | [-0.1407, +0.0077] | -1.756 | 0.079 | no |
-| MIMIC-CXR (noise-handled labels) | PNEUMONIA: NIH vs Kermany | -0.0364 | 0.0354 | [-0.1059, +0.0330] | -1.028 | 0.304 | no |
+| MIMIC-CXR (noise-handled labels) | PNEUMONIA: NIH vs Kermany | -0.0366 | 0.0354 | [-0.1061, +0.0328] | -1.033 | 0.301 | no |
 | MIMIC-CXR (noise-handled labels) | PNEUMONIA: NIH vs VinDr-CXR | -0.0676 | 0.0395 | [-0.1451, +0.0099] | -1.710 | 0.087 | no |
-| MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs Kermany | -0.1275 | 0.0331 | [-0.1924, -0.0626] | -3.850 | 1.2 × 10⁻4 | **yes** |
+| MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs Kermany | -0.1274 | 0.0331 | [-0.1923, -0.0625] | -3.847 | 1.2 × 10⁻4 | **yes** |
 | MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs VinDr-CXR | -0.0551 | 0.0374 | [-0.1285, +0.0183] | -1.472 | 0.141 | no |
 
 **7 of 16** comparisons reached significance and **all 7 pointed to an easier external dataset**. Comparisons were not corrected for multiplicity and are therefore interpreted as descriptive.
@@ -169,10 +169,10 @@ Net benefit was computed at threshold probabilities of 0.10, 0.30 and 0.50. The 
 | Class | Dataset | Threshold | F1 | Sensitivity | Specificity |
 |---|---|---|---|---|---|
 | PNEUMONIA | NIH | 0.506 | 0.1408 | 0.4462 | 0.8845 |
-| PNEUMONIA | Kermany | 0.124 | 0.8515 | 0.9713 | 0.1670 |
+| PNEUMONIA | Kermany | 0.124 | 0.8515 | 0.9713 | 0.1666 |
 | PNEUMONIA | VinDr-CXR | 0.196 | 0.6260 | 0.8309 | 0.4791 |
 | NORMAL | NIH | 0.034 | 0.9883 | 1.0000 | 0.0000 |
-| NORMAL | Kermany | 0.479 | 0.7375 | 0.7704 | 0.8813 |
+| NORMAL | Kermany | 0.479 | 0.7372 | 0.7701 | 0.8813 |
 | NORMAL | VinDr-CXR | 0.411 | 0.8122 | 0.9000 | 0.5000 |
 
 All seven significant comparisons have confidence intervals that exclude zero; none of the nine non-significant comparisons does.

@@ -22,9 +22,9 @@
 
 ## 🔴 裁决
 
-### 主投 BMC Medical Imaging 用 **T1**
+### 主投 BMC Medical Imaging 用 **T1（已按评审意见将 determines 改为 changes）**
 
-> **Class prevalence determines which chest radiograph dataset looks better: a cross-dataset audit of four publicly released classifiers**
+> **Class prevalence changes which chest radiograph dataset looks better: a cross-dataset audit of four publicly released classifiers**
 
 **理由**：
 1. **"looks better"是本文的准确落点**——全文的结论是"哪个数据集更好"取决于评估队列的类别先验，而不是模型的优劣。这个短语准确、无夸张、且直接指向可迁移的实践问题。

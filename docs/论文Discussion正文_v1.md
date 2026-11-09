@@ -19,7 +19,7 @@
 
 Reporting practice rarely examines three choices together. We asked whether the ranking of chest radiograph datasets by the performance of a deployed classifier is stable under them. The three choices are the metric, the label definition, and the class prevalence of the evaluation cohort. Across four classifiers pretrained on three different source datasets, the answer was no. Resampling all three evaluation cohorts to a common prevalence contracted the calibration spread in seven of eight model–label combinations. It retained between 24% and 78% of the original spread, and reversed the calibration ranking in all eight. The change exceeded what resampling noise alone would produce in seven of the eight (p ≤ 2.9 × 10⁻²²). The exception was a configuration in which the ordering did not change at all.
 
-The more consequential result is the baseline against which that change was judged. Consider a null in which the three datasets are of identical calibration and differ only in resampling noise. Under it, prior matching alone reordered them in 82.3% to 84.4% of replicates. A reader who encounters a reported change in dataset ranking without such a baseline cannot determine whether the change reflects anything about the datasets. The quantity is not specific to chest radiographs, to these three cohorts, or to this metric. It is a property of the comparison procedure. We therefore provide it as an independently implemented procedure rather than as a set of numbers. It can then be applied to other tasks and to other metrics.
+The more consequential result is the baseline against which that change was judged. Consider a null in which the three datasets are of identical calibration and differ only in resampling noise. Under it, prior matching alone reordered them in 82.5% to 84.4% of replicates. A reader who encounters a reported change in dataset ranking without such a baseline cannot determine whether the change reflects anything about the datasets. The quantity is not specific to chest radiographs, to these three cohorts, or to this metric. It is a property of the comparison procedure. We therefore provide it as an independently implemented procedure rather than as a set of numbers. It can then be applied to other tasks and to other metrics.
 
 Three further findings shape how the first should be read. The effect reproduced across three of the four classifiers and across both label definitions. This places it in the evaluation protocol rather than in any one checkpoint. Because the architecture was held constant while the pretraining source varied, the attribution rests on the design rather than on an assumption. Every statistically significant discrimination difference pointed in the same direction, namely towards the external dataset being the easier one. The direction of a significant result in this setting therefore carries information opposite to the intuition that a positive difference indicates transferable performance. Finally, retraining with a frozen backbone recovered most of the difference in one direction and little in the other. External validation failure is therefore neither proof that a model is unusable nor proof that local retraining will resolve it.
 
@@ -31,7 +31,7 @@ The closest existing work is the audit of medical vision-language models for che
 
 Two further lines of work inform the interpretation. Calibration has long been recognised as distinct from discrimination, and the two are known to move independently under changes in case mix. The practical consequence is that both should be reported separately, because either may mislead when reported alone. The methodological literature on calibration states this explicitly [11,12]. The present results are a concrete instance of that separation on a single set of cohorts. Work on the calibration of modern neural networks has established a related point. The calibration properties of a network are a property of the training procedure, and they can degrade in ways that are not visible in discrimination [13]. We add to this an observation about the cohorts themselves. The calibration ordering of evaluation cohorts is unstable under a change that leaves the model untouched. The instability is large enough to exceed noise in all but one of eight comparisons.
 
-The most transferable quantity in this work is arguably not the reversal itself but the null against which it must be judged. The requirement is general. A test against a chance expectation of 0.5 is uninformative when the statistic in question is highly structured even under the null. That is precisely the case for the direction of a complete reversal. Under label permutation, consistency in that direction ranged from 43.8% to 99.9% across the eight combinations. It reached 84.1% for the NIH-pretrained classifier on PNEUMONIA. A test against 0.5 therefore measures the gap between a quantity already far from 50% and 50% itself. It then reports that gap as though it had been measured against chance. We therefore regard the noise baseline, rather than any p-value, as the primary result. We have made the comparison procedure available so that others can apply it.
+The most transferable quantity in this work is arguably not the reversal itself but the null against which it must be judged. The requirement is general. A test against a chance expectation of 0.5 is uninformative when the statistic in question is highly structured even under the null. That is precisely the case for the direction of a complete reversal. Under label permutation, consistency in that direction ranged from 40.6% to 100.0% across the eight combinations. It reached 84.8% for the NIH-pretrained classifier on PNEUMONIA. A test against 0.5 therefore measures the gap between a quantity already far from 50% and 50% itself. It then reports that gap as though it had been measured against chance. We therefore regard the noise baseline, rather than any p-value, as the primary result. We have made the comparison procedure available so that others can apply it.
 
 ### 4.3 The variance estimator is not a methodological footnote
 
@@ -49,7 +49,7 @@ Second, normalise prevalence before comparing calibration across datasets. This 
 
 Third, treat a change in dataset ranking as a finding that requires a test, not as a description. A point estimate of a reversal in one comparison does not establish that the reversal is systematic. The resampling-based test needed to establish it is inexpensive. The test must also be given an explicit reference point, since the direction of a complete reversal is structured under the null.
 
-Fourth, distinguish an easier dataset from a better model. A positive difference in discrimination on an external set is frequently evidence of a weaker benchmark rather than a stronger model. Reporting it as evidence of transferability inverts its meaning. In our data every significant difference pointed towards the external dataset being easier. Model provenance was itself sufficient to determine which external cohort constituted a demanding test. The CheXpert-pretrained classifier reached an AUC of 0.9556 on the paediatric cohort, against 0.6162 to 0.7834 for the other three. The difference appears to reflect the closer correspondence between its source population and that cohort, rather than any property of the cohort's difficulty. A benchmark assembled without regard to the provenance of the models it judges can be easy for reasons unrelated to the model under test.
+Fourth, distinguish an easier dataset from a better model. A positive difference in discrimination on an external set is frequently evidence of a weaker benchmark rather than a stronger model. Reporting it as evidence of transferability inverts its meaning. In our data every significant difference pointed towards the external dataset being easier. Model provenance was itself sufficient to determine which external cohort constituted a demanding test. The CheXpert-pretrained classifier reached an AUC of 0.9555 on the paediatric cohort, against 0.6166 to 0.7832 for the other three. The difference appears to reflect the closer correspondence between its source population and that cohort, rather than any property of the cohort's difficulty. A benchmark assembled without regard to the provenance of the models it judges can be easy for reasons unrelated to the model under test.
 
 ### 4.5 Implications for model release and clinical reuse
 
@@ -91,7 +91,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 
 报告实践很少把三个选择放在一起考察。我们考察的是：当它们——指标、标签定义、评估队列的类别先验——发生变化时，按已部署分类器的表现对胸片数据集所作的排序是否稳定。四个在不同源数据集上预训练的分类器给出的答案是：并不稳定。把三个评估队列重采样到共同先验后，8 个"模型×标签"组合中有 7 个的校准跨度收缩，仅保留原跨度的 24%–78%，且 8 个组合的校准排序全部反转。排序改变超出了仅由重采样噪声所能产生的程度（8 个中有 7 个，p ≤ 2.9×10⁻²²），唯一的例外是一个排序根本没有改变的配置。
 
-比这一改变更具后果的，是用来判断该改变的基线。在"三个数据集校准水平完全相同、仅存在重采样噪声"的零假设下，仅先验匹配本身就会在 82.3%–84.4% 的重复中改变它们的排序。**读者若遇到一个报告出来的排序改变而没有这样的基线，就无法判断该改变是否反映了数据集中的任何差异。**这个量不专属于胸片、不专属于这三个队列、也不专属于这个指标——它是比较过程的属性。我们把它作为一个独立实现的过程提供，而非一组数字，以便他人将其应用于其他任务与其他指标。
+比这一改变更具后果的，是用来判断该改变的基线。在"三个数据集校准水平完全相同、仅存在重采样噪声"的零假设下，仅先验匹配本身就会在 82.5%–84.4% 的重复中改变它们的排序。**读者若遇到一个报告出来的排序改变而没有这样的基线，就无法判断该改变是否反映了数据集中的任何差异。**这个量不专属于胸片、不专属于这三个队列、也不专属于这个指标——它是比较过程的属性。我们把它作为一个独立实现的过程提供，而非一组数字，以便他人将其应用于其他任务与其他指标。
 
 另三项发现决定了第一项应如何被解读。该效应在四个分类器中的三个上、并在两种标签定义下都复现，因而归属于评估协议而非某个特定权重。由于架构固定而预训练来源变化，这一归属建立在设计之上，而非建立在假设之上。**全部具有统计显著性的判别能力差异都指向同一方向——外部数据集是更容易的那一个。**这意味着在这一情境下，显著结果的符号所携带的信息与"正向差异意味着可迁移性能"的直觉相反。最后，冻结骨干的重训在一个方向上救回了大部分差异，在另一个方向上几乎无效。外部验证失败因此既不能证明模型不可用，也不能证明本地重训能解决问题。
 
@@ -103,7 +103,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 
 另两条工作线索影响解读。校准长久以来被认为与判别相区分，二者在病例组合变化下会独立移动。其实践含义是两者都应分别报告，因为单独报告任一者都可能误导。校准方法学文献已明确陈述这一点 [11,12]。本研究结果是在同一组队列上这一分离的具体实例。关于现代神经网络校准的工作也已确立：网络的校准性质是训练过程的属性，且会以判别能力看不到的方式退化 [13]。本文在此之上补充一点：**评估队列的校准排序本身，在模型未受任何改动的情况下就会不稳定。**这种不稳定大到在 8 组比较中有 7 组超出噪声。
 
-本工作中最具可迁移性的量，或许不是反转本身，而是判断反转所必需的零分布。这一要求是通用的：当统计量在零假设下就高度结构化时，以 0.5 的偶然期望为参照的检验没有信息量。而完全反转的方向恰属此情形。它在标签置换下的一致性于 8 个"模型×标签"组合间介于 43.8% 与 99.9% 之间，在 NIH 预训练分类器的 PNEUMONIA 任务上达 84.1%。因此我们认为**噪声基线而非任何 p 值才是主要结果**，并已把该比较过程公开，使他人可以应用。
+本工作中最具可迁移性的量，或许不是反转本身，而是判断反转所必需的零分布。这一要求是通用的：当统计量在零假设下就高度结构化时，以 0.5 的偶然期望为参照的检验没有信息量。而完全反转的方向恰属此情形。它在标签置换下的一致性于 8 个"模型×标签"组合间介于 40.6% 与 100.0% 之间，在 NIH 预训练分类器的 PNEUMONIA 任务上达 84.8%。因此我们认为**噪声基线而非任何 p 值才是主要结果**，并已把该比较过程公开，使他人可以应用。
 
 ### 4.3 方差估计量不是方法学脚注
 
@@ -121,7 +121,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 
 **其三，把数据集排序的改变当作需要检验的发现，而不是描述。**单次比较中反转的点估计不能确立反转是系统性的，而确立它所需的重抽样检验成本很低。该检验还必须给出明确的参照系，因为完全反转的方向在零假设下是结构化的。
 
-**其四，区分更容易的数据集与更好的模型。**外部集合上判别能力的正向差异，往例是基准更弱的证据而非模型更强的证据，把它报告为可迁移性的证据会把其含义倒置。在我们的数据中，全部显著差异都指向外部数据集是更容易的那一个。模型来源本身就足以决定哪个外部队列构成有挑战性的检验：CheXpert 预训练分类器在儿童队列上取得 0.9556 的 AUC，其余三个为 0.6162 至 0.7834。这一差异看来反映的是其源人群与该队列的更接近，而非该队列难度本身的属性。**若一个基准在组建时未考虑被其评判的模型的来源，它可能因与被测模型无关的原因而容易。**
+**其四，区分更容易的数据集与更好的模型。**外部集合上判别能力的正向差异，往例是基准更弱的证据而非模型更强的证据，把它报告为可迁移性的证据会把其含义倒置。在我们的数据中，全部显著差异都指向外部数据集是更容易的那一个。模型来源本身就足以决定哪个外部队列构成有挑战性的检验：CheXpert 预训练分类器在儿童队列上取得 0.9555 的 AUC，其余三个为 0.6166 至 0.7832。这一差异看来反映的是其源人群与该队列的更接近，而非该队列难度本身的属性。**若一个基准在组建时未考虑被其评判的模型的来源，它可能因与被测模型无关的原因而容易。**
 
 ### 4.5 对模型发布与临床复用的含义
 
@@ -163,7 +163,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 |---|---|---|---|
 | §4.1 | 7/8 收缩、24–78% 保留、8/8 反转 | `multi_model_prior_matched.json` | `ece_span_raw/matched`、`span_retained_pct`、`rank_reversed` |
 | §4.1 | 7/8 超出、p ≤ 2.9×10⁻²² | `noise_baseline.json` | `exceeds_same`、`p_vs_same` |
-| §4.1 | 基线 82.3–84.4% | 同上 | `baseline_same_dist` |
+| §4.1 | 基线 82.5–84.4% | 同上 | `baseline_same_dist` |
 | §4.1 | 三个分类器中复现 | 同上 | `exceeds_same` |
 | §4.1 | 7 组显著全指向外部更易 | `multi_model_metrics.json` | `per_model.*.cross_dataset_delong` |
 | §4.1 | 重训 0.783→0.892、0.723→0.737 | `retrain_baseline.json` | `summary_table.*.*.retrained_auc` |

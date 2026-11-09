@@ -412,6 +412,12 @@ def audit_history(D):
     all_docs = {k: D[k] for k in ("Abstract", "Introduction", "Methods",
                                   "Results", "Discussion")}
 
+    # 基线范围从 JSON 动态读取（避免写死值在数据更新后误报）
+    _nb = json.load(open(os.path.join(RESULTS, "noise_baseline.json"), encoding="utf-8"))
+    _b2s = [_nb[m][l]["baseline_same_dist"] * 100
+            for m in _nb["models"] for l in ("PNEUMONIA", "NORMAL")]
+    _b2_lo, _b2_hi = min(_b2s), max(_b2s)
+
     # 1) 已撤回数字不得残留
     stale = ["11/16 组显著", "eleven significant", "1.3 × 10⁻²²", "1.3×10⁻²²",
              "p = 9.15", "9.15 × 10", "0 of 500", "19.4%",
@@ -451,8 +457,10 @@ def audit_history(D):
     key_nums = {
         "7/8 超出基线": ("seven of the eight" in all_docs["Results"],
                      "seven of the eight" in all_docs["Discussion"]),
-        "82.3–84.4 基线范围": ("82.3" in all_docs["Results"] and "84.4" in all_docs["Results"],
-                        "82.3" in all_docs["Discussion"] and "84.4" in all_docs["Discussion"]),
+        # ⚠️ 期望值必须从 JSON 动态取值——写死会在数据更新后误报
+        f"{_b2_lo:.1f}–{_b2_hi:.1f} 基线范围": (
+            f"{_b2_lo:.1f}" in all_docs["Results"] and f"{_b2_hi:.1f}" in all_docs["Results"],
+            f"{_b2_lo:.1f}" in all_docs["Discussion"] and f"{_b2_hi:.1f}" in all_docs["Discussion"]),
     }
     for name, (in_r, in_d) in key_nums.items():
         judge("历史错误", "PASS" if in_r and in_d else "FAIL", "major",

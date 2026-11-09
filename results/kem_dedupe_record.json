@@ -1,0 +1,30 @@
+{
+ "reason": "valid-mini.zip contains four images that are byte-identical to four images in valid.zip under different (placeholder) filenames; they are duplicates, not additional images",
+ "duplicate_files": {
+  "NORMAL/image.jpg0.jpg": "NORMAL/IM-0329-0001_jpeg.rf.28f41d0ec8770cc64a1237b215021f66.jpg",
+  "NORMAL/image.jpg1.jpg": "NORMAL/NORMAL2-IM-0502-0001_jpeg.rf.2281158b51910226d4bc94aa78c9d0c8.jpg",
+  "PNEUMONIA/image.jpg0.jpg": "PNEUMONIA/person383_bacteria_1749_jpeg.rf.d62bd194af2fe659f997b6a27fadb721.jpg",
+  "PNEUMONIA/image.jpg1.jpg": "PNEUMONIA/person579_bacteria_2383_jpeg.rf.ab1cf4b337e25d2c6ec51058193a5752.jpg"
+ },
+ "md5": {
+  "NORMAL/image.jpg0.jpg": "83f8172175cfdc30d7a96535fcf40c99",
+  "NORMAL/image.jpg1.jpg": "34f0c45f806d3bf3e2a33d3a66b90af5",
+  "PNEUMONIA/image.jpg0.jpg": "a0a698419822c5cf23a3e049872a1904",
+  "PNEUMONIA/image.jpg1.jpg": "a02e7b40c05c364ee13a01d44736d389"
+ },
+ "n_rows_removed": 16,
+ "n_images_per_dataset_after_deduplication": {
+  "NIH": 2819,
+  "KEM": 5824,
+  "VIN": 702
+ },
+ "kermany_packaging": {
+  "train.zip": 4077,
+  "test.zip": 582,
+  "valid.zip": 1165,
+  "valid-mini.zip": 4,
+  "sum": 5828,
+  "unique_after_dedup": 5824
+ },
+ "implication": "DeLong's test assumes images within a dataset are not identical; the four duplicates are excluded so that the assumption holds."
+}

@@ -107,9 +107,9 @@ def main():
     ck("Table4 声明 7 of 8", True, f"**{n_ex} of 8**" in text)
 
     b2s = [nb[m][l]["baseline_same_dist"] * 100 for m in MODELS for l in LABELS]
-    ck("Table4 基线范围下界 82.3", 82.3, round(min(b2s), 1))
+    ck("Table4 基线范围下界 82.5", 82.5, round(min(b2s), 1))
     ck("Table4 基线范围上界 84.4", 84.4, round(max(b2s), 1))
-    ck("Table4 声明 82.3–84.4", True, "82.3–84.4%" in text)
+    ck("Table4 声明 82.5–84.4", True, "82.5–84.4%" in text)
 
     n_cont = sum(1 for m in MODELS for l in LABELS
                  if pm[m][l]["ece_span_matched"] < pm[m][l]["ece_span_raw"])
@@ -123,9 +123,9 @@ def main():
     # 保留比例只在"收缩"的组合上统计（扩大的那组不属于"保留了多少"）
     retains = [pm[m][l]["span_retained_pct"] for m in MODELS for l in LABELS
                if pm[m][l]["ece_span_matched"] < pm[m][l]["ece_span_raw"]]
-    ck("Table3 保留下界 24.0", 24.0, round(min(retains), 1))
+    ck("Table3 保留下界 23.9", 23.9, round(min(retains), 1))
     ck("Table3 保留上界 77.5", 77.5, round(max(retains), 1))
-    ck("Table3 声明 24.0–77.5", True, "24.0–77.5%" in text)
+    ck("Table3 声明 23.9–77.5", True, "23.9–77.5%" in text)
 
     n_c2 = sum(1 for m in MODELS for l in LABELS
                if ls[m][f"{l}_strict"]["ece_span_matched"] < ls[m][f"{l}_strict"]["ece_span_raw"])

@@ -79,7 +79,7 @@ def main():
     C = COLORS
     # ================= 顶栏：标题 =================
     ax.text(0.5, 0.955,
-            "Class prevalence determines which chest radiograph dataset looks better",
+            "Class prevalence changes which chest radiograph dataset looks better",
             ha="center", va="center", fontsize=17, fontweight="bold", color=C["text"])
     ax.text(0.5, 0.905,
             "Cross-dataset audit of four publicly released classifiers on three chest radiograph datasets",
