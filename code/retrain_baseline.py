@@ -113,16 +113,35 @@ def index_nih():
 
 
 def index_kem():
-    """返回 [(path, gt_label)]"""
+    """返回 [(path, gt_label)]
+
+    🔴 必须排除 4 张重复影像：valid-mini.zip 的 4 个文件与 valid.zip 中的
+       4 张影像**逐字节相同、仅文件名不同**（占位符名 image.jpg0.jpg 等）。
+       重复清单从 results/kem_dedupe_record.json 读取 —— 与主分析共用同一份
+       权威清单，避免各处各写一份导致口径分叉。
+       否则特征缓存会含重复样本，重训基线的评估值与主分析不可比。
+    """
     out_dir = os.path.join(DATA_ROOT, "keremberke", "extracted")
+    dup_rel = set()
+    rec_path = os.path.join(RESULTS, "kem_dedupe_record.json")
+    if os.path.exists(rec_path):
+        dup_rel = set(json.load(open(rec_path, encoding="utf-8")).get(
+            "duplicate_files", []))
     items = []
+    n_skip = 0
     for cls in ["NORMAL", "PNEUMONIA"]:
         cdir = os.path.join(out_dir, cls)
         if not os.path.isdir(cdir):
             continue
         for f in os.listdir(cdir):
-            if f.lower().endswith((".jpg", ".jpeg", ".png")):
-                items.append((os.path.join(cdir, f), cls))
+            if not f.lower().endswith((".jpg", ".jpeg", ".png")):
+                continue
+            if f"{cls}/{f}" in dup_rel:
+                n_skip += 1
+                continue
+            items.append((os.path.join(cdir, f), cls))
+    if dup_rel:
+        log(f"  [KEM] 已排除 {n_skip} 张重复影像（清单来自 kem_dedupe_record.json）")
     return items
 
 
