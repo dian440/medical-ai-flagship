@@ -1,0 +1,1228 @@
+{
+  "generated": "2026-11-09",
+  "seed": 20261104,
+  "n_reps": 500,
+  "n_draws": 4000,
+  "seed_offsets": [
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "analytic_exchangeability_floor_k3": 0.8333333333333334,
+  "analytic_floor_formula": "1 - 1/k!",
+  "reference_rank_variants": [
+    "median",
+    "mean",
+    "raw"
+  ],
+  "models": [
+    "NIH",
+    "CHEX",
+    "MIMIC_CH",
+    "MIMIC_NB"
+  ],
+  "combos": {
+    "NIH/PNEUMONIA": {
+      "matched_prior": 0.38746438746438744,
+      "n_target": 169,
+      "observed_change_rate": 0.97,
+      "n_valid": 500,
+      "n_changed": 485,
+      "raw_rank": [
+        "VIN",
+        "NIH",
+        "KEM"
+      ],
+      "raw_ece": {
+        "NIH": 0.23889582484630995,
+        "KEM": 0.29266790687391286,
+        "VIN": 0.08881313751759376
+      },
+      "ece_medians": {
+        "NIH": 0.10605742011561359,
+        "KEM": 0.06357832336088795,
+        "VIN": 0.09839197471080012
+      },
+      "constructions": {
+        "C1_pooled_median": {
+          "value": 0.844,
+          "mean": 0.83185,
+          "per_seed": [
+            0.844,
+            0.836,
+            0.828,
+            0.825,
+            0.82625
+          ],
+          "sd_pp": 0.7182617907142207,
+          "min": 0.825,
+          "max": 0.844,
+          "exceeds": true,
+          "p": 5.677797691550482e-20,
+          "gap_pp": 12.6
+        },
+        "C2_single_pool": {
+          "NIH": {
+            "mean": 0.83395,
+            "per_seed": [
+              0.82725,
+              0.8315,
+              0.83725,
+              0.83025,
+              0.8435
+            ],
+            "min": 0.82725,
+            "max": 0.8435,
+            "exceeds": true,
+            "p": 3.9068082885170654e-22,
+            "gap_pp": 13.61
+          },
+          "KEM": {
+            "mean": 0.8336500000000001,
+            "per_seed": [
+              0.8345,
+              0.82575,
+              0.844,
+              0.82725,
+              0.83675
+            ],
+            "min": 0.82575,
+            "max": 0.844,
+            "exceeds": true,
+            "p": 3.854017527923087e-22,
+            "gap_pp": 13.63
+          },
+          "VIN": {
+            "mean": 0.8342499999999999,
+            "per_seed": [
+              0.83725,
+              0.83025,
+              0.83425,
+              0.83525,
+              0.83425
+            ],
+            "min": 0.83025,
+            "max": 0.83725,
+            "exceeds": true,
+            "p": 5.942262493274656e-22,
+            "gap_pp": 13.58
+          }
+        },
+        "C3_analytic_exchangeability": {
+          "value": 0.8333333333333334,
+          "exceeds": true,
+          "p": 3.9183658969113016e-22,
+          "gap_pp": 13.67
+        },
+        "C4_label_permutation": {
+          "value": 1.0,
+          "n_changed": 500,
+          "n_valid": 500,
+          "exceeds": false,
+          "p": 0.0,
+          "gap_pp": -3.0
+        }
+      },
+      "reference_rank_variants": {
+        "median": {
+          "mean": 0.83185,
+          "per_seed": [
+            0.844,
+            0.836,
+            0.828,
+            0.825,
+            0.82625
+          ],
+          "exceeds": true,
+          "p": 1.6536232601332385e-22,
+          "gap_pp": 13.81
+        },
+        "mean": {
+          "mean": 0.83185,
+          "per_seed": [
+            0.844,
+            0.836,
+            0.828,
+            0.825,
+            0.82625
+          ],
+          "exceeds": true,
+          "p": 1.6536232601332385e-22,
+          "gap_pp": 13.81
+        },
+        "raw": {
+          "mean": 0.83165,
+          "per_seed": [
+            0.8335,
+            0.8185,
+            0.8385,
+            0.833,
+            0.83475
+          ],
+          "exceeds": true,
+          "p": 1.6739869490504264e-22,
+          "gap_pp": 13.83
+        }
+      },
+      "auth_baseline_same_dist": 0.844,
+      "c1_reproduces_auth": true
+    },
+    "NIH/NORMAL": {
+      "matched_prior": 0.6125356125356125,
+      "n_target": 169,
+      "observed_change_rate": 0.986,
+      "n_valid": 500,
+      "n_changed": 493,
+      "raw_rank": [
+        "VIN",
+        "KEM",
+        "NIH"
+      ],
+      "raw_ece": {
+        "NIH": 0.4359319597649851,
+        "KEM": 0.18497733026423116,
+        "VIN": 0.1579720111672589
+      },
+      "ece_medians": {
+        "NIH": 0.16941154184448115,
+        "KEM": 0.22684873340199507,
+        "VIN": 0.17127732075916152
+      },
+      "constructions": {
+        "C1_pooled_median": {
+          "value": 0.83925,
+          "mean": 0.83575,
+          "per_seed": [
+            0.83925,
+            0.84025,
+            0.83775,
+            0.831,
+            0.8305
+          ],
+          "sd_pp": 0.4162331077653507,
+          "min": 0.8305,
+          "max": 0.84025,
+          "exceeds": true,
+          "p": 2.252921759221426e-28,
+          "gap_pp": 14.67
+        },
+        "C2_single_pool": {
+          "NIH": {
+            "mean": 0.83565,
+            "per_seed": [
+              0.83275,
+              0.8345,
+              0.84025,
+              0.836,
+              0.83475
+            ],
+            "min": 0.83275,
+            "max": 0.84025,
+            "exceeds": true,
+            "p": 3.5546549256794153e-29,
+            "gap_pp": 15.03
+          },
+          "KEM": {
+            "mean": 0.8336,
+            "per_seed": [
+              0.83625,
+              0.838,
+              0.84125,
+              0.8295,
+              0.823
+            ],
+            "min": 0.823,
+            "max": 0.84125,
+            "exceeds": true,
+            "p": 8.898296228613986e-30,
+            "gap_pp": 15.24
+          },
+          "VIN": {
+            "mean": 0.83385,
+            "per_seed": [
+              0.831,
+              0.83525,
+              0.83275,
+              0.83175,
+              0.8385
+            ],
+            "min": 0.831,
+            "max": 0.8385,
+            "exceeds": true,
+            "p": 1.4125269389821628e-29,
+            "gap_pp": 15.21
+          }
+        },
+        "C3_analytic_exchangeability": {
+          "value": 0.8333333333333334,
+          "exceeds": true,
+          "p": 8.713564756384784e-30,
+          "gap_pp": 15.27
+        },
+        "C4_label_permutation": {
+          "value": 0.678,
+          "n_changed": 339,
+          "n_valid": 500,
+          "exceeds": true,
+          "p": 4.709393903021964e-72,
+          "gap_pp": 30.8
+        }
+      },
+      "reference_rank_variants": {
+        "median": {
+          "mean": 0.83575,
+          "per_seed": [
+            0.83925,
+            0.84025,
+            0.83775,
+            0.831,
+            0.8305
+          ],
+          "exceeds": true,
+          "p": 3.5359725846361785e-29,
+          "gap_pp": 15.02
+        },
+        "mean": {
+          "mean": 0.83575,
+          "per_seed": [
+            0.83925,
+            0.84025,
+            0.83775,
+            0.831,
+            0.8305
+          ],
+          "exceeds": true,
+          "p": 3.5359725846361785e-29,
+          "gap_pp": 15.02
+        },
+        "raw": {
+          "mean": 0.8361500000000002,
+          "per_seed": [
+            0.82625,
+            0.84175,
+            0.84025,
+            0.8315,
+            0.841
+          ],
+          "exceeds": true,
+          "p": 3.608177659978298e-29,
+          "gap_pp": 14.98
+        }
+      },
+      "auth_baseline_same_dist": 0.83925,
+      "c1_reproduces_auth": true
+    },
+    "CHEX/PNEUMONIA": {
+      "matched_prior": 0.38746438746438744,
+      "n_target": 169,
+      "observed_change_rate": 0.99,
+      "n_valid": 500,
+      "n_changed": 495,
+      "raw_rank": [
+        "VIN",
+        "KEM",
+        "NIH"
+      ],
+      "raw_ece": {
+        "NIH": 0.2057183475536257,
+        "KEM": 0.2036449886003898,
+        "VIN": 0.1590473576587495
+      },
+      "ece_medians": {
+        "NIH": 0.1608681759417998,
+        "KEM": 0.10947747949576941,
+        "VIN": 0.15890591951485272
+      },
+      "constructions": {
+        "C1_pooled_median": {
+          "value": 0.83875,
+          "mean": 0.8338000000000001,
+          "per_seed": [
+            0.83875,
+            0.83475,
+            0.828,
+            0.834,
+            0.8335
+          ],
+          "sd_pp": 0.3440203482353926,
+          "min": 0.828,
+          "max": 0.83875,
+          "exceeds": true,
+          "p": 9.433187645972958e-31,
+          "gap_pp": 15.12
+        },
+        "C2_single_pool": {
+          "NIH": {
+            "mean": 0.8356,
+            "per_seed": [
+              0.8265,
+              0.84125,
+              0.835,
+              0.83625,
+              0.839
+            ],
+            "min": 0.8265,
+            "max": 0.84125,
+            "exceeds": true,
+            "p": 1.3846044787005017e-31,
+            "gap_pp": 15.44
+          },
+          "KEM": {
+            "mean": 0.83095,
+            "per_seed": [
+              0.82325,
+              0.8375,
+              0.83275,
+              0.82925,
+              0.832
+            ],
+            "min": 0.82325,
+            "max": 0.8375,
+            "exceeds": true,
+            "p": 1.3175844850760313e-32,
+            "gap_pp": 15.91
+          },
+          "VIN": {
+            "mean": 0.8349500000000001,
+            "per_seed": [
+              0.84,
+              0.829,
+              0.83,
+              0.83575,
+              0.84
+            ],
+            "min": 0.829,
+            "max": 0.84,
+            "exceeds": true,
+            "p": 8.62552748708114e-32,
+            "gap_pp": 15.5
+          }
+        },
+        "C3_analytic_exchangeability": {
+          "value": 0.8333333333333334,
+          "exceeds": true,
+          "p": 3.331667966675779e-32,
+          "gap_pp": 15.67
+        },
+        "C4_label_permutation": {
+          "value": 0.758,
+          "n_changed": 379,
+          "n_valid": 500,
+          "exceeds": true,
+          "p": 1.0171715934029705e-51,
+          "gap_pp": 23.2
+        }
+      },
+      "reference_rank_variants": {
+        "median": {
+          "mean": 0.8338000000000001,
+          "per_seed": [
+            0.83875,
+            0.83475,
+            0.828,
+            0.834,
+            0.8335
+          ],
+          "exceeds": true,
+          "p": 5.346435307126626e-32,
+          "gap_pp": 15.62
+        },
+        "mean": {
+          "mean": 0.8338000000000001,
+          "per_seed": [
+            0.83875,
+            0.83475,
+            0.828,
+            0.834,
+            0.8335
+          ],
+          "exceeds": true,
+          "p": 5.346435307126626e-32,
+          "gap_pp": 15.62
+        },
+        "raw": {
+          "mean": 0.83445,
+          "per_seed": [
+            0.831,
+            0.8345,
+            0.83275,
+            0.8385,
+            0.8355
+          ],
+          "exceeds": true,
+          "p": 8.82863232123873e-32,
+          "gap_pp": 15.55
+        }
+      },
+      "auth_baseline_same_dist": 0.83875,
+      "c1_reproduces_auth": true
+    },
+    "CHEX/NORMAL": {
+      "matched_prior": 0.6125356125356125,
+      "n_target": 169,
+      "observed_change_rate": 0.978,
+      "n_valid": 500,
+      "n_changed": 489,
+      "raw_rank": [
+        "VIN",
+        "KEM",
+        "NIH"
+      ],
+      "raw_ece": {
+        "NIH": 0.473620767725956,
+        "KEM": 0.1140150944254576,
+        "VIN": 0.1067512237567699
+      },
+      "ece_medians": {
+        "NIH": 0.2156388265791641,
+        "KEM": 0.27323852525748443,
+        "VIN": 0.12433357843192372
+      },
+      "constructions": {
+        "C1_pooled_median": {
+          "value": 0.82775,
+          "mean": 0.8282,
+          "per_seed": [
+            0.82775,
+            0.82975,
+            0.831,
+            0.83425,
+            0.81825
+          ],
+          "sd_pp": 0.5404627646748658,
+          "min": 0.81825,
+          "max": 0.83425,
+          "exceeds": true,
+          "p": 5.44151142058675e-27,
+          "gap_pp": 15.02
+        },
+        "C2_single_pool": {
+          "NIH": {
+            "mean": 0.8341999999999998,
+            "per_seed": [
+              0.83225,
+              0.83025,
+              0.83375,
+              0.83975,
+              0.835
+            ],
+            "min": 0.83025,
+            "max": 0.83975,
+            "exceeds": true,
+            "p": 1.9644749321894301e-25,
+            "gap_pp": 14.38
+          },
+          "KEM": {
+            "mean": 0.82955,
+            "per_seed": [
+              0.82875,
+              0.82475,
+              0.8235,
+              0.83925,
+              0.8315
+            ],
+            "min": 0.8235,
+            "max": 0.83925,
+            "exceeds": true,
+            "p": 1.352826570243911e-26,
+            "gap_pp": 14.84
+          },
+          "VIN": {
+            "mean": 0.8294499999999999,
+            "per_seed": [
+              0.832,
+              0.83275,
+              0.8265,
+              0.82775,
+              0.82825
+            ],
+            "min": 0.8265,
+            "max": 0.83275,
+            "exceeds": true,
+            "p": 1.341269129639432e-26,
+            "gap_pp": 14.86
+          }
+        },
+        "C3_analytic_exchangeability": {
+          "value": 0.8333333333333334,
+          "exceeds": true,
+          "p": 1.260578956236296e-25,
+          "gap_pp": 14.47
+        },
+        "C4_label_permutation": {
+          "value": 1.0,
+          "n_changed": 500,
+          "n_valid": 500,
+          "exceeds": false,
+          "p": 0.0,
+          "gap_pp": -2.2
+        }
+      },
+      "reference_rank_variants": {
+        "median": {
+          "mean": 0.8282,
+          "per_seed": [
+            0.82775,
+            0.82975,
+            0.831,
+            0.83425,
+            0.81825
+          ],
+          "exceeds": true,
+          "p": 8.556948842237724e-27,
+          "gap_pp": 14.98
+        },
+        "mean": {
+          "mean": 0.8282,
+          "per_seed": [
+            0.82775,
+            0.82975,
+            0.831,
+            0.83425,
+            0.81825
+          ],
+          "exceeds": true,
+          "p": 8.556948842237724e-27,
+          "gap_pp": 14.98
+        },
+        "raw": {
+          "mean": 0.8326,
+          "per_seed": [
+            0.82825,
+            0.818,
+            0.835,
+            0.8315,
+            0.85025
+          ],
+          "exceeds": true,
+          "p": 8.020475347788913e-26,
+          "gap_pp": 14.54
+        }
+      },
+      "auth_baseline_same_dist": 0.82775,
+      "c1_reproduces_auth": true
+    },
+    "MIMIC_CH/PNEUMONIA": {
+      "matched_prior": 0.38746438746438744,
+      "n_target": 169,
+      "observed_change_rate": 0.822,
+      "n_valid": 500,
+      "n_changed": 411,
+      "raw_rank": [
+        "VIN",
+        "KEM",
+        "NIH"
+      ],
+      "raw_ece": {
+        "NIH": 0.30847230204818793,
+        "KEM": 0.2066381727580357,
+        "VIN": 0.0611654305591797
+      },
+      "ece_medians": {
+        "NIH": 0.12838096617577743,
+        "KEM": 0.16084718264463033,
+        "VIN": 0.07949967202372274
+      },
+      "constructions": {
+        "C1_pooled_median": {
+          "value": 0.83625,
+          "mean": 0.82925,
+          "per_seed": [
+            0.83625,
+            0.82525,
+            0.824,
+            0.828,
+            0.83275
+          ],
+          "sd_pp": 0.4612483062299544,
+          "min": 0.824,
+          "max": 0.83625,
+          "exceeds": false,
+          "p": 0.39734993214419745,
+          "gap_pp": -1.43
+        },
+        "C2_single_pool": {
+          "NIH": {
+            "mean": 0.8308500000000001,
+            "per_seed": [
+              0.836,
+              0.83225,
+              0.82775,
+              0.82425,
+              0.834
+            ],
+            "min": 0.82425,
+            "max": 0.836,
+            "exceeds": false,
+            "p": 0.591433000605958,
+            "gap_pp": -0.89
+          },
+          "KEM": {
+            "mean": 0.83185,
+            "per_seed": [
+              0.836,
+              0.834,
+              0.82525,
+              0.83375,
+              0.83025
+            ],
+            "min": 0.82525,
+            "max": 0.836,
+            "exceeds": false,
+            "p": 0.54996789898245,
+            "gap_pp": -0.99
+          },
+          "VIN": {
+            "mean": 0.8335999999999999,
+            "per_seed": [
+              0.8425,
+              0.8315,
+              0.8345,
+              0.836,
+              0.8235
+            ],
+            "min": 0.8235,
+            "max": 0.8425,
+            "exceeds": false,
+            "p": 0.4715924398055714,
+            "gap_pp": -1.16
+          }
+        },
+        "C3_analytic_exchangeability": {
+          "value": 0.8333333333333334,
+          "exceeds": false,
+          "p": 0.5090584699223989,
+          "gap_pp": -1.13
+        },
+        "C4_label_permutation": {
+          "value": 0.46,
+          "n_changed": 230,
+          "n_valid": 500,
+          "exceeds": true,
+          "p": 1.2642767706103424e-62,
+          "gap_pp": 36.2
+        }
+      },
+      "reference_rank_variants": {
+        "median": {
+          "mean": 0.82925,
+          "per_seed": [
+            0.83625,
+            0.82525,
+            0.824,
+            0.828,
+            0.83275
+          ],
+          "exceeds": false,
+          "p": 0.6773245649380906,
+          "gap_pp": -0.73
+        },
+        "mean": {
+          "mean": 0.82925,
+          "per_seed": [
+            0.83625,
+            0.82525,
+            0.824,
+            0.828,
+            0.83275
+          ],
+          "exceeds": false,
+          "p": 0.6773245649380906,
+          "gap_pp": -0.73
+        },
+        "raw": {
+          "mean": 0.8354000000000001,
+          "per_seed": [
+            0.827,
+            0.839,
+            0.83875,
+            0.83475,
+            0.8375
+          ],
+          "exceeds": false,
+          "p": 0.43284946294139437,
+          "gap_pp": -1.34
+        }
+      },
+      "auth_baseline_same_dist": 0.83625,
+      "c1_reproduces_auth": true
+    },
+    "MIMIC_CH/NORMAL": {
+      "matched_prior": 0.6125356125356125,
+      "n_target": 169,
+      "observed_change_rate": 1.0,
+      "n_valid": 500,
+      "n_changed": 500,
+      "raw_rank": [
+        "KEM",
+        "VIN",
+        "NIH"
+      ],
+      "raw_ece": {
+        "NIH": 0.5174145250917856,
+        "KEM": 0.1031333432573784,
+        "VIN": 0.21589653833936423
+      },
+      "ece_medians": {
+        "NIH": 0.23171767547792763,
+        "KEM": 0.3135816021078437,
+        "VIN": 0.22703815449977066
+      },
+      "constructions": {
+        "C1_pooled_median": {
+          "value": 0.8255,
+          "mean": 0.833,
+          "per_seed": [
+            0.8255,
+            0.83925,
+            0.83525,
+            0.837,
+            0.828
+          ],
+          "sd_pp": 0.5317424188458183,
+          "min": 0.8255,
+          "max": 0.83925,
+          "exceeds": true,
+          "p": 3.4959036759347016e-42,
+          "gap_pp": 17.45
+        },
+        "C2_single_pool": {
+          "NIH": {
+            "mean": 0.83625,
+            "per_seed": [
+              0.8315,
+              0.84325,
+              0.84275,
+              0.82775,
+              0.836
+            ],
+            "min": 0.82775,
+            "max": 0.84325,
+            "exceeds": true,
+            "p": 2.798348736571241e-39,
+            "gap_pp": 16.37
+          },
+          "KEM": {
+            "mean": 0.83345,
+            "per_seed": [
+              0.84025,
+              0.83475,
+              0.82875,
+              0.83275,
+              0.83075
+            ],
+            "min": 0.82875,
+            "max": 0.84025,
+            "exceeds": true,
+            "p": 6.373499247035458e-40,
+            "gap_pp": 16.65
+          },
+          "VIN": {
+            "mean": 0.83295,
+            "per_seed": [
+              0.84325,
+              0.8245,
+              0.84,
+              0.82875,
+              0.82825
+            ],
+            "min": 0.8245,
+            "max": 0.84325,
+            "exceeds": true,
+            "p": 3.617508360730932e-40,
+            "gap_pp": 16.71
+          }
+        },
+        "C3_analytic_exchangeability": {
+          "value": 0.8333333333333334,
+          "exceeds": true,
+          "p": 3.678845597421631e-40,
+          "gap_pp": 16.67
+        },
+        "C4_label_permutation": {
+          "value": 1.0,
+          "n_changed": 500,
+          "n_valid": 500,
+          "exceeds": false,
+          "p": 1.0,
+          "gap_pp": 0.0
+        }
+      },
+      "reference_rank_variants": {
+        "median": {
+          "mean": 0.833,
+          "per_seed": [
+            0.8255,
+            0.83925,
+            0.83525,
+            0.837,
+            0.828
+          ],
+          "exceeds": true,
+          "p": 3.609296708819549e-40,
+          "gap_pp": 16.7
+        },
+        "mean": {
+          "mean": 0.833,
+          "per_seed": [
+            0.8255,
+            0.83925,
+            0.83525,
+            0.837,
+            0.828
+          ],
+          "exceeds": true,
+          "p": 3.609296708819549e-40,
+          "gap_pp": 16.7
+        },
+        "raw": {
+          "mean": 0.8347,
+          "per_seed": [
+            0.83725,
+            0.829,
+            0.83375,
+            0.831,
+            0.8425
+          ],
+          "exceeds": true,
+          "p": 1.0014381813089455e-39,
+          "gap_pp": 16.53
+        }
+      },
+      "auth_baseline_same_dist": 0.8255,
+      "c1_reproduces_auth": true
+    },
+    "MIMIC_NB/PNEUMONIA": {
+      "matched_prior": 0.38746438746438744,
+      "n_target": 169,
+      "observed_change_rate": 0.996,
+      "n_valid": 500,
+      "n_changed": 498,
+      "raw_rank": [
+        "VIN",
+        "KEM",
+        "NIH"
+      ],
+      "raw_ece": {
+        "NIH": 0.3757917639604827,
+        "KEM": 0.19853180459832295,
+        "VIN": 0.1831518503176606
+      },
+      "ece_medians": {
+        "NIH": 0.11603699838907934,
+        "KEM": 0.1621282556860228,
+        "VIN": 0.18902679735563208
+      },
+      "constructions": {
+        "C1_pooled_median": {
+          "value": 0.8255,
+          "mean": 0.8322499999999999,
+          "per_seed": [
+            0.8255,
+            0.8335,
+            0.84275,
+            0.83975,
+            0.81975
+          ],
+          "sd_pp": 0.860087204880994,
+          "min": 0.81975,
+          "max": 0.84275,
+          "exceeds": true,
+          "p": 2.2408320529949114e-38,
+          "gap_pp": 17.05
+        },
+        "C2_single_pool": {
+          "NIH": {
+            "mean": 0.83765,
+            "per_seed": [
+              0.8365,
+              0.83,
+              0.83875,
+              0.826,
+              0.857
+            ],
+            "min": 0.826,
+            "max": 0.857,
+            "exceeds": true,
+            "p": 2.4773304235185385e-35,
+            "gap_pp": 15.83
+          },
+          "KEM": {
+            "mean": 0.8275500000000001,
+            "per_seed": [
+              0.834,
+              0.82675,
+              0.82725,
+              0.82325,
+              0.8265
+            ],
+            "min": 0.82325,
+            "max": 0.834,
+            "exceeds": true,
+            "p": 6.293991589161435e-38,
+            "gap_pp": 16.84
+          },
+          "VIN": {
+            "mean": 0.83565,
+            "per_seed": [
+              0.8275,
+              0.83875,
+              0.8415,
+              0.83125,
+              0.83925
+            ],
+            "min": 0.8275,
+            "max": 0.8415,
+            "exceeds": true,
+            "p": 9.188812441296671e-36,
+            "gap_pp": 16.04
+          }
+        },
+        "C3_analytic_exchangeability": {
+          "value": 0.8333333333333334,
+          "exceeds": true,
+          "p": 2.0688185506804588e-36,
+          "gap_pp": 16.27
+        },
+        "C4_label_permutation": {
+          "value": 0.638,
+          "n_changed": 319,
+          "n_valid": 500,
+          "exceeds": true,
+          "p": 2.1270084024308256e-93,
+          "gap_pp": 35.8
+        }
+      },
+      "reference_rank_variants": {
+        "median": {
+          "mean": 0.8322499999999999,
+          "per_seed": [
+            0.8255,
+            0.8335,
+            0.84275,
+            0.83975,
+            0.81975
+          ],
+          "exceeds": true,
+          "p": 1.2585341787328364e-36,
+          "gap_pp": 16.38
+        },
+        "mean": {
+          "mean": 0.8322499999999999,
+          "per_seed": [
+            0.8255,
+            0.8335,
+            0.84275,
+            0.83975,
+            0.81975
+          ],
+          "exceeds": true,
+          "p": 1.2585341787328364e-36,
+          "gap_pp": 16.38
+        },
+        "raw": {
+          "mean": 0.83065,
+          "per_seed": [
+            0.834,
+            0.836,
+            0.828,
+            0.82375,
+            0.8315
+          ],
+          "exceeds": true,
+          "p": 4.610949198977857e-37,
+          "gap_pp": 16.54
+        }
+      },
+      "auth_baseline_same_dist": 0.8255,
+      "c1_reproduces_auth": true
+    },
+    "MIMIC_NB/NORMAL": {
+      "matched_prior": 0.6125356125356125,
+      "n_target": 169,
+      "observed_change_rate": 1.0,
+      "n_valid": 500,
+      "n_changed": 500,
+      "raw_rank": [
+        "KEM",
+        "VIN",
+        "NIH"
+      ],
+      "raw_ece": {
+        "NIH": 0.5159214368765977,
+        "KEM": 0.09557520852559809,
+        "VIN": 0.2424041824972528
+      },
+      "ece_medians": {
+        "NIH": 0.23818267438803198,
+        "KEM": 0.3080281854204878,
+        "VIN": 0.2501730161041198
+      },
+      "constructions": {
+        "C1_pooled_median": {
+          "value": 0.834,
+          "mean": 0.834,
+          "per_seed": [
+            0.834,
+            0.83925,
+            0.834,
+            0.83125,
+            0.8315
+          ],
+          "sd_pp": 0.2876629972728512,
+          "min": 0.83125,
+          "max": 0.83925,
+          "exceeds": true,
+          "p": 6.02264950830369e-40,
+          "gap_pp": 16.6
+        },
+        "C2_single_pool": {
+          "NIH": {
+            "mean": 0.8346500000000001,
+            "per_seed": [
+              0.8395,
+              0.83475,
+              0.83025,
+              0.83675,
+              0.832
+            ],
+            "min": 0.83025,
+            "max": 0.8395,
+            "exceeds": true,
+            "p": 1.0037838688284192e-39,
+            "gap_pp": 16.53
+          },
+          "KEM": {
+            "mean": 0.83105,
+            "per_seed": [
+              0.831,
+              0.83175,
+              0.8375,
+              0.83025,
+              0.82475
+            ],
+            "min": 0.82475,
+            "max": 0.8375,
+            "exceeds": true,
+            "p": 1.3278826303055436e-40,
+            "gap_pp": 16.9
+          },
+          "VIN": {
+            "mean": 0.8310500000000001,
+            "per_seed": [
+              0.8405,
+              0.82875,
+              0.82025,
+              0.82525,
+              0.8405
+            ],
+            "min": 0.82025,
+            "max": 0.8405,
+            "exceeds": true,
+            "p": 1.3278826303055101e-40,
+            "gap_pp": 16.89
+          }
+        },
+        "C3_analytic_exchangeability": {
+          "value": 0.8333333333333334,
+          "exceeds": true,
+          "p": 3.678845597421631e-40,
+          "gap_pp": 16.67
+        },
+        "C4_label_permutation": {
+          "value": 1.0,
+          "n_changed": 500,
+          "n_valid": 500,
+          "exceeds": false,
+          "p": 1.0,
+          "gap_pp": 0.0
+        }
+      },
+      "reference_rank_variants": {
+        "median": {
+          "mean": 0.834,
+          "per_seed": [
+            0.834,
+            0.83925,
+            0.834,
+            0.83125,
+            0.8315
+          ],
+          "exceeds": true,
+          "p": 6.02264950830369e-40,
+          "gap_pp": 16.6
+        },
+        "mean": {
+          "mean": 0.834,
+          "per_seed": [
+            0.834,
+            0.83925,
+            0.834,
+            0.83125,
+            0.8315
+          ],
+          "exceeds": true,
+          "p": 6.02264950830369e-40,
+          "gap_pp": 16.6
+        },
+        "raw": {
+          "mean": 0.8320500000000001,
+          "per_seed": [
+            0.83225,
+            0.8285,
+            0.833,
+            0.82825,
+            0.83825
+          ],
+          "exceeds": true,
+          "p": 2.176111962009338e-40,
+          "gap_pp": 16.79
+        }
+      },
+      "auth_baseline_same_dist": 0.834,
+      "c1_reproduces_auth": true
+    }
+  },
+  "summary": {
+    "C1_pooled_median": {
+      "n_exceeding": 7,
+      "n_total": 8
+    },
+    "C3_analytic_exchangeability": {
+      "n_exceeding": 7,
+      "n_total": 8
+    },
+    "C4_label_permutation": {
+      "n_exceeding": 4,
+      "n_total": 8
+    },
+    "C2_single_pool_NIH": {
+      "n_exceeding": 7,
+      "n_total": 8
+    },
+    "C2_single_pool_KEM": {
+      "n_exceeding": 7,
+      "n_total": 8
+    },
+    "C2_single_pool_VIN": {
+      "n_exceeding": 7,
+      "n_total": 8
+    },
+    "ref_median": {
+      "n_exceeding": 7,
+      "n_total": 8
+    },
+    "ref_mean": {
+      "n_exceeding": 7,
+      "n_total": 8
+    },
+    "ref_raw": {
+      "n_exceeding": 7,
+      "n_total": 8
+    }
+  },
+  "c1_reproduces_auth_all": true,
+  "c1_mismatch": []
+}

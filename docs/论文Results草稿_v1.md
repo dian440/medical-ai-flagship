@@ -53,6 +53,8 @@ More consequential than the contraction was the change in ordering (Figure 4B). 
 
 A reversal observed in a single resample is descriptive. To test whether the ranking changes observed above could be attributed to resampling noise, we compared the observed rate of ranking change against three null distributions, of which the most conservative assumed the three datasets were of identical calibration and differed only in resampling noise. Under that null, prior matching alone reordered the datasets in 82.5% to 84.4% of replicates. We refer to this quantity as the **prevalence-matched null baseline**, and it is the baseline against which any reported reversal must be judged; it has not previously been reported for this type of comparison.
 
+That magnitude is not a free parameter. If the three datasets are exchangeable in calibration, the ordering induced by prior matching is a uniformly random permutation of three items, and the reference ordering is a second independent uniform permutation. Two independent uniform permutations coincide with probability 1/3!, so the probability of a difference is 1 − 1/k! = 83.33% for k = 3. The measured baseline ranged from 82.5% to 84.4%, within 1.1 percentage points of that analytic value, and the agreement did not depend on how the null was constructed or how the reference ordering was defined. Across three constructions of this null and three definitions of the reference ordering, the observed rate exceeded the baseline in seven of the eight model–label combinations in every case (Figure 4B). The constructions were a pooled null, three single-dataset nulls, and the analytic exchangeability value; the reference definitions were the median, the mean, and the raw ordering. Re-drawing the null with five different seeds changed each estimate by no more than 0.9 percentage points in standard deviation. The magnitude of the baseline is therefore a property of exchangeability rather than a quantity chosen by the analyst, which is what makes it usable as a reference by others.
+
 The observed rate of ranking change exceeded this baseline in seven of the eight model–label combinations (Figure 4A; 97.0% observed against 84.4% for NIH/PNEUMONIA, p = 5.7 × 10⁻²⁰; 100% against 82.5% for MIMIC_CH/NORMAL, p = 3.5 × 10⁻⁴²). The single exception was PNEUMONIA for the MIMIC_CXR classifier with CheXpert labels (82.2% observed against 83.6%, p = 0.40). All eight combinations exceeded the less conservative null, in which each dataset retained its own calibration distribution but was sampled independently rather than synchronously.
 
 We provide the baseline as an independently implemented procedure, so that it can be applied to other tasks and other metric comparisons rather than only to the setting reported here. Applying that implementation to the present data reproduced every value reported above, including the observed change rates (97.6%, 97.4%, 98.6%, 98.2%, 83.0%, 100%, 99.8% and 100%) and the baseline rates (81.8% to 84.0%).
@@ -113,6 +115,8 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 单次重采样中观察到的反转只是描述性观察。为检验上述排序变化能否归因于重采样噪声，我们将观测到的排序改变率与三个零分布比较，其中最保守的一个假设三个数据集校准水平完全相同、仅存在重采样噪声。**在该零假设下，仅先验匹配本身就会在 82.5%–84.4% 的重复中改变数据集排序。我们把这个量命名为"先验匹配零基线"（prevalence-matched null baseline）**，它是任何反转报告必须据以判断的基线，此前在这一类比较中从未被报告过。
 
+**这一量级并非可自由选择的参数。**若三个数据集在校准上可交换，则先验匹配诱导的排序是三个元素上的一个均匀随机置换，而作为参照的排序是第二个独立的均匀随机置换；两个独立均匀随机置换相合的概率为 1/3!，故排序相异的概率为 1 − 1/k! = 83.33%（k = 3）。实测基线介于 82.5% 与 84.4% 之间，与该解析值的偏差不超过 1.1 个百分点，且这一吻合不依赖于零分布如何构造、参照排序如何定义。在该零分布的三种构造与三种参照排序定义下，观测改变率均在 8 个组合中的 7 个超出基线（Figure 4B）。三种构造为合并池、三个单库参照池与解析交换性值；三种参照定义为中位数、均值与原始排序。以五个不同种子重抽零分布，各估计值的标准差不超过 0.9 个百分点。**因此基线的量级是可交换性的性质，而非分析者选定的数量——这正是它能被他人用作参照的原因。**
+
 观测到的排序改变率在 8 个"模型×标签"组合中的 7 个超出了该基线（NIH/PNEUMONIA 为 97.0% 对 84.4%，p = 5.7×10⁻²⁰；MIMIC_CH/NORMAL 为 100% 对 82.5%，p = 3.5×10⁻⁴²）。唯一例外是 MIMIC_CXR（CheXpert 标签）分类器的 PNEUMONIA（82.2% 对 83.6%，p = 0.40）。8 个组合全部超出了较宽松的零分布——该零分布下各库保留自身校准分布但独立抽样而非同步抽样。
 
 **我们把该基线作为一个独立实现的过程公开发布**，使其可被应用到其他任务与其他指标比较上，而不仅限于本文的场景。用该独立实现复现本文数据，得到了与上文完全一致的每一个观测改变率（97.6%、97.4%、98.6%、98.2%、83.0%、100%、99.8%、100%）与基线值（81.8%–84.0%）。
@@ -155,6 +159,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 | §3.3 | 分箱敏感性 | 同上 | `per_model.*.ece_bin_sensitivity` |
 | §3.4 | 跨度收缩、排序翻转 | `multi_model_prior_matched.json` | `ece_span_raw/matched`、`span_retained_pct`、`rank_*` |
 | §3.5 | 噪声基线 82.5–84.4% | `noise_baseline.json` | `baseline_same_dist` |
+| §3.5 | 解析交换性基准 83.33% = 1 − 1/3! | `baseline_sensitivity.json` | `analytic_exchangeability_floor_k3` |
 | §3.5 | 7/8 超出、p ≤ 2.9×10⁻²² | 同上 | `exceeds_same`、`p_vs_same` |
 | §3.5 | 方向一致性 43.8%–99.9%（一组 84.1%） | `flip_criteria_validation.json` | `null_dir_consistency` |
 | §3.6 | 严格口径 13/16、6/8 | `label_sensitivity_noise_baseline.json` | `exceeds_same`、`rank_reversed` |
