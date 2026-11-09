@@ -1,0 +1,57 @@
+{
+  "note": "记录已作废的数值；每次重算后追加。scan_stale_values.py 据此扫描全文。",
+  "values": [
+    {
+      "value": 0.7834,
+      "reason": "去重前 KEM PNEUMONIA AUC（现为 0.7832）"
+    },
+    {
+      "value": 0.6162,
+      "reason": "去重前 MIMIC_CH KEM PNEUMONIA AUC（现为 0.6166）"
+    },
+    {
+      "value": 0.9556,
+      "reason": "去重前 CHEX KEM PNEUMONIA AUC（现为 0.9555）"
+    },
+    {
+      "value": 0.9078,
+      "reason": "去重前 NIH KEM NORMAL AUC（现为 0.9077）"
+    },
+    {
+      "value": 0.2925,
+      "reason": "去重前 KEM PNEUMONIA ECE（现为 0.2927）"
+    },
+    {
+      "value": 1.48,
+      "reason": "去重前最大分箱偏差（现为 1.47）"
+    },
+    {
+      "value": 0.1141,
+      "reason": "去重前某判别差异（现为 0.1142）"
+    },
+    {
+      "value": 0.1923,
+      "reason": "去重前某 CI 下界（现为 0.1924）"
+    },
+    {
+      "value": 0.0757,
+      "reason": "去重前某 CI 下界（现为 0.0758）"
+    },
+    {
+      "value": 27.8,
+      "reason": "去重前严格口径 PNEUMONIA 观测改变率（现为 28.0）"
+    },
+    {
+      "value": 25.0,
+      "reason": "去重前严格口径 PNEUMONIA 观测改变率（现为 23.6）"
+    },
+    {
+      "value": "5,828",
+      "reason": "去重前 Kermany 影像数（现为 5,824；Methods 中「四归档合计」为合法引述）"
+    },
+    {
+      "value": 5.7e-20,
+      "reason": "占位：噪声基线 p 上界现为 5.7e-20（旧值 2.9e-22）"
+    }
+  ]
+}

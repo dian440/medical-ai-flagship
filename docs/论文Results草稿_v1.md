@@ -27,9 +27,9 @@ The three cohorts differed in class prevalence by more than an order of magnitud
 
 ### 3.2 Discrimination did not deteriorate on the external datasets
 
-Discrimination behaved consistently across all four classifiers, and in every instance the numerically better-performing external dataset was Kermany, whose paediatric radiographs carry a binary triage label. With the NIH-pretrained classifier, the PNEUMONIA AUC was 0.7229 on NIH, 0.7834 on Kermany, and 0.7036 on VinDr-CXR; the corresponding NORMAL AUCs were 0.7618, 0.9078, and 0.8071. The CheXpert-pretrained classifier produced the highest absolute values in the study (Kermany AUC 0.9556 for PNEUMONIA and 0.9594 for NORMAL), while the two MIMIC-CXR classifiers produced the lowest (0.6162 for PNEUMONIA on Kermany and 0.6777 for NORMAL on NIH).
+Discrimination behaved consistently across all four classifiers, and in every instance the numerically better-performing external dataset was Kermany, whose paediatric radiographs carry a binary triage label. With the NIH-pretrained classifier, the PNEUMONIA AUC was 0.7229 on NIH, 0.7832 on Kermany, and 0.7036 on VinDr-CXR; the corresponding NORMAL AUCs were 0.7618, 0.9077, and 0.8071. The CheXpert-pretrained classifier produced the highest absolute values in the study (Kermany AUC 0.9555 for PNEUMONIA and 0.9594 for NORMAL), while the two MIMIC-CXR classifiers produced the lowest (0.6166 for PNEUMONIA on Kermany and 0.6777 for NORMAL on NIH).
 
-Of the 16 cross-dataset AUC comparisons, seven reached significance at the 0.05 level, and in all seven the difference favoured the external dataset. For the NIH-pretrained classifier, the NORMAL task comparing NIH with Kermany yielded the largest such difference (ΔAUC = AUC(NIH) − AUC(external) = −0.1460, SE 0.0320, 95% CI −0.2087 to −0.0833, z = −4.56, p = 5.0 × 10⁻⁶). The CheXpert-pretrained classifier produced four significant differences, all pointing in the same direction: −0.2211 (95% CI −0.2800 to −0.1622, p = 1.9 × 10⁻¹³) and −0.2175 (95% CI −0.2773 to −0.1576, p = 1.1 × 10⁻¹²) against Kermany, and −0.1475 (95% CI −0.2115 to −0.0835, p = 6.3 × 10⁻⁶) and −0.1205 (95% CI −0.1864 to −0.0547, p = 3.3 × 10⁻⁴) against VinDr-CXR. The remaining two significant differences were NORMAL comparisons for the MIMIC-CXR classifiers against Kermany (−0.1375, 95% CI −0.2025 to −0.0725, p = 3.4 × 10⁻⁵; and −0.1275, 95% CI −0.1924 to −0.0626, p = 1.2 × 10⁻⁴). Two of the nine non-significant comparisons carried a nominally opposite sign, and neither approached significance. The 95% confidence intervals were computed by normal approximation and were not adjusted for multiplicity; each of the seven significant comparisons has an interval that excludes zero, and none of the nine non-significant comparisons does (Table 5a).
+Of the 16 cross-dataset AUC comparisons, seven reached significance at the 0.05 level, and in all seven the difference favoured the external dataset. For the NIH-pretrained classifier, the NORMAL task comparing NIH with Kermany yielded the largest such difference (ΔAUC = AUC(NIH) − AUC(external) = -0.1459, SE 0.0320, 95% CI -0.2086 to -0.0832, z = -4.56, p = 5.1 × 10⁻⁶). The CheXpert-pretrained classifier produced four significant differences, all pointing in the same direction: −0.2211 (95% CI −0.2800 to −0.1622, p = 1.9 × 10⁻¹³) and −0.2175 (95% CI −0.2773 to −0.1576, p = 1.1 × 10⁻¹²) against Kermany, and −0.1475 (95% CI −0.2115 to −0.0835, p = 6.3 × 10⁻⁶) and −0.1205 (95% CI −0.1864 to −0.0547, p = 3.3 × 10⁻⁴) against VinDr-CXR. The remaining two significant differences were NORMAL comparisons for the MIMIC-CXR classifiers against Kermany (−0.1375, 95% CI −0.2025 to −0.0725, p = 3.4 × 10⁻⁵; and −0.1275, 95% CI −0.1924 to −0.0626, p = 1.2 × 10⁻⁴). Two of the nine non-significant comparisons carried a nominally opposite sign, and neither approached significance. The 95% confidence intervals were computed by normal approximation and were not adjusted for multiplicity; each of the seven significant comparisons has an interval that excludes zero, and none of the nine non-significant comparisons does (Table 5a).
 
 The direction of these findings is worth stating plainly, because it runs against the expectation that external evaluation is harder. No comparison showed a significant deterioration on an external dataset; the significant differences indicated external datasets that were easier to classify.
 
@@ -37,9 +37,9 @@ The direction of these findings is worth stating plainly, because it runs agains
 
 Expected calibration error varied more across datasets than AUC did within any single comparison. For the NIH-pretrained classifier, the largest AUC difference between two datasets was 0.1460, whereas the ECE difference between NIH and VinDr-CXR on the NORMAL task was 0.2780. The within-label ECE spread, expressed as the ratio of the worst-calibrated to the best-calibrated dataset, ranged from 1.29× to 5.39× across the eight model–label combinations, whereas the largest AUC difference across all sixteen comparisons was 0.2211.
 
-Discrimination and calibration also disagreed about which dataset was most difficult in four of the eight model–label combinations (Figure 2). For the NIH-pretrained classifier on PNEUMONIA, Kermany yielded the highest AUC (0.7834) and the worst calibration (ECE 0.2925), while VinDr-CXR yielded the lowest AUC (0.7036) and the best calibration (ECE 0.0888); the ECE spread was 3.29×. The same opposition appeared for the NIH-pretrained classifier on NORMAL and for the CheXpert-pretrained classifier on both tasks (NORMAL: Kermany AUC 0.9594, ECE 0.1141; NIH AUC 0.7420, ECE 0.4736; spread 4.44×). In the remaining four combinations, all involving the two MIMIC-CXR classifiers, the two metrics agreed on which dataset was best, but the agreement was itself unstable across tasks: within the same classifier, VinDr-CXR was the best PNEUMONIA dataset by both measures while Kermany was the best NORMAL dataset by both. A model may therefore be well ordered and badly calibrated on the same images, or the reverse, and reporting AUC alone conceals this.
+Discrimination and calibration also disagreed about which dataset was most difficult in four of the eight model–label combinations (Figure 2). For the NIH-pretrained classifier on PNEUMONIA, Kermany yielded the highest AUC (0.7832) and the worst calibration (ECE 0.2927), while VinDr-CXR yielded the lowest AUC (0.7036) and the best calibration (ECE 0.0888); the ECE spread was 3.29×. The same opposition appeared for the NIH-pretrained classifier on NORMAL and for the CheXpert-pretrained classifier on both tasks (NORMAL: Kermany AUC 0.9594, ECE 0.1140; NIH AUC 0.7420, ECE 0.4736; spread 4.44×). In the remaining four combinations, all involving the two MIMIC-CXR classifiers, the two metrics agreed on which dataset was best, but the agreement was itself unstable across tasks: within the same classifier, VinDr-CXR was the best PNEUMONIA dataset by both measures while Kermany was the best NORMAL dataset by both. A model may therefore be well ordered and badly calibrated on the same images, or the reverse, and reporting AUC alone conceals this.
 
-These ECE values were not artefacts of the binning scheme. Recomputation with 5, 15, and 20 bins left 15 of the 24 values within 2% of the 10-bin estimate, and for 14 of the 24 the value was identical to three decimal places across all four partitions. The largest single discrepancy was 1.48-fold for MIMIC_CH/KEM on the NORMAL task.
+These ECE values were not artefacts of the binning scheme. Recomputation with 5, 15, and 20 bins left 15 of the 24 values within 2% of the 10-bin estimate, and for 14 of the 24 the value was identical to three decimal places across all four partitions. The largest single discrepancy was 1.47-fold for MIMIC_CH/KEM on the NORMAL task.
 
 ### 3.4 Resampling to a common prevalence contracted the calibration spread and reversed the ranking
 
@@ -65,7 +65,7 @@ Building the null distributions described above required deciding what the compa
 
 We repeated the analysis under a strict VinDr-CXR label definition, in which the PNEUMONIA class was restricted to consolidation and infiltration, excluding the 136 VinDr-CXR images carrying other abnormalities and leaving 566 images. Under this definition the calibration spread still contracted in all eight model–label combinations and the ranking still reversed in six of eight. The pattern of noise-baseline exceedance was also largely preserved, with six of the eight strict-definition comparisons exceeding the conservative baseline; the two that did not are the same two described below.
 
-Two exceptions were informative. For PNEUMONIA with the NIH-pretrained and CheXpert-pretrained classifiers, the ranking did not reverse under the strict definition and the observed rate of ranking change fell well below the noise baseline (27.8% and 25.0%, against a baseline of 83.2% and 83.7%). Both cases shared the property that VinDr-CXR was already the best-calibrated dataset before matching, so that excluding the other-abnormality images widened the raw spread from 3.29× to 4.10× without displacing the ordering. The two exceptions therefore identify the boundary of the finding rather than contradicting it: where prior matching does not reorder the datasets, no reversal is observed.
+Two exceptions were informative. For PNEUMONIA with the NIH-pretrained and CheXpert-pretrained classifiers, the ranking did not reverse under the strict definition and the observed rate of ranking change fell well below the noise baseline (28.0% and 23.6%, against a baseline of 83.2% and 83.7%). Both cases shared the property that VinDr-CXR was already the best-calibrated dataset before matching, so that excluding the other-abnormality images widened the raw spread from 3.29× to 4.10× without displacing the ordering. The two exceptions therefore identify the boundary of the finding rather than contradicting it: where prior matching does not reorder the datasets, no reversal is observed.
 
 ### 3.7 Decision curve analysis showed the same instability in a clinical metric
 
@@ -75,7 +75,7 @@ Of the remaining six model–label combinations, three changed at two of the thr
 
 ### 3.8 Retraining recovered performance in one direction only
 
-Retraining a linear classification head on the source domain, with the convolutional backbone frozen, recovered most but not all of the difference between domains in one direction and little in the other. Training on NIH and evaluating on Kermany raised the PNEUMONIA AUC from 0.7834 to 0.8915, a relative increase of 13.8%, while training on Kermany and evaluating on NIH raised the same AUC from 0.7229 to 0.7373, a relative increase of 2.0%. The asymmetry was the same in the other direction: training on NIH raised the NORMAL AUC on Kermany from 0.8744 to 0.7902, which was a decrease, whereas training on Kermany raised the NORMAL AUC on NIH from 0.7853 to 0.7363, also a decrease.
+Retraining a linear classification head on the source domain, with the convolutional backbone frozen, recovered most but not all of the difference between domains in one direction and little in the other. Training on NIH and evaluating on Kermany raised the PNEUMONIA AUC from 0.7832 to 0.8915, a relative increase of 13.8%, while training on Kermany and evaluating on NIH raised the same AUC from 0.7229 to 0.7373, a relative increase of 2.0%. The asymmetry was the same in the other direction: training on NIH raised the NORMAL AUC on Kermany from 0.8744 to 0.7902, which was a decrease, whereas training on Kermany raised the NORMAL AUC on NIH from 0.7853 to 0.7363, also a decrease.
 
 ---
 
@@ -89,7 +89,7 @@ Retraining a linear classification head on the source domain, with the convoluti
 
 ### 3.2 判别能力在外部数据集上并未衰减
 
-四个分类器的判别行为高度一致，且每一例中数值表现更好的外部数据集都是 Kermany——该库为儿童胸片、带有二值分诊标签。NIH 预训练分类器的 PNEUMONIA AUC 在 NIH、Kermany、VinDr-CXR 上分别为 0.7229、0.7834、0.7036，对应 NORMAL AUC 为 0.7618、0.9078、0.8071。CheXpert 预训练分类器产出全研究中最高的绝对值（Kermany 上 PNEUMONIA 0.9556、NORMAL 0.9594），两个 MIMIC-CXR 分类器产出最低值（Kermany 上 PNEUMONIA 0.6162，NIH 上 NORMAL 0.6777）。
+四个分类器的判别行为高度一致，且每一例中数值表现更好的外部数据集都是 Kermany——该库为儿童胸片、带有二值分诊标签。NIH 预训练分类器的 PNEUMONIA AUC 在 NIH、Kermany、VinDr-CXR 上分别为 0.7229、0.7832、0.7036，对应 NORMAL AUC 为 0.7618、0.9077、0.8071。CheXpert 预训练分类器产出全研究中最高的绝对值（Kermany 上 PNEUMONIA 0.9555、NORMAL 0.9594），两个 MIMIC-CXR 分类器产出最低值（Kermany 上 PNEUMONIA 0.6166，NIH 上 NORMAL 0.6777）。
 
 16 组跨数据集 AUC 比较中，7 组在 0.05 水平显著，且 7 组的方向全部有利于外部数据集。NIH 预训练分类器的 NORMAL 任务（NIH 对 Kermany）给出其中最大的差异（ΔAUC = AUC(NIH) − AUC(外部) = −0.1460，SE 0.0320，z = −4.56，p = 5.0×10⁻⁶）。CheXpert 预训练分类器给出 4 组显著差异，方向一致：对 Kermany 的 −0.2211（p = 1.9×10⁻¹³）与 −0.2175（p = 1.1×10⁻¹²），对 VinDr-CXR 的 −0.1475（p = 6.3×10⁻⁶）与 −0.1205（p = 3.3×10⁻⁴）。另两组显著差异来自两个 MIMIC-CXR 分类器对 Kermany 的 NORMAL 比较（−0.1375，p = 3.4×10⁻⁵；−0.1275，p = 1.2×10⁻⁴）。9 组不显著比较中有 2 组名义方向相反，但均远未接近显著。95% 置信区间按正态近似计算、未做多重性校正；**7 组显著比较的区间均不含 0，9 组不显著比较的区间均含 0**（Table 5a）。
 
@@ -99,9 +99,9 @@ Retraining a linear classification head on the source domain, with the convoluti
 
 ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差异。对 NIH 预训练分类器而言，两个数据集间最大的 AUC 差异为 0.1460，而 NORMAL 任务上 NIH 与 VinDr-CXR 的 ECE 差异为 0.2780。同一标签内的 ECE 跨度（最差校准库 ÷ 最好校准库）在 8 个"模型×标签"组合中为 1.29× 至 5.39×，而全部 16 组比较中最大的 AUC 差异为 0.2211。
 
-判别与校准对"哪个数据集最难"的判断在 **8 个组合中的 4 个**上不一致。NIH 预训练分类器在 PNEUMONIA 上，Kermany 的 AUC 最高（0.7834）而校准最差（ECE 0.2925），VinDr-CXR 的 AUC 最低（0.7036）而校准最好（ECE 0.0888），ECE 跨度 3.29×。同样的对立出现在 NIH 预训练分类器的 NORMAL，以及 CheXpert 预训练分类器的两个任务（NORMAL：Kermany AUC 0.9594、ECE 0.1141；NIH AUC 0.7420、ECE 0.4736；跨度 4.44×）。余下 4 个组合（均为两个 MIMIC-CXR 分类器）两个指标对"哪个数据集最优"判断一致，但**这种一致本身跨任务不稳定**：在同一个分类器内，VinDr-CXR 在 PNEUMONIA 上两项指标均为最优，而 Kermany 在 NORMAL 上两项均为最优。因此在同一批影像上，模型可能排序良好而校准很差，或反之；**只报 AUC 会掩盖这一点**。
+判别与校准对"哪个数据集最难"的判断在 **8 个组合中的 4 个**上不一致。NIH 预训练分类器在 PNEUMONIA 上，Kermany 的 AUC 最高（0.7832）而校准最差（ECE 0.2927），VinDr-CXR 的 AUC 最低（0.7036）而校准最好（ECE 0.0888），ECE 跨度 3.29×。同样的对立出现在 NIH 预训练分类器的 NORMAL，以及 CheXpert 预训练分类器的两个任务（NORMAL：Kermany AUC 0.9594、ECE 0.1140；NIH AUC 0.7420、ECE 0.4736；跨度 4.44×）。余下 4 个组合（均为两个 MIMIC-CXR 分类器）两个指标对"哪个数据集最优"判断一致，但**这种一致本身跨任务不稳定**：在同一个分类器内，VinDr-CXR 在 PNEUMONIA 上两项指标均为最优，而 Kermany 在 NORMAL 上两项均为最优。因此在同一批影像上，模型可能排序良好而校准很差，或反之；**只报 AUC 会掩盖这一点**。
 
-这些 ECE 值不是分箱方式的产物。改用 5、15、20 箱复算后，24 个值中有 15 个与 10 箱结果的差异在 2% 以内，其中 14 个在四种分箱下三位小数完全相同。最大单组偏差为 MIMIC_CH/KEM 在 NORMAL 上的 1.48 倍。
+这些 ECE 值不是分箱方式的产物。改用 5、15、20 箱复算后，24 个值中有 15 个与 10 箱结果的差异在 2% 以内，其中 14 个在四种分箱下三位小数完全相同。最大单组偏差为 MIMIC_CH/KEM 在 NORMAL 上的 1.47 倍。
 
 ### 3.4 重采样到共同先验后校准跨度收缩，且排序反转
 
@@ -127,7 +127,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 我们在严格的 VinDr-CXR 标签定义下重做了全部分析：PNEUMONIA 类仅保留实变与浸润，排除携带其他异常的 136 张 VinDr-CXR 影像，余 566 张。在该定义下，**8 个组合的校准跨度仍然全部收缩，排序在 6 个组合中仍然反转**；超出保守基线的模式也大体保持，**8 组严格口径比较中有 6 组超出**，未超出者正是下文所述的两个例外。
 
-两个例外有解释力。NIH 预训练与 CheXpert 预训练分类器的 PNEUMONIA 在严格定义下排序未反转，且排序改变率远低于噪声基线（27.8% 与 25.0%，基线为 83.2% 与 83.7%）。这两例的共同点是匹配前 VinDr-CXR 已是最好校准的库，因此排除其他异常影像使原始跨度从 3.29× 扩大到 4.10×，却未改变排序。**这两个例外划出了发现的边界而非推翻发现**：在先验匹配不改变排序的地方，自然也就观测不到反转。
+两个例外有解释力。NIH 预训练与 CheXpert 预训练分类器的 PNEUMONIA 在严格定义下排序未反转，且排序改变率远低于噪声基线（28.0% 与 23.6%，基线为 83.2% 与 83.7%）。这两例的共同点是匹配前 VinDr-CXR 已是最好校准的库，因此排除其他异常影像使原始跨度从 3.29× 扩大到 4.10×，却未改变排序。**这两个例外划出了发现的边界而非推翻发现**：在先验匹配不改变排序的地方，自然也就观测不到反转。
 
 ### 3.7 决策曲线分析显示同一临床指标上的不稳定性
 
@@ -143,7 +143,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 ### 3.8 重训只在一个方向上救回了性能
 
-在源域上重训线性分类头（冻结卷积骨干），在一个方向上救回了域间差异的大部分，在另一个方向上几乎无效。在 NIH 上训练后评估 Kermany，PNEUMONIA AUC 从 0.7834 升至 0.8915，相对提升 13.8%；而在 Kermany 上训练后评估 NIH，同一 AUC 从 0.7229 升至 0.7373，相对提升仅 2.0%。另一方向同样呈现不对称：在 NIH 上训练把 Kermany 上的 NORMAL AUC 从 0.8744 降到 0.7902，在 Kermany 上训练把 NIH 上的 NORMAL AUC 从 0.7853 降到 0.7363。
+在源域上重训线性分类头（冻结卷积骨干），在一个方向上救回了域间差异的大部分，在另一个方向上几乎无效。在 NIH 上训练后评估 Kermany，PNEUMONIA AUC 从 0.7832 升至 0.8915，相对提升 13.8%；而在 Kermany 上训练后评估 NIH，同一 AUC 从 0.7229 升至 0.7373，相对提升仅 2.0%。另一方向同样呈现不对称：在 NIH 上训练把 Kermany 上的 NORMAL AUC 从 0.8744 降到 0.7902，在 Kermany 上训练把 NIH 上的 NORMAL AUC 从 0.7853 降到 0.7363。
 
 ---
 

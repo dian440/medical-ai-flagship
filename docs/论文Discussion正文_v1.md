@@ -5,7 +5,7 @@
 > **Journal decision (2026-11-09)**: **BMC Medical Imaging primary, Insights into Imaging secondary.** No word ceiling therefore applies, so the methodological argument in Methods is retained in full.
 >
 > **Corrections applied to the v1 outline** (each verified against the analysis output, not carried over from memory):
-> - "complete three-way reversal no longer observed (0 of 500 replicates)" → the measured values are **27.8%** (NIH/PNEUMONIA) and **25.0%** (CHEX/PNEUMONIA); the ranking did not reverse, but the change rate was not zero.
+> - "complete three-way reversal no longer observed (0 of 500 replicates)" → the measured values are **28.0%** (NIH/PNEUMONIA) and **23.6%** (CHEX/PNEUMONIA); the ranking did not reverse, but the change rate was not zero.
 > - "VinDr PNEUMONIA prevalence 38.7% → 19.4%" → **38.7% → 24.0%** (136 of 566 after excluding 136 OTHER images). The earlier 19.4% came from a superseded script that treated OTHER images as negatives.
 > - CheXpert Kermany PNEUMONIA AUC "0.956, against 0.703–0.783" → **0.9556, against 0.6162–0.7834**.
 >
@@ -173,7 +173,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 | §4.2 | 方向一致性 43.8%–99.9%（一组 84.1%） | `flip_criteria_validation.json` | `null_dir_consistency` |
 | §4.3 | 单模型版 1/4 显著 | `final_metrics.json` | `cross_dataset_delong` |
 | §4.3 | DeLong 1988 / fastDeLong 2014 / Hanley-McNeil | 参考文献总表 [5][6][7] | Biometrics / IEEE SPL / Radiology |
-| §4.4 | CHEX 0.9556、其余 0.6162–0.7834 | `multi_model_metrics.json` | `per_model.*.per_dataset.KEM_PNEUMONIA.auc` |
+| §4.4 | CHEX 0.9555、其余 0.6166–0.7832 | `multi_model_metrics.json` | `per_model.*.per_dataset.KEM_PNEUMONIA.auc` |
 | §4.7 | 169 上限、65/65 少数类 | `multi_model_prior_matched.json` + `multi_model_metrics.json` | `matched_n`、`n_pos` |
 | §4.7 | 43.6% 丢弃 | `multi_model_metrics.json` | 由 n=4,999 → 2,819 推得 |
 | §4.7 | 严格口径 8/8 收缩、6/8 反转 | `label_sensitivity_noise_baseline.json` | `ece_span_*`、`rank_reversed` |

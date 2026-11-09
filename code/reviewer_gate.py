@@ -146,7 +146,7 @@ def gate_numbers():
     py = sys.executable
     for script in ("verify_results_draft.py", "verify_figures.py",
                    "verify_tables.py", "verify_discussion.py",
-                   "verify_teacher_brief.py"):
+                   "verify_teacher_brief.py", "scan_stale_values.py"):
         p = os.path.join(HERE, script)
         if not os.path.exists(p):
             r.add("MINOR", f"{script} 不存在", "无法机械核验", False)

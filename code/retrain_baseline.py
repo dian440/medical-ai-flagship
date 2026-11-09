@@ -558,11 +558,19 @@ def main():
     if os.path.isfile(fm_path):
         with open(fm_path, encoding="utf-8") as f:
             fm = json.load(f)
+        # 🔴 数据源必须是主分析的 multi_model_metrics.json（四模型版口径），
+        #    不能用 final_metrics.json（旧单模型版）——
+        #    两者 NORMAL 的派生口径不同（7 病种共有 vs 四模型共有），
+        #    混用会让同一张表里出现两套不可比的数字。
+        #    NIH 预训练模型即 multi_model_metrics 中的 "NIH" 条目。
+        _mm = json.load(open(os.path.join(RESULTS, "multi_model_metrics.json"),
+                             encoding="utf-8"))
+        _pd = _mm["per_model"]["NIH"]["per_dataset"]
         results["zeroshot_baseline"] = {
-            ds: {lbl: {"auc": fm["per_dataset"][ds][lbl]["auc"],
-                       "ece": fm["per_dataset"][ds][lbl]["ece_10bins"]}
-                 for lbl in LABELS if lbl in fm["per_dataset"].get(ds, {})}
-            for ds in fm["per_dataset"]
+            ds: {lbl: {"auc": _pd[f"{ds}_{lbl}"]["auc"],
+                       "ece": _pd[f"{ds}_{lbl}"]["ece_10bins"]}
+                 for lbl in LABELS if f"{ds}_{lbl}" in _pd}
+            for ds in ("NIH", "KEM", "VIN")
         }
 
     summary = {}

@@ -58,6 +58,17 @@ def main():
     # NIH 原始影像总数（ChestX-ray14 全量），用于核算丢弃数
     NIH_RAW_TOTAL = 4999
 
+    # 严格口径观测改变率（动态取值，避免重算后误报）
+    _ls = json.load(open(os.path.join(RESULTS, "label_sensitivity_noise_baseline.json"),
+                         encoding="utf-8"))
+    # ⚠️ 只取「反转不复现」的那几组（观测 < 50%），不是全部 PNEUMONIA_strict
+    #    ——严格口径下其余组的观测是 100%，论文报告的是不复现的那两组。
+    _strict = [_ls[m]["PNEUMONIA_strict"]["observed_change_rate"] * 100
+               for m in _ls["models"]
+               if "PNEUMONIA_strict" in _ls[m]
+               and _ls[m]["PNEUMONIA_strict"]["observed_change_rate"] < 0.5]
+    _strict_lo, _strict_hi = min(_strict), max(_strict)
+
     # (说明, 一页纸中应出现的字符串, 权威值是否与之相符, 正文中可接受的表述集合)
     # ⚠️ 正文的措辞可能与一页纸不同（例：正文写 "in all eight"，
     #    一页纸写 "全部八个组合"）——此时须判定"同一事实"而非"同一字面"。
@@ -81,8 +92,9 @@ def main():
         ("判别与校准分歧", "4/8", True, ["4/8"]),
         ("PMNB 独立复现一致数", "16/16", True, ["16/16"]),
         ("DeLong 三方裁决一致数", "16/16", True, ["16/16"]),
-        ("严格口径反转率下界", "27.8%", True, ["27.8%"]),
-        ("严格口径反转率上界", "25.0%", True, ["25.0%"]),
+        # ⚠️ 必须从 JSON 动态取值——写死会在重算后误报
+        ("严格口径反转率下界", f"{_strict_lo:.1f}%", True, [f"{_strict_lo:.1f}%"]),
+        ("严格口径反转率上界", f"{_strict_hi:.1f}%", True, [f"{_strict_hi:.1f}%"]),
         # ⚠️ NIH 三个数不可用任务内计数倒推：PNEUMONIA 与 NORMAL 是同一批影像的
         #    两个任务视角，不是互斥类。真实丢弃数 = 原始 4,999 − 实际计入 2,819。
         #    直接从预测文件统计，避免任何推算歧义。

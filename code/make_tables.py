@@ -68,7 +68,9 @@ def table1(d):
         "| Population | Adult inpatients | Paediatric | Adult outpatients |",
         "| Setting | Single US institution | Triage dataset | Vietnamese outpatient cohort |",
         "| Annotation | NLP-derived report labels (14) | Curated binary folders | Radiologist reports (22 local categories) |",
-        "| Images evaluated | 2,819 | 5,828 | 702 |",
+        # ⚠️ 必须从 JSON 动态取值——硬编码过一次（5,828），去重后就与权威值脱节了
+        f"| Images evaluated | {pd_['NIH_PNEUMONIA']['n']:,} | "
+        f"{pd_['KEM_PNEUMONIA']['n']:,} | {pd_['VIN_PNEUMONIA']['n']:,} |",
         "| PNEUMONIA, n (prevalence) | "
         f"{pd_['NIH_PNEUMONIA']['n_pos']} ({pd_['NIH_PNEUMONIA']['prior']*100:.1f}%) | "
         f"{pd_['KEM_PNEUMONIA']['n_pos']} ({pd_['KEM_PNEUMONIA']['prior']*100:.1f}%) | "
