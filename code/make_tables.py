@@ -270,10 +270,12 @@ def table5(d):
         "### Table 5. Cross-dataset AUC differences with corrected DeLong test, and supporting analyses",
         "",
         "**(a) DeLong comparisons of AUC, corrected variance estimator.** ΔAUC = AUC(NIH) − AUC(external); "
-        "negative values indicate the external dataset was easier.",
+        "negative values indicate the external dataset was easier. Confidence intervals are 95% normal "
+        "approximation (ΔAUC ± 1.96 × SE); no multiplicity correction was applied and the comparisons "
+        "are therefore descriptive.",
         "",
-        "| Classifier | Comparison | ΔAUC | SE | z | p (two-sided) | Significant |",
-        "|---|---|---|---|---|---|---|",
+        "| Classifier | Comparison | ΔAUC | SE | 95% CI | z | p (two-sided) | Significant |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     n_sig = 0
     n_neg = 0
@@ -288,8 +290,10 @@ def table5(d):
                         n_neg += 1
                 lines.append(
                     f"| {MODEL_LABEL[m]} | {lbl}: NIH vs {DS_LABEL[other]} | "
-                    f"{x['delta']:+.4f} | {x['se']:.4f} | {x['z']:+.3f} | "
-                    f"{fmt_p(x['p_two_sided'])} | {'**yes**' if sig else 'no'} |")
+                    f"{x['delta']:+.4f} | {x['se']:.4f} | "
+                    f"[{x['ci95_low']:+.4f}, {x['ci95_high']:+.4f}] | "
+                    f"{x['z']:+.3f} | {fmt_p(x['p_two_sided'])} | "
+                    f"{'**yes**' if sig else 'no'} |")
     lines += [
         "",
         f"**{n_sig} of 16** comparisons reached significance and **all {n_neg} pointed to an easier external "
@@ -348,7 +352,11 @@ def table5(d):
                          f"{b['sensitivity']:.4f} | {b['specificity']:.4f} |")
     lines += [
         "",
-        "*Source: `multi_model_metrics.json` → `per_model.*.cross_dataset_delong`; "
+        "All seven significant comparisons have confidence intervals that exclude zero; "
+        "none of the nine non-significant comparisons does.",
+        "",
+        "*Source: `multi_model_metrics.json` → `per_model.*.cross_dataset_delong` "
+        "(delta, se, ci95_low, ci95_high, z, p_two_sided); "
         "`multi_model_dca.json` → `n_flip_thresholds`; `retrain_baseline.json` → `experiments.*.evals.*.auc`; "
         "`operating_points.json` → `per_model.NIH.*.*`.*",
         "",

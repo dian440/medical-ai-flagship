@@ -81,7 +81,7 @@ Power is limited throughout by the 65 minority cases in NIH, so the absence of a
 
 ### 4.8 Conclusion
 
-Cross-dataset comparisons of chest radiograph classifiers are not invariant to class prevalence. The change they induce in the ordering of datasets exceeds what resampling noise alone would produce. Because even identically calibrated datasets are reordered in more than four fifths of resamples, a comparison may report artefactual conclusions. That happens whenever it omits prevalence control and an explicit noise baseline. A positive discrimination difference on an external dataset may likewise indicate a weaker benchmark rather than a transferable model. Four practices would each raise the reliability of the evidence on which clinical reuse decisions rest: reporting the prevalence at which each metric was computed, normalising prevalence before comparison, testing any reported change in ranking against a stated null, and distinguishing an easier dataset from a better model.
+Cross-dataset comparisons of chest radiograph classifiers are not invariant to class prevalence. The change they induce in the ordering of datasets exceeds what resampling noise alone would produce. Because even identically calibrated datasets are reordered in more than four fifths of resamples, a comparison may report artefactual conclusions. That happens whenever it omits prevalence control and an explicit noise baseline. A positive discrimination difference on an external dataset may likewise indicate a weaker benchmark rather than a transferable model. Four practices would each raise the reliability of the evidence on which clinical reuse decisions rest: reporting the prevalence at which each metric was computed, normalising prevalence before comparison, testing any reported change in ranking against a stated null, and distinguishing an easier dataset from a better model. The reporting follows the STROBE statement for observational studies [14]. Where the evaluation of a classifier rather than a clinical prediction model is at issue, we have addressed the TRIPOD+AI items that bear on it [15]. Confidence intervals are reported for every discrimination comparison, without multiplicity adjustment, and each comparison significant at the 0.05 level has an interval that excludes zero.
 
 ---
 
@@ -153,7 +153,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 
 ### 4.8 结论
 
-胸片分类器的跨数据集比较对类别先验并不稳健，且由此在数据集排序中引发的改变，超出了仅由重采样噪声所能产生的程度。**由于即便三个数据集校准水平完全相同，也会有超过五分之四的重采样改变排序**，任何缺少患病率控制与明确噪声基线的比较都可能报告伪影性的结论。而外部数据集上判别能力的正向差异，可能意味着基准更弱而非模型更具可迁移性。报告每个指标所计算时的患病率、在比较前归一化患病率、针对任何报告出的排序改变以明确的零分布做检验，以及区分更容易的数据集与更好的模型——这四项各自都能提高临床复用决策所依赖的证据的可靠性。
+胸片分类器的跨数据集比较对类别先验并不稳健，且由此在数据集排序中引发的改变，超出了仅由重采样噪声所能产生的程度。**由于即便三个数据集校准水平完全相同，也会有超过五分之四的重采样改变排序**，任何缺少患病率控制与明确噪声基线的比较都可能报告伪影性的结论。而外部数据集上判别能力的正向差异，可能意味着基准更弱而非模型更具可迁移性。报告每个指标所计算时的患病率、在比较前归一化患病率、针对任何报告出的排序改变以明确的零分布做检验，以及区分更容易的数据集与更好的模型——这四项各自都能提高临床复用决策所依赖的证据的可靠性。本研究的报告遵循观察性研究的 STROBE 声明 [14]；在所论者为**分类器评估**而非临床预测模型的条目上，我们亦已处理 TRIPOD+AI 中与之相关的部分 [15]。全部判别能力比较均给出了置信区间（未作多重性校正），且每一组在 0.05 水平显著的比较，其区间均不含 0。
 
 ---
 

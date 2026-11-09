@@ -116,26 +116,26 @@ The observed rate exceeded the most conservative null in **7 of 8** combinations
 
 ### Table 5. Cross-dataset AUC differences with corrected DeLong test, and supporting analyses
 
-**(a) DeLong comparisons of AUC, corrected variance estimator.** ΔAUC = AUC(NIH) − AUC(external); negative values indicate the external dataset was easier.
+**(a) DeLong comparisons of AUC, corrected variance estimator.** ΔAUC = AUC(NIH) − AUC(external); negative values indicate the external dataset was easier. Confidence intervals are 95% normal approximation (ΔAUC ± 1.96 × SE); no multiplicity correction was applied and the comparisons are therefore descriptive.
 
-| Classifier | Comparison | ΔAUC | SE | z | p (two-sided) | Significant |
-|---|---|---|---|---|---|---|
-| NIH-pretrained | PNEUMONIA: NIH vs Kermany | -0.0605 | 0.0341 | -1.776 | 0.076 | no |
-| NIH-pretrained | PNEUMONIA: NIH vs VinDr-CXR | +0.0192 | 0.0388 | +0.495 | 0.621 | no |
-| NIH-pretrained | NORMAL: NIH vs Kermany | -0.1460 | 0.0320 | -4.564 | 5.0 × 10⁻6 | **yes** |
-| NIH-pretrained | NORMAL: NIH vs VinDr-CXR | -0.0453 | 0.0357 | -1.269 | 0.204 | no |
-| CheXpert-pretrained | PNEUMONIA: NIH vs Kermany | -0.2211 | 0.0301 | -7.358 | 1.9 × 10⁻13 | **yes** |
-| CheXpert-pretrained | PNEUMONIA: NIH vs VinDr-CXR | -0.1475 | 0.0327 | -4.517 | 6.3 × 10⁻6 | **yes** |
-| CheXpert-pretrained | NORMAL: NIH vs Kermany | -0.2175 | 0.0305 | -7.119 | 1.1 × 10⁻12 | **yes** |
-| CheXpert-pretrained | NORMAL: NIH vs VinDr-CXR | -0.1205 | 0.0336 | -3.588 | 3.3 × 10⁻4 | **yes** |
-| MIMIC-CXR (CheXpert labels) | PNEUMONIA: NIH vs Kermany | +0.0525 | 0.0373 | +1.406 | 0.160 | no |
-| MIMIC-CXR (CheXpert labels) | PNEUMONIA: NIH vs VinDr-CXR | -0.0395 | 0.0414 | -0.954 | 0.340 | no |
-| MIMIC-CXR (CheXpert labels) | NORMAL: NIH vs Kermany | -0.1375 | 0.0332 | -4.146 | 3.4 × 10⁻5 | **yes** |
-| MIMIC-CXR (CheXpert labels) | NORMAL: NIH vs VinDr-CXR | -0.0665 | 0.0379 | -1.756 | 0.079 | no |
-| MIMIC-CXR (noise-handled labels) | PNEUMONIA: NIH vs Kermany | -0.0364 | 0.0354 | -1.028 | 0.304 | no |
-| MIMIC-CXR (noise-handled labels) | PNEUMONIA: NIH vs VinDr-CXR | -0.0676 | 0.0395 | -1.710 | 0.087 | no |
-| MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs Kermany | -0.1275 | 0.0331 | -3.850 | 1.2 × 10⁻4 | **yes** |
-| MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs VinDr-CXR | -0.0551 | 0.0374 | -1.472 | 0.141 | no |
+| Classifier | Comparison | ΔAUC | SE | 95% CI | z | p (two-sided) | Significant |
+|---|---|---|---|---|---|---|---|
+| NIH-pretrained | PNEUMONIA: NIH vs Kermany | -0.0605 | 0.0341 | [-0.1273, +0.0063] | -1.776 | 0.076 | no |
+| NIH-pretrained | PNEUMONIA: NIH vs VinDr-CXR | +0.0192 | 0.0388 | [-0.0569, +0.0953] | +0.495 | 0.621 | no |
+| NIH-pretrained | NORMAL: NIH vs Kermany | -0.1460 | 0.0320 | [-0.2087, -0.0833] | -4.564 | 5.0 × 10⁻6 | **yes** |
+| NIH-pretrained | NORMAL: NIH vs VinDr-CXR | -0.0453 | 0.0357 | [-0.1153, +0.0247] | -1.269 | 0.204 | no |
+| CheXpert-pretrained | PNEUMONIA: NIH vs Kermany | -0.2211 | 0.0301 | [-0.2800, -0.1622] | -7.358 | 1.9 × 10⁻13 | **yes** |
+| CheXpert-pretrained | PNEUMONIA: NIH vs VinDr-CXR | -0.1475 | 0.0327 | [-0.2115, -0.0835] | -4.517 | 6.3 × 10⁻6 | **yes** |
+| CheXpert-pretrained | NORMAL: NIH vs Kermany | -0.2175 | 0.0305 | [-0.2773, -0.1576] | -7.119 | 1.1 × 10⁻12 | **yes** |
+| CheXpert-pretrained | NORMAL: NIH vs VinDr-CXR | -0.1205 | 0.0336 | [-0.1864, -0.0547] | -3.588 | 3.3 × 10⁻4 | **yes** |
+| MIMIC-CXR (CheXpert labels) | PNEUMONIA: NIH vs Kermany | +0.0525 | 0.0373 | [-0.0207, +0.1257] | +1.406 | 0.160 | no |
+| MIMIC-CXR (CheXpert labels) | PNEUMONIA: NIH vs VinDr-CXR | -0.0395 | 0.0414 | [-0.1206, +0.0417] | -0.954 | 0.340 | no |
+| MIMIC-CXR (CheXpert labels) | NORMAL: NIH vs Kermany | -0.1375 | 0.0332 | [-0.2025, -0.0725] | -4.146 | 3.4 × 10⁻5 | **yes** |
+| MIMIC-CXR (CheXpert labels) | NORMAL: NIH vs VinDr-CXR | -0.0665 | 0.0379 | [-0.1407, +0.0077] | -1.756 | 0.079 | no |
+| MIMIC-CXR (noise-handled labels) | PNEUMONIA: NIH vs Kermany | -0.0364 | 0.0354 | [-0.1059, +0.0330] | -1.028 | 0.304 | no |
+| MIMIC-CXR (noise-handled labels) | PNEUMONIA: NIH vs VinDr-CXR | -0.0676 | 0.0395 | [-0.1451, +0.0099] | -1.710 | 0.087 | no |
+| MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs Kermany | -0.1275 | 0.0331 | [-0.1924, -0.0626] | -3.850 | 1.2 × 10⁻4 | **yes** |
+| MIMIC-CXR (noise-handled labels) | NORMAL: NIH vs VinDr-CXR | -0.0551 | 0.0374 | [-0.1285, +0.0183] | -1.472 | 0.141 | no |
 
 **7 of 16** comparisons reached significance and **all 7 pointed to an easier external dataset**. Comparisons were not corrected for multiplicity and are therefore interpreted as descriptive.
 
@@ -175,6 +175,8 @@ Net benefit was computed at threshold probabilities of 0.10, 0.30 and 0.50. The 
 | NORMAL | Kermany | 0.479 | 0.7375 | 0.7704 | 0.8813 |
 | NORMAL | VinDr-CXR | 0.411 | 0.8122 | 0.9000 | 0.5000 |
 
-*Source: `multi_model_metrics.json` → `per_model.*.cross_dataset_delong`; `multi_model_dca.json` → `n_flip_thresholds`; `retrain_baseline.json` → `experiments.*.evals.*.auc`; `operating_points.json` → `per_model.NIH.*.*`.*
+All seven significant comparisons have confidence intervals that exclude zero; none of the nine non-significant comparisons does.
+
+*Source: `multi_model_metrics.json` → `per_model.*.cross_dataset_delong` (delta, se, ci95_low, ci95_high, z, p_two_sided); `multi_model_dca.json` → `n_flip_thresholds`; `retrain_baseline.json` → `experiments.*.evals.*.auc`; `operating_points.json` → `per_model.NIH.*.*`.*
 
 ---

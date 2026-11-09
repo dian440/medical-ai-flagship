@@ -380,9 +380,34 @@ def gate_reviewer_perspective():
     return r
 
 
+def gate_final_audit():
+    """闸门 6：调用终审脚本（内容质量的对抗性审查）。"""
+    import subprocess
+    r = Review("闸门 6 · 内容质量终审（最严格标准）")
+    p = os.path.join(HERE, "final_audit.py")
+    if not os.path.exists(p):
+        r.add("MINOR", "终审脚本不存在", "无法执行内容质量审查", False)
+        return r
+    res = subprocess.run([sys.executable, p], capture_output=True, text=True,
+                         cwd=REPO, timeout=1800)
+    out = res.stdout
+    m = re.search(r"合计 (\d+) 项检查：通过 (\d+)　提示 (\d+)　不通过 (\d+)", out)
+    if m:
+        total, npass, nwarn, nfail = (int(x) for x in m.groups())
+        if nfail == 0:
+            r.add("NOTE", f"终审 {npass}/{total} 通过，{nwarn} 项提示，无阻塞",
+                  "论文达到可投稿标准", False)
+        else:
+            r.add("FATAL", f"终审有 {nfail} 项不通过", "须先清零终审阻塞项", True)
+    else:
+        r.add("MAJOR", "终审脚本未能给出可解析的结果",
+              "检查 final_audit.py 是否正常运行", False)
+    return r
+
+
 def run_all():
     reviews = [gate_numbers(), gate_manuscript(), gate_claims(),
-               gate_reviewer_perspective(), gate_tables()]
+               gate_reviewer_perspective(), gate_tables(), gate_final_audit()]
     for r in reviews:
         print(r.report())
         print()
