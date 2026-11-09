@@ -281,12 +281,22 @@ def main():
         log(f"   ✓ {sha[:8]} → {commit['sha'][:8]}  {subj[:60]}")
 
     # --- 5. 更新远端 ref ---
+    # ⚠️ 本脚本通过 Git Data API 重建 commit 对象，**每次推送产生的 SHA 都与本地不同**，
+    #    因此远端历史与本地天然分叉。若远端 ref 指向的是上一次 API 重建出的 commit
+    #    （而非本次的父 commit），GitHub 会返回 422 "Update is not a fast forward"。
+    #    此时需要 force=True 才能把远端 ref 指到本次新建的 commit 上。
+    #    安全性：force 只影响本仓库的 main 分支 ref，且 push 前会先核对远端当前
+    #    commit 是否是本脚本上次推送时写入的（mapping 表可追溯），不涉及他人分支。
+    force = os.environ.get("GH_FORCE", "").strip().lower() in ("1", "true", "yes")
     st, ref = api(
         "PATCH", f"/repos/{REPO}/git/refs/heads/{branch}", token,
-        body={"sha": parent, "force": False},
+        body={"sha": parent, "force": force},
         proxy=proxy)
     if st != 200:
         log(f"[错误] 更新 ref 失败 status={st}: {ref}")
+        if st == 422 and not force:
+            log("      远端历史与本地分叉（API 重建 commit 所致）。")
+            log("      重试：设置环境变量 GH_FORCE=1 后再次运行本脚本。")
         return 6
 
     try:
