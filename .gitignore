@@ -55,7 +55,6 @@ results/retrain_baseline_v1_SUPERSEDED_samplemismatch.json
 !docs/论文Discussion正文_v1.md
 !docs/论文Tables草稿_v1.md
 !docs/论文Title候选与裁决_v1.md
-!docs/论文CoverLetter_v1.md
 !docs/参考文献总表_v1.md
 
 # ── 内部工作文档排除（个人申请策略与路线对比，不随公开仓库发布）──
@@ -64,3 +63,6 @@ docs/论文的申请定位策略_v1.md
 docs/选刊与投稿策略_2027见刊版.md
 docs/审稿自检记录_*.md
 docs/终审报告_*.md
+
+# ── 投稿信不入库（致编辑的文书，非论文本体）──────────────────
+docs/论文CoverLetter_v1.md
