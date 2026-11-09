@@ -57,7 +57,7 @@ The observed rate of ranking change exceeded this baseline in seven of the eight
 
 We provide the baseline as an independently implemented procedure, so that it can be applied to other tasks and other metric comparisons rather than only to the setting reported here. Applying that implementation to the present data reproduced every value reported above, including the observed change rates (97.6%, 97.4%, 98.6%, 98.2%, 83.0%, 100%, 99.8% and 100%) and the baseline rates (81.8% to 84.0%).
 
-Building the null distributions described above required deciding what the comparison should be against, and one choice deserves comment because it is easy to make. The natural-looking null for a test of reversal direction is a binomial expectation that complete reversals should occur equally often in either direction, that is, against 0.5. That expectation does not hold for this quantity. The direction of a complete reversal is itself a structured property of the resampling procedure rather than a symmetric coin flip; under label permutation, which destroys discrimination entirely, the direction of complete reversal was consistent in 84.1% of replicates. A test against 0.5 therefore measures the difference between 84.1% and 50% and reports it as though it had been measured against chance, which overstates the evidence by many orders of magnitude. We consequently report the null-distribution comparison throughout, and give the permutation-based null alongside it so that the appropriate reference point is visible to the reader. We include this note because point estimates of reversal without any null distribution are the prevailing practice in this literature, and because a comparison whose reference point has not been stated cannot be interpreted.
+Building the null distributions described above required deciding what the comparison should be against, and one choice deserves comment because it is easy to make. The natural-looking null for a test of reversal direction is a binomial expectation that complete reversals should occur equally often in either direction, that is, against 0.5. That expectation does not hold for this quantity. The direction of a complete reversal is itself a structured property of the resampling procedure rather than a symmetric coin flip; under label permutation, which destroys discrimination entirely, the direction of complete reversal was consistent in 43.8% to 99.9% of replicates across the eight combinations, and in 84.1% for one of them. A test against 0.5 therefore measures the difference between a quantity already far from 50% and 50% itself, and reports it as though it had been measured against chance, which overstates the evidence by many orders of magnitude. We consequently report the null-distribution comparison throughout, and give the permutation-based null alongside it so that the appropriate reference point is visible to the reader. We include this note because point estimates of reversal without any null distribution are the prevailing practice in this literature, and because a comparison whose reference point has not been stated cannot be interpreted.
 
 ### 3.6 The finding was robust to the label definition but not to the noise baseline
 
@@ -117,7 +117,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 **我们把该基线作为一个独立实现的过程公开发布**，使其可被应用到其他任务与其他指标比较上，而不仅限于本文的场景。用该独立实现复现本文数据，得到了与上文完全一致的每一个观测改变率（97.6%、97.4%、98.6%、98.2%、83.0%、100%、99.8%、100%）与基线值（81.8%–84.0%）。
 
-构建上文所述的零分布，需要先决定"应当与什么作比较"，其中有一个选择值得说明，因为它容易出错。对"反转方向"做检验时，最自然的零假设是二项期望——完全反转在两个方向上应等频出现，即以 0.5 为参照。**但这一期望对本量并不成立**：完全反转的方向是重采样过程本身的结构性质，而非对称的抛硬币；在标签置换（判别力被完全破坏）下，完全反转的方向一致性达 84.1%。因此，以 0.5 为参照的检验实际测量的是"84.1% 与 50% 的差距"，却把它报告成是相对偶然性测量的，会大幅高估证据强度。本文因此全程采用零分布对照，并同时给出置换零分布，使读者能看到正确的参照系。此处专门说明，是因为在这一文献中，只报反转的点估计而不给出参照系是普遍做法，而未说明参照系的比较无法解读。
+构建上文所述的零分布，需要先决定"应当与什么作比较"，其中有一个选择值得说明，因为它容易出错。对"反转方向"做检验时，最自然的零假设是二项期望——完全反转在两个方向上应等频出现，即以 0.5 为参照。**但这一期望对本量并不成立**：完全反转的方向是重采样过程本身的结构性质，而非对称的抛硬币；在标签置换（判别力被完全破坏）下，完全反转的方向一致性于 8 个组合间介于 43.8% 与 99.9% 之间（其中一组为 84.1%）。因此，以 0.5 为参照的检验实际测量的是"一个本就远离 50% 的量与 50% 本身的差距"，却把它报告成是相对偶然性测量的，会大幅高估证据强度。本文因此全程采用零分布对照，并同时给出置换零分布，使读者能看到正确的参照系。此处专门说明，是因为在这一文献中，只报反转的点估计而不给出参照系是普遍做法，而未说明参照系的比较无法解读。
 
 ### 3.6 结果对标签定义稳健，但对噪声基线不稳健
 
@@ -156,7 +156,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 | §3.4 | 跨度收缩、排序翻转 | `multi_model_prior_matched.json` | `ece_span_raw/matched`、`span_retained_pct`、`rank_*` |
 | §3.5 | 噪声基线 82.3–84.4% | `noise_baseline.json` | `baseline_same_dist` |
 | §3.5 | 7/8 超出、p ≤ 2.9×10⁻²² | 同上 | `exceeds_same`、`p_vs_same` |
-| §3.5 | 84.1% 方向一致性 | `flip_criteria_validation.json` | `null_dir_consistency` |
+| §3.5 | 方向一致性 43.8%–99.9%（一组 84.1%） | `flip_criteria_validation.json` | `null_dir_consistency` |
 | §3.6 | 严格口径 13/16、6/8 | `label_sensitivity_noise_baseline.json` | `exceeds_same`、`rank_reversed` |
 | §3.7 | DCA 翻转阈值 | `multi_model_dca.json` | `n_flip_thresholds` |
 | §3.8 | 重训 AUC | `retrain_baseline.json` | `experiments.*.evals.*.auc` |
