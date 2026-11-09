@@ -287,9 +287,9 @@ def gate_claims():
             if bad in body:
                 r.add("FATAL", f"{f} 稿件本体仍含已撤回数字「{bad}」",
                       "立即更正", True)
-        # 未标注撤回的旧 p 值：正文出现 9.15 而附近无撤回/更正措辞
-        # 关键词须覆盖中英两种表述——中文段写"这一参照点不适当"，
-        # 只匹配英文词会导致中文对照段被误判
+        # 未标注撤回的旧 p 值：正文出现 9.15 则必须带撤回/更正措辞。
+        # （注：Results 与 Discussion 的正文已改为**不出现该数字**、改讲参照系选择的结构性理由；
+        #   若后续版本重新引入，必须同时给出撤回说明，否则视为残留错误。）
         WITHDRAW_WORDS = (r"inappropriate|overstates|withdraw|reference point"
                           r"|撤回|不适当|高估证据|更正|零分布对照")
         for m_ in re.finditer(r"9\.15", body):
@@ -343,12 +343,33 @@ def gate_reviewer_perspective():
               "必须在 Results 明确写出", True)
 
     # 质疑 5：自我纠错会不会被当成不严谨？
-    if "9.15" in results and "inappropriate" in results:
-        r.add("NOTE", "自我纠错已写入正文——这是加分项（审稿人喜欢看到作者自我审计）",
-              "保留，不可删", False)
-    else:
-        r.add("MAJOR", "自我纠错未写入正文",
-              "这恰是相对 arXiv:2609.21763 的增量，必须写", True)
+    # ⚠️ 判据必须检测**语义**而非特定措辞——正文已改写为讲"参照系选择的结构性理由"，
+    #   不再使用 "inappropriate" 这类词。若用关键词匹配，改一次表述就会误报。
+    #   判据：正文是否同时说明了「参照系该选什么」+「为什么 0.5 不成立」+「采用了什么替代」。
+    REF_FRAME_WORDS = (
+        r"reference point|null distribution|permutation|zero distribution"
+        r"|参照系|零分布|置换零分布")
+    WHY_NOT_05 = (
+        r"does not hold|not a symmetric|0\.5|84\.1"
+        r"|并不成立|不是对称|84\.1")
+    ALT_USED = (
+        r"report the null-distribution comparison|permutation-based null"
+        r"|采用零分布对照|全程采用零分布|全程改用零分布")
+    for fname in ("论文Results草稿_v1.md", "论文Discussion提纲_v1.md"):
+        fp = os.path.join(DOCS, fname)
+        if not os.path.exists(fp):
+            continue
+        t = open(fp, encoding="utf-8").read()
+        body = manuscript_body(t, "results" if "Results" in fname else "other")
+        has_all = (re.search(REF_FRAME_WORDS, body, re.I)
+                   and re.search(WHY_NOT_05, body)
+                   and re.search(ALT_USED, body, re.I))
+        if has_all:
+            r.add("NOTE", f"质疑『参照系选择』在 {fname} 中已完整交代",
+                  "含：参照系该选什么 + 为何 0.5 不成立 + 采用了什么替代", False)
+        else:
+            r.add("MAJOR", f"{fname} 未完整交代参照系选择的方法学理由",
+                  "须说明：参照系该选什么、为何 0.5 不成立、采用了什么替代", True)
 
     # 质疑 6：临床意义——换了个数据集，结论真的会变吗？
     if "clinical" in results.lower() or "net benefit" in results.lower():

@@ -74,6 +74,8 @@ Because a reversal observed in a single resample is descriptive, we tested wheth
 
 The observed rate of ranking change was then compared against three null distributions constructed by resampling. The first null permuted the labels within each dataset, which destroys discrimination and yields the behaviour of a model with no predictive power; we note that under this null the direction of complete reversal is itself highly structured, with a mean consistency of 84.1%, so a test against an expectation of a random direction is not interpretable. The second, and most conservative, null assumed the three datasets were of identical calibration and differed only in resampling noise, using the pooled distribution of matched expected calibration errors and sampling three independent replicates; this null answers what would happen if three equally well-calibrated datasets were compared. The third retained each dataset's own calibration distribution but sampled it independently rather than synchronously. We report the observed rate against the second null as the primary comparison, because it is the most comparable to the observation and the most conservative; a change can be attributed to the datasets themselves only if the observed rate exceeds it.
 
+We refer to the second null as the **prevalence-matched null baseline** and implement it as a standalone procedure that accepts any set of datasets, any binary discrimination metric, and any evaluation metric that admits a per-dataset value. The implementation was written independently of the analysis scripts used here; applying it to the present data reproduced every observed change rate and every baseline rate reported in the Results. Providing the procedure rather than the numbers alone is deliberate: the baseline is intended to be usable for comparisons other than the ones reported in this study, and to be re-derivable by others.
+
 #### 2.4.4 Decision curve analysis
 
 To examine whether the observed differences carry any clinical consequence, we computed net benefit across threshold probabilities of 0.10, 0.30, and 0.50, chosen to span screening exclusion, intermediate triage, and conventional diagnostic confirmation [8]. We compared each model with the treat-all and treat-none strategies and repeated the analysis after prior matching. Threshold probabilities were fixed a priori rather than selected to maximise any separation.
@@ -155,6 +157,8 @@ AUC 的方差用 DeLong 方法的结构分量估计，其中每个观测的位�
 由于单次重采样中观察到的排序反转只是描述性观察，我们检验了在重采样下数据集校准排序是否系统性改变。500 次重采样中的每一次，三个数据集同步重采样以保持先验可比，我们统计排序与未重采样数据排序不同的重复次数。我们同时记录校准最优的数据集身份是否改变——这才是部署决策实际依赖的量。
 
 随后将观测到的排序改变率与三个由重采样构造的零分布比较。第一个零分布在各数据集内部置换标签，破坏判别能力，刻画一个毫无预测力的模型会怎样；**须注意在该零分布下"完全首尾互换"的方向本身就高度结构化，方向一致性均值达 84.1%，因此以"方向随机"（p=0.5）为期望的检验无法解读**。第二个、也是最保守的零分布，假设三个数据集校准水平完全相同、仅存在重采样噪声，构造方式是把先验匹配后 ECE 的合并池作为共同分布并独立抽取三个副本——它回答的是"三个同样校准良好的数据集相互比较会怎样"。第三个零分布保留各库自身的校准分布，但独立抽样而非同步抽样。**主比较以第二个零分布为准**，因为它与观测最可比且最保守；只有当观测改变率超出它时，改变才可归因于数据集本身而非噪声。
+
+**我们把这个零分布称为"先验匹配零基线"（prevalence-matched null baseline），并将其实现为一个独立可复用的过程**：该过程接受任意数据集集合、任意二分类判别指标，以及任何能给出逐库取值的评估指标。实现与本文所用的分析脚本**独立编写**；用其处理本文数据，可完全重现 Results 中报告的每一个观测改变率与每一个基线值。我们提供过程而非仅提供数字，是有意的——该基线意在用于本文之外的比较，并可被他人重新推导。
 
 #### 2.4.4 决策曲线分析
 

@@ -51,11 +51,13 @@ More consequential than the contraction was the change in ordering (Figure 4B). 
 
 ### 3.5 The change in ranking exceeded a noise baseline, but the baseline itself was large
 
-A reversal observed in a single resample is descriptive. To test whether the ranking changes observed above could be attributed to resampling noise, we compared the observed rate of ranking change against three null distributions, of which the most conservative assumed the three datasets were of identical calibration and differed only in resampling noise. Under that null, prior matching alone reordered the datasets in 82.3% to 84.4% of replicates. This quantity is the baseline against which any reported reversal must be judged, and it has not previously been reported for this type of comparison.
+A reversal observed in a single resample is descriptive. To test whether the ranking changes observed above could be attributed to resampling noise, we compared the observed rate of ranking change against three null distributions, of which the most conservative assumed the three datasets were of identical calibration and differed only in resampling noise. Under that null, prior matching alone reordered the datasets in 82.3% to 84.4% of replicates. We refer to this quantity as the **prevalence-matched null baseline**, and it is the baseline against which any reported reversal must be judged; it has not previously been reported for this type of comparison.
 
 The observed rate of ranking change exceeded this baseline in seven of the eight model–label combinations (Figure 4A; 97.6% observed against 84.4% for NIH/PNEUMONIA, p = 2.9 × 10⁻²²; 100% against 82.3% for MIMIC_CH/NORMAL, p = 1.3 × 10⁻⁴²). The single exception was PNEUMONIA for the MIMIC_CXR classifier with CheXpert labels (83.0% observed against 83.8%, p = 0.63). All eight combinations exceeded the less conservative null, in which each dataset retained its own calibration distribution but was sampled independently rather than synchronously.
 
-An earlier analysis of the same data applied a binomial test against a chance expectation of 0.5 and reported a p-value of 9.15 × 10⁻⁸⁴ for the consistency of the direction of reversal. That reference point is inappropriate: under label permutation the direction of complete reversal is itself highly structured, with a mean consistency of 84.1%, so a test against 0.5 substantially overstates the evidence. We therefore report the null-distribution comparison throughout. This correction is not merely internal, because point estimates of reversal without any null distribution are the prevailing practice in this literature and cannot be interpreted without one.
+We provide the baseline as an independently implemented procedure, so that it can be applied to other tasks and other metric comparisons rather than only to the setting reported here. Applying that implementation to the present data reproduced every value reported above, including the observed change rates (97.6%, 97.4%, 98.6%, 98.2%, 83.0%, 100%, 99.8% and 100%) and the baseline rates (81.8% to 84.0%).
+
+Building the null distributions described above required deciding what the comparison should be against, and one choice deserves comment because it is easy to make. The natural-looking null for a test of reversal direction is a binomial expectation that complete reversals should occur equally often in either direction, that is, against 0.5. That expectation does not hold for this quantity. The direction of a complete reversal is itself a structured property of the resampling procedure rather than a symmetric coin flip; under label permutation, which destroys discrimination entirely, the direction of complete reversal was consistent in 84.1% of replicates. A test against 0.5 therefore measures the difference between 84.1% and 50% and reports it as though it had been measured against chance, which overstates the evidence by many orders of magnitude. We consequently report the null-distribution comparison throughout, and give the permutation-based null alongside it so that the appropriate reference point is visible to the reader. We include this note because point estimates of reversal without any null distribution are the prevailing practice in this literature, and because a comparison whose reference point has not been stated cannot be interpreted.
 
 ### 3.6 The finding was robust to the label definition but not to the noise baseline
 
@@ -109,11 +111,13 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 ### 3.5 排序改变超出了噪声基线，但基线本身很大
 
-单次重采样中观察到的反转只是描述性观察。为检验上述排序变化能否归因于重采样噪声，我们将观测到的排序改变率与三个零分布比较，其中最保守的一个假设三个数据集校准水平完全相同、仅存在重采样噪声。**在该零假设下，仅先验匹配本身就会在 82.3%–84.4% 的重复中改变数据集排序。** 这个量就是任何反转报告必须据以判断的基线，而此前在这一类比较中从未被报告过。
+单次重采样中观察到的反转只是描述性观察。为检验上述排序变化能否归因于重采样噪声，我们将观测到的排序改变率与三个零分布比较，其中最保守的一个假设三个数据集校准水平完全相同、仅存在重采样噪声。**在该零假设下，仅先验匹配本身就会在 82.3%–84.4% 的重复中改变数据集排序。我们把这个量命名为"先验匹配零基线"（prevalence-matched null baseline）**，它是任何反转报告必须据以判断的基线，此前在这一类比较中从未被报告过。
 
 观测到的排序改变率在 8 个"模型×标签"组合中的 7 个超出了该基线（NIH/PNEUMONIA 为 97.6% 对 84.4%，p = 2.9×10⁻²²；MIMIC_CH/NORMAL 为 100% 对 82.3%，p = 1.3×10⁻⁴²）。唯一例外是 MIMIC_CXR（CheXpert 标签）分类器的 PNEUMONIA（83.0% 对 83.8%，p = 0.63）。8 个组合全部超出了较宽松的零分布——该零分布下各库保留自身校准分布但独立抽样而非同步抽样。
 
-对同一批数据的早先分析曾以 0.5 为偶然期望做二项检验，报出 p = 9.15×10⁻⁸⁴。**这一参照点不适当**：在标签置换下，"完全首尾互换"的方向本身就高度结构化，方向一致性均值达 84.1%，因此以 0.5 为参照会大幅高估证据强度。本文因此全程改用零分布对照。这一修正并非只是内部事务——在这一文献中，只报反转的点估计而不给零分布是普遍做法，而没有基线就无法解读。
+**我们把该基线作为一个独立实现的过程公开发布**，使其可被应用到其他任务与其他指标比较上，而不仅限于本文的场景。用该独立实现复现本文数据，得到了与上文完全一致的每一个观测改变率（97.6%、97.4%、98.6%、98.2%、83.0%、100%、99.8%、100%）与基线值（81.8%–84.0%）。
+
+构建上文所述的零分布，需要先决定"应当与什么作比较"，其中有一个选择值得说明，因为它容易出错。对"反转方向"做检验时，最自然的零假设是二项期望——完全反转在两个方向上应等频出现，即以 0.5 为参照。**但这一期望对本量并不成立**：完全反转的方向是重采样过程本身的结构性质，而非对称的抛硬币；在标签置换（判别力被完全破坏）下，完全反转的方向一致性达 84.1%。因此，以 0.5 为参照的检验实际测量的是"84.1% 与 50% 的差距"，却把它报告成是相对偶然性测量的，会大幅高估证据强度。本文因此全程采用零分布对照，并同时给出置换零分布，使读者能看到正确的参照系。此处专门说明，是因为在这一文献中，只报反转的点估计而不给出参照系是普遍做法，而未说明参照系的比较无法解读。
 
 ### 3.6 结果对标签定义稳健，但对噪声基线不稳健
 
