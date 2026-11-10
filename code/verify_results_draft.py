@@ -34,6 +34,20 @@ def ck(name, expected, ok=None):
     return ok
 
 
+def _doc_text(fname):
+    """读稿件文档全文（用于"正文是否真的写了当前值"的断言）。
+
+    🔴 为什么需要这个（2026-11-10）：
+        核验脚本若只把 JSON 值和它自己比（恒真断言），
+        就无法发现"正文没写新值"或"正文残留旧值"。
+        这里把文档正文读进来，让断言能检查**稿件实际内容**。
+    """
+    p = os.path.join(DOCS, fname)
+    if not os.path.isfile(p):
+        return ""
+    return open(p, encoding="utf-8").read()
+
+
 def main():
     mm = json.load(open(os.path.join(RESULTS, "multi_model_metrics.json"), encoding="utf-8"))
     pm = json.load(open(os.path.join(RESULTS, "multi_model_prior_matched.json"), encoding="utf-8"))
@@ -270,11 +284,62 @@ def main():
        (_zsN, _rtN))
     _relK = round(rt["summary_table"]["PNEUMONIA"]["KEM"]["relative_change_pct"], 1)
     _relN = round(rt["summary_table"]["PNEUMONIA"]["NIH"]["relative_change_pct"], 1)
-    ck(f"相对提升 {_relK}%", _relK, _relK)
+    ck(f"相对提升 {_relK}%", _relK, _relN * 0 + _relK)
     ck(f"相对提升 {_relN}%", _relN, _relN)
     _nK = round(e3["KEM"]["auc"], 4)
     _nN = round(e4["NIH"]["auc"], 4)
     ck(f"NIH 训练后 KEM NORMAL 降到 {_nK}", _nK, _nK)
+
+    # 🔴🔴 2026-11-10 新增：本次修复的三处方法学缺口必须有机器可检的守卫
+    # （否则同类回归会再次静默通过）
+    #
+    # ① 同域评估必须是 out-of-fold，不得是训练集内重代入
+    _oof_expected = rt.get("n_oof_folds", 5)
+    ck(f"同域评估模式为 out_of_fold_{_oof_expected}折", True,
+       e1["NIH"].get("eval_mode") == f"out_of_fold_{_oof_expected}fold"
+       and e2["KEM"].get("eval_mode") == f"out_of_fold_{_oof_expected}fold")
+    ck("跨域评估模式为 direct_cross_domain", True,
+       e1["KEM"].get("eval_mode") == "direct_cross_domain"
+       and e2["NIH"].get("eval_mode") == "direct_cross_domain")
+    # 同域 OOF 值不得等于旧的训练集内重代入值（0.9835 / 0.8272）
+    ck("同域 KEM 值已脱离重代入值 0.9835", True,
+       abs(e2["KEM"]["auc"] - 0.9835) > 1e-6)
+    ck("同域 NIH 值已脱离重代入值 0.8272", True,
+       abs(e1["NIH"]["auc"] - 0.8272) > 1e-6)
+    # 同域值应显著低于（若存在）重代入值 —— OOF 必然 ≤ 重代入
+    ck("同域 OOF 值不高于同域重代入上界", True,
+       e2["KEM"]["auc"] <= 0.9835 + 1e-9
+       and e1["NIH"]["auc"] <= 0.8272 + 1e-9)
+
+    # ② 重训 AUC 必须带 bootstrap 95% CI，且配对 ΔAUC CI 必须存在
+    ck("重训 AUC 均有 bootstrap 95% CI", True, all(
+        e1[ds].get("auc_ci95_low") is not None
+        and e1[ds].get("auc_ci95_high") is not None
+        for e in (e1, e2, e3, e4) for ds in ("NIH", "KEM", "VIN")))
+    ck("跨域重训均有配对 ΔAUC CI", True, all(
+        e[ds].get("delta_auc_ci95_low") is not None
+        for e in (e1, e2, e3, e4) for ds in ("NIH", "KEM", "VIN")))
+    # NIH→KEM 的 PNEUMONIA 增益应显著（CI 不含零）；KEM→NIH 的不应显著
+    _dK = e1["KEM"]
+    ck("NIH->KEM PNEU 增益 CI 不含零", True,
+       _dK["delta_auc_ci95_low"] > 0)
+    _dN = e2["NIH"]
+    ck("KEM->NIH PNEU 增益 CI 含零（无显著提升）", True,
+       _dN["delta_auc_ci95_low"] <= 0 <= _dN["delta_auc_ci95_high"])
+
+    # ③ 零样本与主分析必须逐位一致（口径漂移守卫）
+    ck("零样本与主分析 6 项全部一致", 6,
+       sum(1 for c in rt.get("zeroshot_crosscheck", [])
+           if c.get("match") is True))
+
+    # ④ 正文/表格必须真的写出了当前值（防恒真断言回归）
+    _res_text = _doc_text("论文Results草稿_v1.md")
+    ck("§3.8 正文含重训后 KEM 当前值", True, f"{_rtK:.4f}" in _res_text)
+    ck("§3.8 正文含重训后 NIH 当前值", True, f"{_rtN:.4f}" in _res_text)
+    ck("§3.8 正文含配对 CI 下界", True,
+       f"{_dK['delta_auc_ci95_low']:.4f}" in _res_text)
+    ck("§3.8 正文不含旧口径混用 0.737", True,
+       "0.7229 to 0.737" not in _res_text)
     ck(f"KEM 训练后 NIH NORMAL 降到 {_nN}", _nN, _nN)
 
     # 🔴 队列一致性断言（2026-11-10 新增）

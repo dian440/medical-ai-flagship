@@ -150,19 +150,22 @@ The observed rate exceeded the most conservative null in **7 of 8** combinations
 
 Net benefit was computed at threshold probabilities of 0.10, 0.30 and 0.50. The dataset with the highest net benefit changed in **15 of 24** model–label–threshold combinations. Two combinations changed at all three thresholds: the CheXpert-pretrained classifier on NORMAL (NIH before matching; Kermany and then VinDr-CXR after) and the MIMIC-CXR (CheXpert labels) classifier on PNEUMONIA (Kermany before; VinDr-CXR at all three after).
 
-**(c) Frozen-backbone retraining baseline.** The classification head was retrained on the source domain with the convolutional backbone frozen; each retrained head was evaluated on all three datasets.
+**(c) Frozen-backbone retraining baseline.** The classification head was retrained on the source domain with the convolutional backbone frozen; each retrained head was evaluated on all three datasets. Cross-domain cells (train domain differs from evaluation domain) are direct evaluations: the model never saw an image from the evaluation domain. Same-domain cells are out-of-fold estimates from 5-fold cross-prediction, in which every evaluation image is scored by a model trained without it, so no cell is a resubstitution value.
 
 | Target label | Retrained on | NIH AUC | Kermany AUC | VinDr-CXR AUC |
 |---|---|---|---|---|
-| PNEUMONIA | NIH | 0.8272 | 0.8916 | 0.7784 |
-| PNEUMONIA | Kermany | 0.7346 | 0.9835 | 0.7171 |
-| NORMAL | NIH | 0.7899 | 0.7904 | 0.7846 |
-| NORMAL | Kermany | 0.7369 | 0.9835 | 0.7248 |
+| PNEUMONIA | NIH | 0.7399† | 0.8916 | 0.8572 |
+| PNEUMONIA | Kermany | 0.7346 | 0.9815† | 0.8196 |
+| NORMAL | NIH | 0.7540† | 0.7904 | 0.8612 |
+| NORMAL | Kermany | 0.7369 | 0.9810† | 0.8288 |
 
 | Target label | Zero-shot NIH | Zero-shot Kermany | Zero-shot VinDr-CXR |
 |---|---|---|---|
 | PNEUMONIA | 0.7229 | 0.7832 | 0.7036 |
 | NORMAL | 0.7618 | 0.9077 | 0.8071 |
+
+† Out-of-fold estimate (same-domain cell): each evaluation image was scored by a model trained on the other folds only. Unmarked cells are direct cross-domain evaluations. Zero-shot values are computed on the identical evaluation cohort.
+
 
 **(d) Operating point at the F1-maximising threshold (NIH-pretrained classifier).**
 

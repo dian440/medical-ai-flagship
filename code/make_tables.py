@@ -320,7 +320,11 @@ def table5(d):
         f"(Kermany before; VinDr-CXR at all three after).",
         "",
         "**(c) Frozen-backbone retraining baseline.** The classification head was retrained on the source "
-        "domain with the convolutional backbone frozen; each retrained head was evaluated on all three datasets.",
+        "domain with the convolutional backbone frozen; each retrained head was evaluated on all three datasets. "
+        "Cross-domain cells (train domain differs from evaluation domain) are direct evaluations: the model "
+        "never saw an image from the evaluation domain. Same-domain cells are out-of-fold estimates from "
+        f"{rt.get('n_oof_folds', 5)}-fold cross-prediction, in which every evaluation image is scored by a model "
+        "trained without it, so no cell is a resubstitution value.",
         "",
         "| Target label | Retrained on | NIH AUC | Kermany AUC | VinDr-CXR AUC |",
         "|---|---|---|---|---|",
@@ -330,8 +334,14 @@ def table5(d):
                          ("retrain_on_NIH_for_NORMAL", "NORMAL", "NIH"),
                          ("retrain_on_KEM_for_NORMAL", "NORMAL", "Kermany")):
         e = rt["experiments"][key]["evals"]
-        lines.append(f"| {lbl} | {tr} | " +
-                     " | ".join(f"{e[ds]['auc']:.4f}" for ds in DATASETS) + " |")
+        cells = []
+        for ds in DATASETS:
+            rec = e[ds]
+            auc = rec.get("auc")
+            mode = rec.get("eval_mode", "")
+            mark = "†" if mode.startswith("out_of_fold") else ""
+            cells.append(f"{auc:.4f}{mark}" if auc is not None else "n/a")
+        lines.append(f"| {lbl} | {tr} | " + " | ".join(cells) + " |")
     z = rt["zeroshot_baseline"]
     lines += [
         "",
@@ -341,6 +351,11 @@ def table5(d):
     for lbl in LABELS:
         lines.append(f"| {lbl} | " + " | ".join(f"{z[ds][lbl]['auc']:.4f}" for ds in DATASETS) + " |")
     lines += [
+        "",
+        "† Out-of-fold estimate (same-domain cell): each evaluation image was scored by a model trained on the "
+        "other folds only. Unmarked cells are direct cross-domain evaluations. Zero-shot values are computed on "
+        "the identical evaluation cohort.",
+        "",
         "",
         "**(d) Operating point at the F1-maximising threshold (NIH-pretrained classifier).**",
         "",

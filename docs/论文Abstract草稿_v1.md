@@ -17,15 +17,15 @@
 
 ### Background
 
-Cross-dataset evaluation is the principal evidence on whether a released chest radiograph classifier will perform acceptably elsewhere. Metric choice, label definition and class prevalence all influence the ordering of datasets by reported performance, yet are rarely examined together, and the noise baseline against which such orderings should be judged has not been established.
+Cross-dataset evaluation is the principal evidence on whether a released chest radiograph classifier performs acceptably elsewhere. Metric choice, label definition and class prevalence all influence the ordering of datasets by reported performance, yet are rarely examined together, and the noise baseline against which such orderings should be judged has not been established.
 
 ### Methods
 
-We evaluated four publicly released DenseNet-121 classifiers pretrained on the NIH ChestX-ray14, CheXpert and two MIMIC-CXR label variants on three chest radiograph datasets (2,819; 5,824; 702 images), each reduced to one identically defined task. Discrimination was compared with DeLong's test using a variance estimator corrected for an error common in public implementations and verified three ways. Calibration was assessed as ten-bin expected calibration error before and after resampling all datasets 500 times to a common prevalence, and the ranking change was tested against a null of identical calibration. A frozen-backbone retraining baseline separated distribution shift from model failure.
+We evaluated four released DenseNet-121 classifiers pretrained on the NIH ChestX-ray14, CheXpert and two MIMIC-CXR label variants on three chest radiograph datasets (2,819; 5,824; 702 images), each reduced to one identically defined task. Discrimination was compared with DeLong's test using a variance estimator corrected for an error common in public implementations, verified three ways. Calibration was assessed as ten-bin expected calibration error before and after resampling all datasets 500 times to a common prevalence, and the ranking change was tested against a null of identical calibration. A frozen-backbone retraining baseline separated distribution shift from model failure.
 
 ### Results
 
-Across four pretrained classifiers, discrimination did not fall on the external datasets, and all seven significant differences indicated an *easier* external dataset. Calibration differed far more than discrimination, and the two metrics ranked datasets oppositely in four of eight model–label combinations. Resampling to a common prevalence contracted calibration spread in seven of eight combinations, retaining 24–78%, and reversed the calibration ranking in all eight. The induced change in ranking exceeded a noise baseline in seven of eight combinations (p ≤ 2.9 × 10⁻²²); under a null of identical calibration, prior matching alone reordered the datasets in 83–84% of resamples. We term this the prevalence-matched null baseline and provide it as a reusable procedure. Retraining recovered most of the degradation in one direction (0.783 → 0.892) but little in the other (0.723 → 0.737).
+Across four pretrained classifiers, discrimination did not fall on the external datasets, and all seven significant differences indicated an *easier* external dataset. Calibration differed far more than discrimination, and metrics ranked datasets oppositely in four of eight model–label combinations. Resampling to a common prevalence contracted calibration spread in seven of eight combinations, retaining 24–78%, and reversed calibration ranking in all eight. The change in ranking exceeded a noise baseline in seven of eight combinations (p ≤ 2.9 × 10⁻²²); under a null of identical calibration, prior matching alone reordered the datasets in 83–84% of resamples. We term this the prevalence-matched null baseline and provide it as a reusable procedure. Retraining recovered most of the degradation in one direction (0.783 → 0.892), exceeding resampling noise, but little in the other (0.723 → 0.735), which did not.
 
 ### Conclusions
 
@@ -45,7 +45,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 我们评估了四个公开发布的 DenseNet-121 分类器（分别在 NIH ChestX-ray14、CheXpert 与两个 MIMIC-CXR 标签变体上预训练，主分析中未做微调），在三个独立采集的胸片数据集上评估（2,819；5,824；702 张），每个数据集均归约为在全部"数据集×模型"组合上定义完全一致的单一二分类任务。判别能力用 DeLong 检验比较，其方差估计量修正了公开实现中常见的一处错误，并以三种独立方法交叉验证。校准以十箱期望校准误差衡量；随后把各数据集重采样 500 次至共同类别先验，**并把由此产生的排序改变与"三个数据集校准水平完全相同"的零分布比较——该基线实测为 82%–84%**。以冻结骨干的重训基线，把输入分布的偏移与模型的失效区分开来。
 
 ### 结果
-在四个预训练分类器上，判别能力在外部数据集上均未下降，且全部 7 组具有统计显著性的差异都指向一个**更容易**的外部数据集。校准的差异远大于判别能力，且两个指标在 8 个"模型×标签"组合中的 4 个上对数据集的排序相反。把各数据集重采样到共同先验后，**8 个"模型×标签"组合中有 7 个的校准跨度收缩**，仅保留原跨度的 24%–78%，且 8 个组合的校准排序全部发生反转。由此产生的排序改变在 7/8 的组合中**超出了噪声基线**（p ≤ 2.9 × 10⁻²²）；**在"三个数据集校准水平完全相同"的零假设下，仅先验匹配本身就会在 82%–84% 的重采样中改变排序**——**我们把这个量命名为"先验匹配零基线"（prevalence-matched null baseline），并将其作为可复用的过程公开发布**。重训在一个方向上救回了大部分衰减（Kermany AUC 0.783 → 0.892），在另一方向上则几乎无效（NIH 0.723 → 0.737）。
+在四个预训练分类器上，判别能力在外部数据集上均未下降，且全部 7 组具有统计显著性的差异都指向一个**更容易**的外部数据集。校准的差异远大于判别能力，且两个指标在 8 个"模型×标签"组合中的 4 个上对数据集的排序相反。把各数据集重采样到共同先验后，**8 个"模型×标签"组合中有 7 个的校准跨度收缩**，仅保留原跨度的 24%–78%，且 8 个组合的校准排序全部发生反转。由此产生的排序改变在 7/8 的组合中**超出了噪声基线**（p ≤ 2.9 × 10⁻²²）；**在"三个数据集校准水平完全相同"的零假设下，仅先验匹配本身就会在 82%–84% 的重采样中改变排序**——**我们把这个量命名为"先验匹配零基线"（prevalence-matched null baseline），并将其作为可复用的过程公开发布**。重训在一个方向上救回了大部分衰减（Kermany AUC 0.783 → 0.892）且超出了重采样噪声，在另一方向上则几乎无效（NIH 0.723 → 0.735）且不能与零区分。
 
 ### 结论
 胸片分类器的跨数据集比较对类别先验并不稳健，且由此产生的排序改变**超出了仅由重采样噪声所能解释的程度**。**由于即便三个数据集校准水平完全相同，也会有超过五分之四的重采样改变排序**，任何缺少患病率控制与噪声基线的校准比较都可能报告伪影性的结论；而外部数据集上判别能力的正向差异，也可能意味着基准更弱而非模型更具可迁移性。
@@ -64,9 +64,9 @@ Four publicly released DenseNet-121 classifiers pretrained on the NIH ChestX-ray
 
 ### Results
 
-Across four pretrained classifiers, discrimination did not fall externally, and all seven significant differences indicated an easier external dataset. Resampling all datasets to a common prevalence contracted the calibration spread in seven of eight model–label combinations, retaining 24–78%, and reversed the calibration ranking in all eight. The induced change in ranking exceeded a noise baseline in seven of eight combinations (p ≤ 2.9 × 10⁻²²); under a null of identical calibration, prior matching alone reordered datasets in 83–84% of resamples, a quantity we term the prevalence-matched null baseline and release as a reusable procedure. Retraining recovered degradation in one direction (0.783 → 0.892) but not the other (0.723 → 0.737).
+Across four pretrained classifiers, discrimination did not fall externally, and all seven significant differences indicated an easier external dataset. Resampling all datasets to a common prevalence contracted the calibration spread in seven of eight model–label combinations, retaining 24–78%, and reversed calibration ranking in all eight. The change in ranking exceeded a noise baseline in seven of eight combinations (p ≤ 2.9 × 10⁻²²); under a null of identical calibration, prior matching alone reordered datasets in 83–84% of resamples, a quantity we term the prevalence-matched null baseline and release as a reusable procedure. Retraining recovered degradation in one direction (0.783 → 0.892) but not the other (0.723 → 0.737).
 
-Cross-dataset comparisons of chest radiograph classifiers are not invariant to class prevalence, and the resulting change in ranking exceeds the noise expected from resampling alone. Because even identically calibrated datasets are reordered in more than four fifths of resamples, comparisons omitting prevalence control and a noise baseline may report artefactual conclusions.
+Cross-dataset comparisons of chest radiograph classifiers are not invariant to class prevalence, and the resulting change in ranking exceeds the noise from resampling alone. Because even identically calibrated datasets are reordered in more than four fifths of resamples, comparisons omitting prevalence control and a noise baseline may report artefactual conclusions.
 
 ---
 
@@ -80,7 +80,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 | 排序 8/8 全部反转 | `multi_model_prior_matched.json` | `rank_reversed`（8 组全为 true） |
 | 排序改变 7/8 超出基线，p ≤ 2.9×10⁻²² | `noise_baseline.json` | `exceeds_same`；`p_vs_same`（7 个超出组合中最大 p = 2.876×10⁻²²） |
 | 基线 82%–84% | `noise_baseline.json` | `baseline_same_dist`（三库同分布基线，实测 82.5%–84.4%） |
-| 重训 0.783→0.892、0.723→0.737 | `retrain_baseline.json` | `summary_table.*.*.retrained_auc` |
+| 重训 0.7832→0.8916、0.7229→0.7346 | `retrain_baseline.json` | `summary_table.PNEUMONIA.*.{zeroshot_auc,retrained_auc}` |
 
 > **⚠️ 2026-11-09 数字勘误**：本文件早先版本写"全部 11 组显著差异"与"p ≤ 1.3 × 10⁻²²"，两处均已更正为 **7 组**与 **p ≤ 2.9 × 10⁻²²**。
 > 更正依据：由 `multi_model_metrics.json` 直接统计，16 组比较中 p<0.05 者为 7 组（全部 Δ<0）；`noise_baseline.json` 中 7 个超出基线组合的最大 p 为 2.876×10⁻²²。

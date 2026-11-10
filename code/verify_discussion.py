@@ -41,6 +41,34 @@ def ck(name, expected, actual):
         failures.append(name)
 
 
+def _verified_ref_numbers():
+    """从参考文献总表解析**已核实**条目的编号集合。
+
+    🔴 为什么不用硬编码（2026-11-10 修）：
+        原实现写死 `set(range(1, 17))`，新增文献 [20][21] 后，
+        正文引用会被误判为"不在清单内"。清单只应有一处真相 ——
+        参考文献总表本身。
+
+    解析规则：只认表格行 `| [n] | ... | ... | ✅ ... |`，
+    即"已核实文献"表中的行；标注为"待人工核实"的条目不在其中，
+    因此**不可能**因为总表里列了候选文献就误认为已核实。
+    """
+    path = os.path.join(DOCS, "参考文献总表_v1.md")
+    if not os.path.isfile(path):
+        return set()
+    txt = open(path, encoding="utf-8").read()
+    out = set()
+    for line in txt.split("\n"):
+        if not line.startswith("| ["):
+            continue
+        if "✅" not in line:
+            continue          # 仅收已核实（带 ✅）的行
+        m = re.match(r"\|\s*\[(\d{1,2})\]", line)
+        if m:
+            out.add(int(m.group(1)))
+    return out
+
+
 def main():
     if not os.path.exists(DOC):
         print(f"❌ 找不到 {DOC}")
@@ -108,9 +136,19 @@ def main():
     # ⚠️ 从 JSON 动态取值——写死旧值会在重算后误报（已发生三次）
     _rtK = round(e1["KEM"]["auc"], 4)
     _rtN = round(e2["NIH"]["auc"], 4)
-    ck(f"§4.1 重训后 {_rtK}", _rtK, _rtK)
+    # 🔴🔴 2026-11-10 修正：原写法是 `ck(f"...{_rtK}", _rtK, _rtK)` ——
+    #    拿 JSON 值和它自己比，**恒为真**，等于没检查。
+    #    真正的检查是：正文里**必须出现**JSON 的当前值。
+    ck(f"§4.1 正文含重训后 KEM 值 {_rtK}", True, f"{_rtK:.4f}" in en)
     ck("§4.1 重训 NIH 0.7229", 0.7229, round(z["NIH"]["PNEUMONIA"]["auc"], 4))
-    ck(f"§4.1 重训后 {_rtN}", _rtN, _rtN)
+    ck(f"§4.1 正文含重训后 NIH 值 {_rtN}", True, f"{_rtN:.4f}" in en)
+    # 🔴 口径混用守卫：0.737 是 NORMAL 任务的重训值，曾被误写进
+    #    PNEUMONIA 语境（"0.723 → 0.737"）。若正文再出现该组合即报错。
+    ck("§4.1 未出现 PNEUMONIA/NORMAL 口径混用 (0.737)", True,
+       "0.723 to 0.737" not in en and "0.723 → 0.737" not in en)
+    # 🔴 同域评估不得再报重代入值（旧版 0.9835 为训练集内 AUC）
+    ck("§4.1 正文不含同域重代入值 0.9835", True, "0.9835" not in en)
+    ck("§4.1 正文不含同域重代入值 0.8272", True, "0.8272" not in en)
     # 🔴 队列一致性（2026-11-10 新增）：零样本与重训必须同一批样本
     ck("§4.1 零样本 KEM NORMAL 用四模型口径（非旧单模型 0.8744）", True,
        abs(z["KEM"]["NORMAL"]["auc"]
@@ -242,9 +280,18 @@ def main():
     ck("英文正文无项目符号行", [], bullet_lines)
 
     # ---------- 引用编号必须都在已核实清单内 ----------
+    # 🔴 2026-11-10 修：原实现硬编码 `set(range(1, 17))`，
+    #    新增文献 [20][21] 后正文引用会被误判为"不在清单内"。
+    #    改为**直接读参考文献总表**中"已核实文献"表格的编号 ——
+    #    这样清单只有一处真相，且新增文献时不可能漏同步。
     refs = set(int(x) for x in re.findall(r"\[(\d{1,2})\]", en))
-    valid = set(range(1, 17))
+    valid = _verified_ref_numbers()
+    ck("参考文献总表可解析出已核实编号", True, len(valid) > 0)
     ck("正文引用的编号均在已核实清单内", [], sorted(refs - valid))
+    # Discussion 正文引 8 条（其余在 Introduction/Methods）；
+    # 参考文献总表建议 Discussion 引 10–16 条，此处按现状断言，
+    # 若后续补引只需改这个数字，不会漏改别处。
+    ck("正文至少引用 8 条", True, len(refs) >= 8)
 
     # ---------- 汇总 ----------
     print("=" * 88)

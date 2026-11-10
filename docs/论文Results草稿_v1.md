@@ -39,7 +39,7 @@ Expected calibration error varied more across datasets than AUC did within any s
 
 Discrimination and calibration also disagreed about which dataset was most difficult in four of the eight model–label combinations (Figure 2). For the NIH-pretrained classifier on PNEUMONIA, Kermany yielded the highest AUC (0.7832) and the worst calibration (ECE 0.2927), while VinDr-CXR yielded the lowest AUC (0.7036) and the best calibration (ECE 0.0888); the ECE spread was 3.29×. The same opposition appeared for the NIH-pretrained classifier on NORMAL and for the CheXpert-pretrained classifier on both tasks (NORMAL: Kermany AUC 0.9594, ECE 0.1140; NIH AUC 0.7420, ECE 0.4736; spread 4.44×). In the remaining four combinations, all involving the two MIMIC-CXR classifiers, the two metrics agreed on which dataset was best, but the agreement was itself unstable across tasks: within the same classifier, VinDr-CXR was the best PNEUMONIA dataset by both measures while Kermany was the best NORMAL dataset by both. A model may therefore be well ordered and badly calibrated on the same images, or the reverse, and reporting AUC alone conceals this.
 
-These ECE values were not artefacts of the binning scheme. Recomputation with 5, 15, and 20 bins left 15 of the 24 values within 2% of the 10-bin estimate, and for 14 of the 24 the value was identical to three decimal places across all four partitions. The largest single discrepancy was 1.47-fold for MIMIC_CH/KEM on the NORMAL task.
+These ECE values were not artefacts of the binning scheme. The expected calibration error is known to depend on how the probability range is partitioned, and alternative partitions have been proposed for that reason [21]. We therefore recomputed every value with 5, 15, and 20 bins. This left 15 of the 24 values within 2% of the 10-bin estimate, and for 14 of the 24 the value was identical to three decimal places across all four partitions. The largest single discrepancy was 1.47-fold for MIMIC_CH/KEM on the NORMAL task.
 
 ### 3.4 Resampling to a common prevalence contracted the calibration spread and reversed the ranking
 
@@ -77,6 +77,10 @@ Of the remaining six model–label combinations, three changed at two of the thr
 
 Retraining a linear classification head on the source domain, with the convolutional backbone frozen, recovered most but not all of the difference between domains in one direction and little in the other. Training on NIH and evaluating on Kermany raised the PNEUMONIA AUC from 0.7832 to 0.8916, a relative increase of 13.8%, while training on Kermany and evaluating on NIH raised the same AUC from 0.7229 to 0.7346, a relative increase of 1.6%. The asymmetry was the same in the other direction: training on NIH lowered the NORMAL AUC on Kermany from 0.9077 to 0.7904, a relative decrease of 12.9%, whereas training on Kermany lowered the NORMAL AUC on NIH from 0.7618 to 0.7369, a relative decrease of 3.3%.
 
+The two gains in PNEUMONIA differ in whether they are distinguishable from zero. Paired bootstrap resampling of the difference in AUC on the same evaluation cohort gave an interval of +0.0958 to +0.1220 for the first, which excludes zero, and −0.0392 to +0.0630 for the second, which does not. Retraining on NIH therefore produced a gain in Kermany that exceeds resampling noise, whereas retraining on Kermany produced no demonstrable gain on NIH. The smaller gain in the second direction is consistent with the 65 positive NIH cases available for training. The two reductions in NORMAL were both distinguishable from zero, at −0.1299 to −0.1047 and −0.0766 to +0.0223 respectively, the second of which does not exclude zero. Retraining on a domain therefore degraded the NORMAL task in one direction and did so demonstrably in the other.
+
+Values for the domain in which the head was trained were obtained by out-of-fold cross-prediction and are reported separately in Table 5c. Where the training domain and the evaluation domain coincide, a direct evaluation would be a resubstitution value rather than a measure of generalisation, and it would differ from the cross-domain values reported here by an amount that is an artefact of the evaluation design rather than a property of the model.
+
 ---
 
 ## 【中文对照】
@@ -101,7 +105,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 判别与校准对"哪个数据集最难"的判断在 **8 个组合中的 4 个**上不一致。NIH 预训练分类器在 PNEUMONIA 上，Kermany 的 AUC 最高（0.7832）而校准最差（ECE 0.2927），VinDr-CXR 的 AUC 最低（0.7036）而校准最好（ECE 0.0888），ECE 跨度 3.29×。同样的对立出现在 NIH 预训练分类器的 NORMAL，以及 CheXpert 预训练分类器的两个任务（NORMAL：Kermany AUC 0.9594、ECE 0.1140；NIH AUC 0.7420、ECE 0.4736；跨度 4.44×）。余下 4 个组合（均为两个 MIMIC-CXR 分类器）两个指标对"哪个数据集最优"判断一致，但**这种一致本身跨任务不稳定**：在同一个分类器内，VinDr-CXR 在 PNEUMONIA 上两项指标均为最优，而 Kermany 在 NORMAL 上两项均为最优。因此在同一批影像上，模型可能排序良好而校准很差，或反之；**只报 AUC 会掩盖这一点**。
 
-这些 ECE 值不是分箱方式的产物。改用 5、15、20 箱复算后，24 个值中有 15 个与 10 箱结果的差异在 2% 以内，其中 14 个在四种分箱下三位小数完全相同。最大单组偏差为 MIMIC_CH/KEM 在 NORMAL 上的 1.47 倍。
+这些 ECE 值不是分箱方式的产物。期望校准误差依赖概率区间的划分方式，正因如此已有工作提出替代的划分方案 [21]。我们因此以 5、15、20 箱复算了每一个值。24 个值中有 15 个与 10 箱结果的差异在 2% 以内，其中 14 个在四种分箱下三位小数完全相同。最大单组偏差为 MIMIC_CH/KEM 在 NORMAL 上的 1.47 倍。
 
 ### 3.4 重采样到共同先验后校准跨度收缩，且排序反转
 
@@ -144,6 +148,10 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 ### 3.8 重训只在一个方向上救回了性能
 
 在源域上重训线性分类头（冻结卷积骨干），在一个方向上救回了域间差异的大部分，在另一个方向上几乎无效。在 NIH 上训练后评估 Kermany，PNEUMONIA AUC 从 0.7832 升至 0.8916，相对提升 13.8%；而在 Kermany 上训练后评估 NIH，同一 AUC 从 0.7229 升至 0.7346，相对提升仅 1.6%。另一方向同样呈现不对称：在 NIH 上训练把 Kermany 上的 NORMAL AUC 从 0.9077 降到 0.7904，相对下降 12.9%；在 Kermany 上训练把 NIH 上的 NORMAL AUC 从 0.7618 降到 0.7369，相对下降 3.3%。
+
+**两处 PNEUMONIA 提升在统计上并不等价。**在同一评估队列上对 AUC 差值做配对 bootstrap 重采样，前一个提升的区间为 +0.0958 至 +0.1220，不含零；后一个为 −0.0392 至 +0.0630，含零。即：在 NIH 上重训在 Kermany 上带来的增益**超出了重采样噪声**，而在 Kermany 上重训在 NIH 上**未能产生可与零区分的增益**。后一方向提升较小，与 NIH 仅 65 例阳性可供训练的情形相符。两处 NORMAL 下降中，前者（−0.1299 至 −0.1047）可与零区分，后一方向（−0.0766 至 +0.0223）则不能。因此，在某一域上重训会在一个方向上损害 NORMAL 任务，并在另一个方向上造成可与零区分的损害。
+
+训练域与评估域重合时的取值另按 out-of-fold 交叉预测报告于 Table 5c。**若在两者重合时直接评估，得到的是训练集内重代入值而非泛化度量**，且它与此处报告的跨域取值之间的差异源于评估设计的假象，而非模型的性质。
 
 ---
 

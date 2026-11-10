@@ -1,16 +1,25 @@
 {
-  "generated": "2026-11-09",
+  "generated": "2026-11-10",
+  "version": "v3 · train/eval separation + out-of-fold same-domain evaluation + bootstrap CIs",
   "seed": 20261104,
+  "bootstrap_seed": 20261103,
+  "n_boot": 2000,
   "probe_type": "per_label_linear_probe_on_frozen_backbone",
   "epochs": 40,
   "fixed_epochs_sensitivity": 20,
+  "n_oof_folds": 5,
   "eval_cohort": {
     "source": "results/multi_model_predictions.csv, rows with model == 'NIH' (authoritative four-model evaluation list; identical to the cohort used by multi_model_metrics.json)",
-    "note": "Evaluation samples are restricted to exactly the images that entered the main cross-dataset evaluation, so that zero-shot and retrained AUC are computed on identical samples. Training samples use all labelled images of the source domain.",
+    "note": "Training pool and evaluation cohort are separate. Training pool = all labelled, de-duplicated images of the source domain. Evaluation cohort = exactly the images that entered the main cross-dataset evaluation. Same-domain evaluation uses out-of-fold predictions.",
     "dropped_vs_full_labelled_index": {
       "NIH": 0,
-      "KEM": 4,
+      "KEM": 0,
       "VIN": 12
+    },
+    "n_train_pool": {
+      "NIH": 2819,
+      "KEM": 5824,
+      "VIN": 714
     },
     "n_eval": {
       "NIH": 2819,
@@ -18,7 +27,51 @@
       "VIN": 702
     }
   },
-  "caveat": "测试集选最佳 epoch 会乐观偏倚；三对照使用完全相同的选择规则，故相对比较仍公平。固定 epoch 版本见 sensitivity_fixed_epochs 字段。",
+  "caveat": "这是 linear probe（冻结骨干只训分类头），不是 full fine-tuning。epoch 由训练集内 20% 分层验证集选择，所有对照使用完全相同的规则，故相对比较公平。",
+  "zeroshot_crosscheck": [
+    {
+      "key": "NIH_PNEUMONIA",
+      "multi_model_metrics": 0.7228590581531759,
+      "recomputed_here": 0.7228590581531759,
+      "abs_diff": 0.0,
+      "match": true
+    },
+    {
+      "key": "KEM_PNEUMONIA",
+      "multi_model_metrics": 0.7831876864410762,
+      "recomputed_here": 0.7831876864410762,
+      "abs_diff": 0.0,
+      "match": true
+    },
+    {
+      "key": "VIN_PNEUMONIA",
+      "multi_model_metrics": 0.7036422708618331,
+      "recomputed_here": 0.7036422708618331,
+      "abs_diff": 0.0,
+      "match": true
+    },
+    {
+      "key": "NIH_NORMAL",
+      "multi_model_metrics": 0.7618121892631697,
+      "recomputed_here": 0.7618121892631697,
+      "abs_diff": 0.0,
+      "match": true
+    },
+    {
+      "key": "KEM_NORMAL",
+      "multi_model_metrics": 0.9076850088507061,
+      "recomputed_here": 0.9076850088507061,
+      "abs_diff": 0.0,
+      "match": true
+    },
+    {
+      "key": "VIN_NORMAL",
+      "multi_model_metrics": 0.8071306429548564,
+      "recomputed_here": 0.8071306429548564,
+      "abs_diff": 0.0,
+      "match": true
+    }
+  ],
   "experiments": {
     "retrain_on_NIH_for_PNEUMONIA": {
       "train_domain": "NIH",
@@ -27,30 +80,49 @@
       "train_pos_rate": 0.02305782192266761,
       "selected_epoch": 39,
       "selected_by": "best AUC on 20% stratified validation split within the training domain",
+      "selected_val_auc": 0.8356833728884545,
       "evals": {
         "NIH": {
           "n": 2819,
-          "auc": 0.8272498743086978,
-          "ece": 0.33797832235493064,
-          "brier": 0.16815517319962478,
-          "auc_fixed_epochs": 0.8029774872912128,
-          "ece_fixed_epochs": 0.33983591329220464
+          "auc": 0.7398525222054634,
+          "ece": 0.36234499231567613,
+          "brier": 0.16524155067663465,
+          "eval_mode": "out_of_fold_5fold",
+          "auc_fixed_epochs": 0.7468912351265293,
+          "ece_fixed_epochs": 0.3533679240850025,
+          "auc_ci95_low": 0.6713333054019329,
+          "auc_ci95_high": 0.7985432378079437,
+          "delta_auc_vs_zeroshot": 0.01699346405228752,
+          "delta_auc_ci95_low": -0.02458577733087528,
+          "delta_auc_ci95_high": 0.05846628679962017
         },
         "KEM": {
           "n": 5824,
           "auc": 0.8915896285985598,
           "ece": 0.1396172236034565,
           "brier": 0.13706087801495628,
+          "eval_mode": "direct_cross_domain",
           "auc_fixed_epochs": 0.914556259981754,
-          "ece_fixed_epochs": 0.1820281403981006
+          "ece_fixed_epochs": 0.1820281403981006,
+          "auc_ci95_low": 0.8832140669908569,
+          "auc_ci95_high": 0.9000960859215962,
+          "delta_auc_vs_zeroshot": 0.10840194215748367,
+          "delta_auc_ci95_low": 0.09577124784886454,
+          "delta_auc_ci95_high": 0.1220068537958823
         },
         "VIN": {
           "n": 702,
-          "auc": 0.7783724797339431,
-          "ece": 0.2782010906760679,
-          "brier": 0.2106242411630428,
-          "auc_fixed_epochs": 0.7887783205154854,
-          "ece_fixed_epochs": 0.2506225559319186
+          "auc": 0.8572246922024623,
+          "ece": 0.1536739049452832,
+          "brier": 0.16910051560449288,
+          "eval_mode": "direct_cross_domain",
+          "auc_fixed_epochs": 0.8780352257181943,
+          "ece_fixed_epochs": 0.14997829129638157,
+          "auc_ci95_low": 0.8270331737346102,
+          "auc_ci95_high": 0.886390005129959,
+          "delta_auc_vs_zeroshot": 0.15358242134062927,
+          "delta_auc_ci95_low": 0.11384436987004105,
+          "delta_auc_ci95_high": 0.18967136200410398
         }
       }
     },
@@ -61,30 +133,49 @@
       "train_pos_rate": 0.7288804945054945,
       "selected_epoch": 39,
       "selected_by": "best AUC on 20% stratified validation split within the training domain",
+      "selected_val_auc": 0.984318856137526,
       "evals": {
         "NIH": {
           "n": 2819,
           "auc": 0.7346293503156248,
           "ece": 0.40111727322973423,
           "brier": 0.2965416148752702,
+          "eval_mode": "direct_cross_domain",
           "auc_fixed_epochs": 0.7307580582090386,
-          "ece_fixed_epochs": 0.4059677798510438
+          "ece_fixed_epochs": 0.4059677798510438,
+          "auc_ci95_low": 0.6662425283503716,
+          "auc_ci95_high": 0.801871683146193,
+          "delta_auc_vs_zeroshot": 0.011770292162448959,
+          "delta_auc_ci95_low": -0.03924431596000211,
+          "delta_auc_ci95_high": 0.06301756885090196
         },
         "KEM": {
           "n": 5824,
-          "auc": 0.983496584664296,
-          "ece": 0.05017612337087985,
-          "brier": 0.04748641923169978,
-          "auc_fixed_epochs": 0.980729703984347,
-          "ece_fixed_epochs": 0.058064730486241556
+          "auc": 0.9814546189646054,
+          "ece": 0.05167526026577568,
+          "brier": 0.04991576129891063,
+          "eval_mode": "out_of_fold_5fold",
+          "auc_fixed_epochs": 0.9785270604839282,
+          "ece_fixed_epochs": 0.06222483609878139,
+          "auc_ci95_low": 0.9783891118038509,
+          "auc_ci95_high": 0.9844410031247879,
+          "delta_auc_vs_zeroshot": 0.19826693252352923,
+          "delta_auc_ci95_low": 0.18662793876639136,
+          "delta_auc_ci95_high": 0.21022290315097075
         },
         "VIN": {
           "n": 702,
-          "auc": 0.7170546663895241,
-          "ece": 0.33037747495940456,
-          "brier": 0.32234945696676437,
-          "auc_fixed_epochs": 0.7096237788401579,
-          "ece_fixed_epochs": 0.3416991804548897
+          "auc": 0.819562243502052,
+          "ece": 0.1654797387231638,
+          "brier": 0.20736991372517966,
+          "eval_mode": "direct_cross_domain",
+          "auc_fixed_epochs": 0.8123717510259918,
+          "ece_fixed_epochs": 0.17185956432229205,
+          "auc_ci95_low": 0.7859753334473324,
+          "auc_ci95_high": 0.8503003163474693,
+          "delta_auc_vs_zeroshot": 0.11591997264021892,
+          "delta_auc_ci95_low": 0.06680702804377557,
+          "delta_auc_ci95_high": 0.16186655694254432
         }
       }
     },
@@ -95,30 +186,49 @@
       "train_pos_rate": 0.9769421780773324,
       "selected_epoch": 5,
       "selected_by": "best AUC on 20% stratified validation split within the training domain",
+      "selected_val_auc": 0.8457350272232305,
       "evals": {
         "NIH": {
           "n": 2819,
-          "auc": 0.7898553153455115,
-          "ece": 0.3885825301747493,
-          "brier": 0.1894508060336164,
-          "auc_fixed_epochs": 0.8035472878610134,
-          "ece_fixed_epochs": 0.3378827137123951
+          "auc": 0.7539802245684599,
+          "ece": 0.3482858301287384,
+          "brier": 0.16546188154950617,
+          "eval_mode": "out_of_fold_5fold",
+          "auc_fixed_epochs": 0.7481537344282443,
+          "ece_fixed_epochs": 0.3523788015051233,
+          "auc_ci95_low": 0.6884722920507234,
+          "auc_ci95_high": 0.8120510027372771,
+          "delta_auc_vs_zeroshot": -0.007831964694709814,
+          "delta_auc_ci95_low": -0.047534914250600475,
+          "delta_auc_ci95_high": 0.027735461706049912
         },
         "KEM": {
           "n": 5824,
           "auc": 0.7904204999213023,
           "ece": 0.1816214211950345,
           "brier": 0.19877426496722006,
+          "eval_mode": "direct_cross_domain",
           "auc_fixed_epochs": 0.879507612800814,
-          "ece_fixed_epochs": 0.1633124880014233
+          "ece_fixed_epochs": 0.1633124880014233,
+          "auc_ci95_low": 0.7772203598317433,
+          "auc_ci95_high": 0.8026243667810209,
+          "delta_auc_vs_zeroshot": -0.11726450892940388,
+          "delta_auc_ci95_low": -0.1298778393684482,
+          "delta_auc_ci95_high": -0.10474104318234545
         },
         "VIN": {
           "n": 702,
-          "auc": 0.7846341716898774,
-          "ece": 0.27751290687808283,
-          "brier": 0.2110308592752986,
-          "auc_fixed_epochs": 0.7949750571606735,
-          "ece_fixed_epochs": 0.2570566066522204
+          "auc": 0.8612260601915185,
+          "ece": 0.1898280379609165,
+          "brier": 0.1866587233786702,
+          "eval_mode": "direct_cross_domain",
+          "auc_fixed_epochs": 0.8787876196990423,
+          "ece_fixed_epochs": 0.15432247186233514,
+          "auc_ci95_low": 0.8315317202462381,
+          "auc_ci95_high": 0.8886914329685363,
+          "delta_auc_vs_zeroshot": 0.05409541723666211,
+          "delta_auc_ci95_low": 0.03140240253077969,
+          "delta_auc_ci95_high": 0.07725760943912441
         }
       }
     },
@@ -129,36 +239,56 @@
       "train_pos_rate": 0.2711195054945055,
       "selected_epoch": 39,
       "selected_by": "best AUC on 20% stratified validation split within the training domain",
+      "selected_val_auc": 0.9857539025808472,
       "evals": {
         "NIH": {
           "n": 2819,
           "auc": 0.7368917937545387,
           "ece": 0.3740796252033351,
           "brier": 0.2767927234935599,
+          "eval_mode": "direct_cross_domain",
           "auc_fixed_epochs": 0.7313893078598961,
-          "ece_fixed_epochs": 0.41035520708303713
+          "ece_fixed_epochs": 0.41035520708303713,
+          "auc_ci95_low": 0.6682750963633316,
+          "auc_ci95_high": 0.8053200938495056,
+          "delta_auc_vs_zeroshot": -0.02492039550863101,
+          "delta_auc_ci95_low": -0.0765719792190381,
+          "delta_auc_ci95_high": 0.02234288587229769
         },
         "KEM": {
           "n": 5824,
-          "auc": 0.9835131447718919,
-          "ece": 0.04670510993010684,
-          "brier": 0.04660872586357968,
-          "auc_fixed_epochs": 0.9804980862632415,
-          "ece_fixed_epochs": 0.0586476489046078
+          "auc": 0.9809502070386424,
+          "ece": 0.051053001734984275,
+          "brier": 0.05017628685204836,
+          "eval_mode": "out_of_fold_5fold",
+          "auc_fixed_epochs": 0.9783322181368984,
+          "ece_fixed_epochs": 0.06270966390671914,
+          "auc_ci95_low": 0.9777165551097255,
+          "auc_ci95_high": 0.9839685999473359,
+          "delta_auc_vs_zeroshot": 0.07326519818793631,
+          "delta_auc_ci95_low": 0.06596933135208803,
+          "delta_auc_ci95_high": 0.08013998885549516
         },
         "VIN": {
           "n": 702,
-          "auc": 0.7247713573061734,
-          "ece": 0.32706144579098845,
-          "brier": 0.3150576986692159,
-          "auc_fixed_epochs": 0.7082986905009353,
-          "ece_fixed_epochs": 0.34246954796427825
+          "auc": 0.8287619699042408,
+          "ece": 0.15702811163358263,
+          "brier": 0.19947614896580435,
+          "eval_mode": "direct_cross_domain",
+          "auc_fixed_epochs": 0.8119442544459644,
+          "ece_fixed_epochs": 0.17310093346591163,
+          "auc_ci95_low": 0.7989979480164158,
+          "auc_ci95_high": 0.859345288987688,
+          "delta_auc_vs_zeroshot": 0.02163132694938441,
+          "delta_auc_ci95_low": -0.0030298820109438598,
+          "delta_auc_ci95_high": 0.04788367818057455
         }
       }
     }
   },
   "label_aware": true,
   "probe_design": "对每个目标标签单独训练一个线性二分类头（冻结骨干），使探针的每标签 AUC 可与零样本基线逐标签对比。",
+  "same_domain_evaluation": "5-fold out-of-fold cross-prediction: each evaluation image is scored by a model trained on the training pool with that image (and its fold) excluded, so no evaluation image contributes to the model that predicts it. Cross-domain evaluation is direct, because the model has never seen the evaluation domain.",
   "zeroshot_baseline": {
     "NIH": {
       "PNEUMONIA": {
@@ -191,26 +321,35 @@
       }
     }
   },
-  "zeroshot_baseline_source": "results/multi_model_metrics.json → per_model.NIH.per_dataset (four-model NIH-pretrained classifier; same model and cohort as the retrained probes)",
+  "zeroshot_baseline_source": "recomputed from results/multi_model_predictions.csv (p_pneumonia / p_normal_common) on the canonical evaluation cohort; cross-checked against multi_model_metrics.json → per_model.NIH.per_dataset",
   "summary_table": {
     "PNEUMONIA": {
       "NIH": {
         "zeroshot_auc": 0.7228590581531759,
         "retrained_auc": 0.7346293503156248,
         "retrained_on": "KEM",
-        "relative_change_pct": 1.628296972928684
+        "relative_change_pct": 1.628296972928684,
+        "delta_auc_ci95_low": -0.03924431596000211,
+        "delta_auc_ci95_high": 0.06301756885090196,
+        "comparison": "cross-domain retraining vs zero-shot on the same evaluation cohort"
       },
       "KEM": {
         "zeroshot_auc": 0.7831876864410762,
         "retrained_auc": 0.8915896285985598,
         "retrained_on": "NIH",
-        "relative_change_pct": 13.841119317143322
+        "relative_change_pct": 13.841119317143322,
+        "delta_auc_ci95_low": 0.09577124784886454,
+        "delta_auc_ci95_high": 0.1220068537958823,
+        "comparison": "cross-domain retraining vs zero-shot on the same evaluation cohort"
       },
       "VIN": {
         "zeroshot_auc": 0.7036422708618331,
-        "retrained_auc": 0.7170546663895241,
+        "retrained_auc": 0.819562243502052,
         "retrained_on": "KEM",
-        "relative_change_pct": 1.9061384005914388
+        "relative_change_pct": 16.47427641011933,
+        "delta_auc_ci95_low": 0.06680702804377557,
+        "delta_auc_ci95_high": 0.16186655694254432,
+        "comparison": "cross-domain retraining vs zero-shot on the same evaluation cohort"
       }
     },
     "NORMAL": {
@@ -218,19 +357,28 @@
         "zeroshot_auc": 0.7618121892631697,
         "retrained_auc": 0.7368917937545387,
         "retrained_on": "KEM",
-        "relative_change_pct": -3.271199366438885
+        "relative_change_pct": -3.271199366438885,
+        "delta_auc_ci95_low": -0.0765719792190381,
+        "delta_auc_ci95_high": 0.02234288587229769,
+        "comparison": "cross-domain retraining vs zero-shot on the same evaluation cohort"
       },
       "KEM": {
         "zeroshot_auc": 0.9076850088507061,
         "retrained_auc": 0.7904204999213023,
         "retrained_on": "NIH",
-        "relative_change_pct": -12.919075206263681
+        "relative_change_pct": -12.919075206263681,
+        "delta_auc_ci95_low": -0.1298778393684482,
+        "delta_auc_ci95_high": -0.10474104318234545,
+        "comparison": "cross-domain retraining vs zero-shot on the same evaluation cohort"
       },
       "VIN": {
         "zeroshot_auc": 0.8071306429548564,
-        "retrained_auc": 0.7247713573061734,
+        "retrained_auc": 0.8287619699042408,
         "retrained_on": "KEM",
-        "relative_change_pct": -10.203959714275083
+        "relative_change_pct": 2.680027965509206,
+        "delta_auc_ci95_low": -0.0030298820109438598,
+        "delta_auc_ci95_high": 0.04788367818057455,
+        "comparison": "cross-domain retraining vs zero-shot on the same evaluation cohort"
       }
     }
   }

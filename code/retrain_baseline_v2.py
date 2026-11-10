@@ -113,21 +113,53 @@ def index_nih():
 
 
 def index_kem():
-    """返回 [(path, gt_label)]"""
+    """返回 [(path, gt_label)]
+
+    🔴 必须排除 4 张重复影像（2026-11-10 修 · 见 index_kem 的说明）：
+       valid-mini.zip 的 4 个文件与 valid.zip 中的 4 张影像**逐字节相同、
+       仅文件名不同**（占位符名 image.jpg0.jpg 等）。
+       重复清单从 results/kem_dedupe_record.json 读取 —— 与主分析共用
+       同一份权威清单，避免各处各写一份导致口径分叉。
+
+    ⚠️ v2 之前的版本（2026-11-09）在这里**没有**去重，是靠下游的
+       评估队列过滤间接去掉那 4 张的。本函数显式去重，使"训练池"与
+       "评估队列"两条路径各自独立且都不含重复影像。
+    """
     out_dir = os.path.join(DATA_ROOT, "keremberke", "extracted")
+    dup_rel = set()
+    rec_path = os.path.join(RESULTS, "kem_dedupe_record.json")
+    if os.path.exists(rec_path):
+        dup_rel = set(json.load(open(rec_path, encoding="utf-8")).get(
+            "duplicate_files", []))
     items = []
+    n_skip = 0
     for cls in ["NORMAL", "PNEUMONIA"]:
         cdir = os.path.join(out_dir, cls)
         if not os.path.isdir(cdir):
             continue
         for f in os.listdir(cdir):
-            if f.lower().endswith((".jpg", ".jpeg", ".png")):
-                items.append((os.path.join(cdir, f), cls))
+            if not f.lower().endswith((".jpg", ".jpeg", ".png")):
+                continue
+            if f"{cls}/{f}" in dup_rel:
+                n_skip += 1
+                continue
+            items.append((os.path.join(cdir, f), cls))
+    if dup_rel:
+        log(f"  [KEM] 训练池已排除 {n_skip} 张重复影像"
+            f"（清单来自 kem_dedupe_record.json）")
     return items
 
 
 def index_vindr():
-    """返回 [(path, gt_label_A, gt_label_B)]（口径 A 宽松 / B 严格）"""
+    """返回 [(path, gt_label_A, gt_label_B)]（口径 A 宽松 / B 严格）
+
+    🔴 只保留 PNEUMONIA / NORMAL 两类（2026-11-10 补）：
+       原始标注表里还有 OTHER 类（12 张）。主分析的评估队列
+       （multi_model_predictions.csv）已把 OTHER 全部排除，
+       因此这里也必须排除 —— 否则在 NORMAL 任务上，OTHER 会被
+       `label_vector` 当成"正类"（因为它不是 PNEUMONIA），
+       凭空在训练池里塞进 12 张假负样本。
+    """
     import csv as _csv
 
     root = os.path.join(DATA_ROOT, "VinDr")
@@ -136,6 +168,7 @@ def index_vindr():
     if not (os.path.isfile(lab_path) and os.path.isdir(img_dir)):
         return []
     out = []
+    n_other = 0
     with open(lab_path, encoding="utf-8") as f:
         for r in _csv.DictReader(f):
             iid = r["image_id"]
@@ -145,8 +178,14 @@ def index_vindr():
             a = r.get("unified_label", "")
             if not a:
                 continue
+            if a not in ("PNEUMONIA", "NORMAL"):
+                n_other += 1
+                continue
             b = r.get("unified_label_strict", a)
             out.append((p, a, b))
+    if n_other:
+        log(f"  [VIN] 已排除 {n_other} 张 OTHER 类影像"
+            f"（与主分析评估队列口径一致）")
     return out
 
 
@@ -490,48 +529,75 @@ def main():
     log(f"  原始索引  NIH {len(nih_items)} | KEM {len(kem_items)} "
         f"| VIN {len(vin_items)}")
 
-    # ---- 1b. 评估队列对齐（2026-11-09 修）----
-    # 训练样本用各域全部有标注样本；**评估样本严格对齐主评估的权威清单**，
-    # 保证 P0 表里"零样本 AUC"与"重训后 AUC"算在同一批样本上。
+    # ---- 1b. 评估队列对齐（2026-11-09 修；2026-11-10 再修）----
+    # 🔴🔴 2026-11-10 发现的严重缺陷（本轮修复的核心）：
+    #
+    #   旧实现（11-09 版）把**训练样本也**替换成了评估队列：
+    #       nih_items, kem_items, vin_items = eval_nih, eval_kem, eval_vin
+    #   后果：训练域与评估域**完全相同**。于是
+    #       "在 KEM 上训练 → 在 KEM 上评估" 报出的 AUC 0.9835
+    #   是**训练集内重代入（resubstitution）**的值，不是泛化性能。
+    #   Table 5(c) 把 0.9835 与 0.7834（零样本）并列，审稿人一眼就能看出
+    #   "训练集上的 AUC"被当成了泛化 AUC —— 这是可直接导致拒稿的错误。
+    #
+    #   修复（本版）：**训练池**与**评估队列**彻底分离。
+    #     · 训练池 = 该域全部有标注、去重后的影像
+    #       （NIH 2819 / KEM 5824 / VIN 702）
+    #     · 评估队列 = 主分析权威清单（与训练池同源，但**分开管理**）
+    #     · **跨域**评估（训练域 ≠ 评估域）：模型从未见过评估域的影像，
+    #       结果有效，与原版一致。
+    #     · **同域**评估（训练域 = 评估域）：改用 **out-of-fold 交叉预测**
+    #       —— K 折，每折用 K-1 折训练、在留出折上预测，拼接后算 AUC。
+    #       这样每个评估样本都由"没见过它"的模型给出预测，
+    #       得到的是可与跨域数字并列比较的**泛化**估计。
+    #
+    #   代价：同域数字会从 0.98 降到真实的泛化水平（预期 0.75–0.85）。
+    #   这是正确的代价 —— 论文的核心论断"重训在 KEM 上几乎无效"
+    #   恰恰必须建立在**无泄漏**的同域基线上，否则 0.98 反而会
+    #   让人误以为重训在 KEM 上非常有效，与论文结论矛盾。
     cohort = canonical_eval_cohort()
     eval_cohort_note = None
     if cohort is None:
         log("  [警告] 找不到 results/multi_model_predictions.csv —— "
             "无法对齐评估队列，本次结果不可与主评估直接比较")
+        log("  [警告] 同域评估将退回重代入口径，请勿用于投稿")
+        train_pool = {"NIH": list(nih_items), "KEM": list(kem_items),
+                      "VIN": list(vin_items)}
+        eval_pool = dict(train_pool)
     else:
         def _restrict(items, ds):
             keep = cohort[ds]
-            out = [it for it in items
-                   if os.path.basename(it[0]) in keep]
-            return out
-        n_before = (len(nih_items), len(kem_items), len(vin_items))
-        eval_nih = _restrict(nih_items, "NIH")
-        eval_kem = _restrict(kem_items, "KEM")
-        eval_vin = _restrict(vin_items, "VIN")
-        dropped = {
-            "NIH": n_before[0] - len(eval_nih),
-            "KEM": n_before[1] - len(eval_kem),
-            "VIN": n_before[2] - len(eval_vin),
-        }
-        log(f"  评估队列对齐  NIH {len(eval_nih)} | KEM {len(eval_kem)} "
-            f"| VIN {len(eval_vin)}  （对齐主评估清单）")
+            return [it for it in items
+                    if os.path.basename(it[0]) in keep]
+
+        train_pool = {"NIH": list(nih_items), "KEM": list(kem_items),
+                      "VIN": list(vin_items)}
+        eval_pool = {"NIH": _restrict(nih_items, "NIH"),
+                     "KEM": _restrict(kem_items, "KEM"),
+                     "VIN": _restrict(vin_items, "VIN")}
+        dropped = {ds: len(train_pool[ds]) - len(eval_pool[ds])
+                   for ds in ("NIH", "KEM", "VIN")}
+        log(f"  训练池（全部有标注、去重后）  "
+            f"NIH {len(train_pool['NIH'])} | KEM {len(train_pool['KEM'])} "
+            f"| VIN {len(train_pool['VIN'])}")
+        log(f"  评估队列（主分析权威清单）    "
+            f"NIH {len(eval_pool['NIH'])} | KEM {len(eval_pool['KEM'])} "
+            f"| VIN {len(eval_pool['VIN'])}")
         if any(v > 0 for v in dropped.values()):
-            log(f"  🔴 因未进入主评估清单而被排除的样本：{dropped}")
+            log(f"  🔴 未进入主评估清单而排除的样本：{dropped}")
             eval_cohort_note = dropped
-        nih_items, kem_items, vin_items = eval_nih, eval_kem, eval_vin
 
     if args.quick:
         rng = np.random.default_rng(SEED)
         def sub(items, k=400):
             idx = rng.permutation(len(items))[:k]
             return [items[i] for i in sorted(idx)]
-        nih_items = sub(nih_items)
-        kem_items = sub(kem_items)
-        vin_items = sub(vin_items)
-        log(f"  [quick 模式] NIH {len(nih_items)} | KEM {len(kem_items)} "
-            f"| VIN {len(vin_items)}")
+        train_pool = {k: sub(v) for k, v in train_pool.items()}
+        eval_pool = {k: sub(v) for k, v in eval_pool.items()}
+        log(f"  [quick 模式] " +
+            " | ".join(f"{k} {len(v)}" for k, v in train_pool.items()))
 
-    if not nih_items or not kem_items:
+    if not train_pool["NIH"] or not train_pool["KEM"]:
         log("[SKIP] 数据未就位")
         return 2
 

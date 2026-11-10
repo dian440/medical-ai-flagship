@@ -19,9 +19,17 @@
 
 Reporting practice rarely examines three choices together. We asked whether the ranking of chest radiograph datasets by the performance of a deployed classifier is stable under them. The three choices are the metric, the label definition, and the class prevalence of the evaluation cohort. Across four classifiers pretrained on three different source datasets, the answer was no. Resampling all three evaluation cohorts to a common prevalence contracted the calibration spread in seven of eight model–label combinations. It retained between 24% and 78% of the original spread, and reversed the calibration ranking in all eight. The change exceeded what resampling noise alone would produce in seven of the eight (p ≤ 2.9 × 10⁻²²). The exception was a configuration in which the ordering did not change at all.
 
-The more consequential result is the baseline against which that change was judged. Consider a null in which the three datasets are of identical calibration and differ only in resampling noise. Under it, prior matching alone reordered them in 82.5% to 84.4% of replicates. A reader who encounters a reported change in dataset ranking without such a baseline cannot determine whether the change reflects anything about the datasets. The quantity is not specific to chest radiographs, to these three cohorts, or to this metric. It is a property of the comparison procedure. It also has a value that can be derived rather than estimated. Where the datasets are exchangeable in calibration, the probability that prior matching changes the ordering is 1 − 1/k!. That is 83.33% for three datasets, and our measured range of 82.5% to 84.4% lies within 1.1 percentage points of it. A practitioner comparing four or five datasets can therefore anticipate the same effect at 1 − 1/4! or 1 − 1/5!, and can decide in advance whether the comparison is worth reporting. We therefore provide the comparison as an independently implemented procedure rather than as a set of numbers. Others can then apply it and check their own data against the same analytic expectation.
+The more consequential result is the baseline against which that change was judged. Consider a null in which the three datasets are of identical calibration and differ only in resampling noise. Under it, prior matching alone reordered them in 82.5% to 84.4% of replicates. A reader who encounters a reported change in dataset ranking without such a baseline cannot determine whether the change reflects anything about the datasets. The quantity is not specific to chest radiographs, to these three cohorts, or to this metric. It is a property of the comparison procedure.
+
+The baseline also has a value that can be derived rather than estimated, and we are careful about what that derivation is. Where the datasets are exchangeable in calibration, the ordering induced by prior matching is a uniformly random permutation. The reference ordering is a second, independent one, so the probability that they differ is 1 − 1/k!. This follows from the classical result on the rank of exchangeable random variables [20]. We do not present it as a new result.
+
+What we establish is that the comparison procedure in this domain generates precisely the exchangeable situation to which that result applies. We also show that the resulting baseline is attained empirically, to within 1.1 percentage points, in a concrete medical imaging comparison. The value is 83.33% for three datasets, against a measured range of 82.5% to 84.4%. A practitioner comparing four or five datasets can therefore anticipate the same effect at 1 − 1/4! or 1 − 1/5!, and can decide in advance whether the comparison is worth reporting. We therefore provide the comparison as an independently implemented procedure rather than as a set of numbers. Others can then apply it and check their own data against the same analytic expectation.
 
 Three further findings shape how the first should be read. The effect reproduced across three of the four classifiers and across both label definitions. This places it in the evaluation protocol rather than in any one checkpoint. Because the architecture was held constant while the pretraining source varied, the attribution rests on the design rather than on an assumption. Every statistically significant discrimination difference pointed in the same direction, namely towards the external dataset being the easier one. The direction of a significant result in this setting therefore carries information opposite to the intuition that a positive difference indicates transferable performance. Finally, retraining with a frozen backbone recovered most of the difference in one direction and little in the other. External validation failure is therefore neither proof that a model is unusable nor proof that local retraining will resolve it.
+
+The two directions of that retraining are not statistically equivalent, and the distinction is worth stating separately. Training on NIH and evaluating on Kermany raised the PNEUMONIA AUC from 0.7832 to 0.8916. A paired bootstrap interval on the same evaluation cohort ran from +0.0958 to +0.1220, which excludes zero. Training on Kermany and evaluating on NIH raised the same AUC from 0.7229 to 0.7346. Its interval ran from −0.0392 to +0.0630, which does not. The gain in the first direction therefore exceeds resampling noise, and the gain in the second cannot be distinguished from zero. This turns an asymmetry that could previously only be described into a testable claim. It also shows that with limited samples, "retraining did not improve external performance" and "retraining demonstrably did not help" are different statements. Only an interval distinguishes them. The smaller gain is consistent with the 65 positive NIH cases available for training. Whether local retraining after an external validation failure is worthwhile therefore depends on the sample size and class composition of the retraining domain. It has to be assessed per label and per target domain rather than answered in general.
+
+In addition, where the training domain and the evaluation domain coincide we report out-of-fold cross-prediction rather than a direct evaluation. A direct evaluation in that case returns a resubstitution value. Such a value measures the fit of the model to images it has already seen, rather than its generalisation. Placing it alongside the cross-domain values would admit the appearance that retraining is highly effective within the training domain.
 
 ### 4.2 Relation to prior work
 
@@ -51,6 +59,8 @@ Third, treat a change in dataset ranking as a finding that requires a test, not 
 
 Fourth, distinguish an easier dataset from a better model. A positive difference in discrimination on an external set is frequently evidence of a weaker benchmark rather than a stronger model. Reporting it as evidence of transferability inverts its meaning. In our data every significant difference pointed towards the external dataset being easier. Model provenance was itself sufficient to determine which external cohort constituted a demanding test. The CheXpert-pretrained classifier reached an AUC of 0.9555 on the paediatric cohort, against 0.6166 to 0.7832 for the other three. The difference appears to reflect the closer correspondence between its source population and that cohort, rather than any property of the cohort's difficulty. A benchmark assembled without regard to the provenance of the models it judges can be easy for reasons unrelated to the model under test.
 
+This last point deserves emphasis, because the direction of the differences in our data is the opposite of what a favourable reading would suggest. The zero-shot classifier did not lose discrimination on the external datasets; it gained it. Read without attention to which cohort was easier, that is a result about robustness. Read with the same attention, it is a result about the composition of the evaluation cohorts. It is also the reason why a comparison of such classifiers across institutions cannot be summarised by the sign of the difference. A reader who takes the external cohort to be the harder test will draw the wrong conclusion from our numbers. We therefore report the class prevalence of every cohort alongside every performance figure. A reader who did not follow the argument above can then make the comparison on the same terms.
+
 ### 4.5 Implications for model release and clinical reuse
 
 Two consequences follow for practice. A released model should be accompanied by the evaluation specification under which its reported performance was obtained. Without that specification, the number cannot be transferred to any other setting. Evaluation protocols should also be treated as components of the model, requiring the same version control as the weights. The same weights, evaluated under two different negative-class definitions or at two specified prevalences, may support opposite conclusions. A model card that records only the favourable setting is not reproducible.
@@ -62,6 +72,8 @@ We would put the emphasis on the reliability of the evaluation rather than on th
 The framework developed here was designed with respect to chest radiograph classifiers. The evaluation protocol it exposes, however, is not specific to them. The conditions it identifies become more consequential, not less, as the models being evaluated change.
 
 The decisive feature of a vision-language model is that the classifier is not determined by the checkpoint alone. The text prompt, the image processor and the scoring rule participate directly in the prediction. An evaluation specification therefore has more degrees of freedom than it does for a convolutional classifier. Every additional degree of freedom is another variable whose value can change the reported ranking without any change in the underlying model. The audit of medical vision-language models shows that this is not hypothetical. No model led every cohort and every reliability criterion, and the ordering of two models reversed across specified prevalences [10]. The result reported here is the convolutional-model counterpart of that observation, arrived at independently. Two lines of work have converged on the same conclusion, that benchmark rankings are conditional on evaluation choices rather than properties of models. This convergence indicates that the problem is structural.
+
+That the effect appears for the simplest possible model type is itself part of the finding. A convolutional classifier has no prompt, no image processor and no scoring rule: the mapping from image to prediction is fixed once the checkpoint is fixed. Every degree of freedom in the evaluation therefore lies in the protocol rather than in the model. The reversal reported here arises under those conditions. The same protocol applied to a vision-language model would have at least as many degrees of freedom over which to arise. The effect is thus not a property of the flexibility of the model class; it is a property of what an evaluation has to specify. This is the reason we frame the contribution as an audit of the evaluation procedure rather than of any model. It is also why we release the procedure rather than the numbers.
 
 We offer this extension as a methodological implication rather than as an empirical claim, since no vision-language model was evaluated in the present study. Whether the specific quantitative effects reported here reproduce for vision-language models is a direct and feasible extension. Those effects are the contraction of calibration spread and the systematicity of ranking reversal under prevalence matching. The outcome would determine whether the present findings describe a property of chest radiograph evaluation in general, or of supervised convolutional classifiers in particular.
 
@@ -91,9 +103,17 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 
 报告实践很少把三个选择放在一起考察。我们考察的是：当它们——指标、标签定义、评估队列的类别先验——发生变化时，按已部署分类器的表现对胸片数据集所作的排序是否稳定。四个在不同源数据集上预训练的分类器给出的答案是：并不稳定。把三个评估队列重采样到共同先验后，8 个"模型×标签"组合中有 7 个的校准跨度收缩，仅保留原跨度的 24%–78%，且 8 个组合的校准排序全部反转。排序改变超出了仅由重采样噪声所能产生的程度（8 个中有 7 个，p ≤ 2.9×10⁻²²），唯一的例外是一个排序根本没有改变的配置。
 
-比这一改变更具后果的，是用来判断该改变的基线。在"三个数据集校准水平完全相同、仅存在重采样噪声"的零假设下，仅先验匹配本身就会在 82.5%–84.4% 的重复中改变它们的排序。**读者若遇到一个报告出来的排序改变而没有这样的基线，就无法判断该改变是否反映了数据集中的任何差异。**这个量不专属于胸片、不专属于这三个队列、也不专属于这个指标——它是比较过程的属性。它还有一个可以被推导而非被估计的值。在数据集校准可交换的情形下，先验匹配改变排序的概率为 1 − 1/k!。三个数据集时该值为 83.33%，我们实测的 82.5%–84.4% 与之相差不超过 1.1 个百分点。**因此比较四个或五个数据集的实践者可以预先预期到同样的效应（1 − 1/4! 或 1 − 1/5!），并在开展比较之前就判断该比较是否值得报告。**我们因此把它作为一个独立实现的过程提供，而非一组数字，以便他人将其应用于其他任务与其他指标，并与同一解析预期相互对照。
+比这一改变更具后果的，是用来判断该改变的基线。在"三个数据集校准水平完全相同、仅存在重采样噪声"的零假设下，仅先验匹配本身就会在 82.5%–84.4% 的重复中改变它们的排序。**读者若遇到一个报告出来的排序改变而没有这样的基线，就无法判断该改变是否反映了数据集中的任何差异。**这个量不专属于胸片、不专属于这三个队列、也不专属于这个指标——它是比较过程的属性。
+
+这个基线还有一个可以被推导而非被估计的值，而我们对这项推导的归属保持审慎。在数据集校准可交换的情形下，先验匹配诱导的排序是一个均匀随机置换。参照排序是第二个独立的均匀随机置换，故二者相异的概率为 1 − 1/k!。**这一结论源自关于可交换随机变量之秩的经典结果 [20]。我们并不把它当作新的结果。**
+
+**本文确立的是：本文所研究的这类比较程序恰好产生了该经典结论适用的可交换情形。**我们同时证明，由此得到的基线在一个具体的医学影像比较中被经验地达到，相差不超过 1.1 个百分点。三个数据集时该值为 83.33%，我们实测的 82.5%–84.4% 与之相符。**因此比较四个或五个数据集的实践者可以预先预期到同样的效应（1 − 1/4! 或 1 − 1/5!），并在开展比较之前就判断该比较是否值得报告。**我们因此把它作为一个独立实现的过程提供，而非一组数字，以便他人将其应用于其他任务与其他指标，并与同一解析预期相互对照。
 
 另三项发现决定了第一项应如何被解读。该效应在四个分类器中的三个上、并在两种标签定义下都复现，因而归属于评估协议而非某个特定权重。由于架构固定而预训练来源变化，这一归属建立在设计之上，而非建立在假设之上。**全部具有统计显著性的判别能力差异都指向同一方向——外部数据集是更容易的那一个。**这意味着在这一情境下，显著结果的符号所携带的信息与"正向差异意味着可迁移性能"的直觉相反。最后，冻结骨干的重训在一个方向上救回了大部分差异，在另一个方向上几乎无效。外部验证失败因此既不能证明模型不可用，也不能证明本地重训能解决问题。
+
+**重训的这两个方向在统计上并不等价，这一点值得单独强调。**在 NIH 上重训后评估 Kermany，PNEUMONIA AUC 从 0.7832 升至 0.8916。同一批样本上的配对 bootstrap 区间为 +0.0958 至 +0.1220，不含零。在 Kermany 上重训后评估 NIH，AUC 从 0.7229 升至 0.7346。其区间为 −0.0392 至 +0.0630，含零。**因此，前一个方向上的提升超出了重采样噪声，后一个方向上的提升则无法与零区分。**这一区分把此前只能定性表述的"不对称"变成了可检验的论断。它也说明，在有限样本条件下，"重训未能改善外部表现"与"重训在统计上确实无益"是两回事。只有区间才能区分二者。较小的那一处提升与 NIH 仅 65 例阳性可供训练的情形相符。由此，外部验证失败后的本地重训是否值得，答案取决于重训域的样本量与类别构成。它必须逐标签、逐目标域分别评估，而不能给出一个一般性的结论。
+
+此外，本文对"训练域与评估域重合"情形的取值采用 out-of-fold 交叉预测，而非直接评估。**在两者重合时直接评估所得到的是训练集内重代入值。**这样的值衡量的是模型对已见样本的拟合，而非泛化能力。把它与跨域数值并列，会让"重训在本域上极为有效"这一假象进入文献。
 
 ### 4.2 与既往工作的关系
 
@@ -123,6 +143,8 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 
 **其四，区分更容易的数据集与更好的模型。**外部集合上判别能力的正向差异，往例是基准更弱的证据而非模型更强的证据，把它报告为可迁移性的证据会把其含义倒置。在我们的数据中，全部显著差异都指向外部数据集是更容易的那一个。模型来源本身就足以决定哪个外部队列构成有挑战性的检验：CheXpert 预训练分类器在儿童队列上取得 0.9555 的 AUC，其余三个为 0.6166 至 0.7832。这一差异看来反映的是其源人群与该队列的更接近，而非该队列难度本身的属性。**若一个基准在组建时未考虑被其评判的模型的来源，它可能因与被测模型无关的原因而容易。**
 
+**最后一点值得强调，因为本文数据中差异的方向，与一种有利的解读恰好相反。**零样本分类器在外部数据集上并未丢失判别能力，反而有所提升。若不追问哪一队列更容易，这一结果读起来像是关于鲁棒性的结论。若追问同一件事，它读起来则是关于**评估队列构成**的结论。跨机构比较这类分类器时，也不能仅凭差异的正负号来概括。**把外部队列默认为更难的检验的读者，会对我们的数字得出错误结论。**因此我们在每一处性能数字旁同时报告该队列的类别患病率。未跟随上述论证的读者据此仍可在同样的前提下进行比较。
+
 ### 4.5 对模型发布与临床复用的含义
 
 对实践有两条推论。**发布模型时应同时发布其报告性能所依据的评估规范**——否则该数值无法向任何其他场景迁移。**评估协议应与权重同等对待、需要同等的版本管理。**同一权重在两种不同阴性类定义下、或在两个指定患病率下评估，可能支持相反的结论。而只记录有利设定的模型卡不可复现。
@@ -134,6 +156,8 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 本研究建立的框架是针对胸片分类器设计的，但它所揭示的评估协议并非专属于胸片分类器。**随着被评估模型的改变，这些条件所起的作用只会更重要，不会更轻**。
 
 视觉语言模型的决定性特征在于，分类器并非仅由权重决定。文本提示、图像处理器与打分规则都直接参与预测，因此"评估规范"的自由度比对卷积分类器更大。**每一个额外的自由度都是另一个变量，其取值可在底层模型毫无变化的情况下改变所报告的排序。**而那项针对胸片结核筛查的医学视觉语言模型审计已表明这并非假想。**没有任何模型在所有队列与所有可靠性判据上均居首位，且两个模型的排序在指定患病率之间发生反转 [10]。本报告的结果是该观察在卷积模型上的对应物，系独立得出。两条工作线索收敛于同一结论——基准排名是评估选择的条件函数，而非模型的属性。这表明该问题是结构性的。
+
+**该效应在最简单的模型类型上同样出现，本身即是发现的一部分。**卷积分类器没有提示、没有图像处理器、没有打分规则：一旦权重固定，图像到预测的映射即固定。评估中的全部自由度因而都在协议一侧，而不在模型一侧。本文报告的反转正是在这些条件下出现的。而同一协议若用于视觉语言模型，其可供产生的自由度只会更多。该效应因此不是模型类别灵活性的属性，而是"评估必须指定什么"的属性。这正是我们把贡献界定为对评估程序而非对某个模型的审计的原因，也正是我们发布程序而非数字的原因。
 
 我们把这一延伸作为方法学推论提出，而非经验主张——本研究未评估任何视觉语言模型。检验此处报告的具体定量效应能否在视觉语言模型上复现，是一项直接且可行的延伸。这些效应包括校准跨度的收缩，以及先验匹配下排序反转的系统性。其结果将决定本研究的发现究竟描述的是胸片评估的一般属性，还是有监督卷积分类器的特定属性。
 
@@ -168,7 +192,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 | §4.2 | 解析交换性基准 83.33% | `baseline_sensitivity.json` | `analytic_exchangeability_floor_k3` |
 | §4.1 | 三个分类器中复现 | 同上 | `exceeds_same` |
 | §4.1 | 7 组显著全指向外部更易 | `multi_model_metrics.json` | `per_model.*.cross_dataset_delong` |
-| §4.1 | 重训 0.783→0.892、0.723→0.737 | `retrain_baseline.json` | `summary_table.*.*.retrained_auc` |
+| §4.1 | 重训 0.7832→0.8916、0.7229→0.7346 | `retrain_baseline.json` | `summary_table.PNEUMONIA.*.{zeroshot_auc,retrained_auc}` |
 | §4.2 | Zech 2018 | 参考文献总表 [9] | PLoS Med 2018;15(11):e1002683 |
 | §4.2 | Akhtar 2026（10%/50%、三队列） | 参考文献总表 [10] | arXiv:2609.21763v1 |
 | §4.2 | 方向一致性 40.6%–100.0%（一组 84.8%） | `flip_criteria_validation.json` | `null_dir_consistency` |

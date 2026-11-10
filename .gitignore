@@ -36,11 +36,15 @@ Thumbs.db
 results/cache_*.jsonl
 .gh_api_push_map.json
 
-# 特征缓存（可由 code/retrain_baseline_v2.py 自动重建，体积大不入库）
+# 特征缓存（可由 code/retrain_baseline.py 自动重建，体积大不入库）
 results/feat_*.npz
 
 # 已被取代的历史结果（样本集不一致版本）
 results/retrain_baseline_v1_SUPERSEDED_samplemismatch.json
+
+# 临时备份目录（重跑流水线前的快照，体积大不入库）
+results/_backup_*/
+results/_backup_*/
 
 
 
