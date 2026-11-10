@@ -261,6 +261,70 @@ def main():
         stale = [v for v in STALE_BASELINE_VALUES if v in txt]
         ck(f"{label} 无历史错值残留", not stale, f"残留 {stale}" if stale else "")
 
+    # ---------- G2. 机构署名（ROR）核对 ----------
+    # 🔴 2026-11-10 补：affiliation 从未被核验过。
+    #    风险点：所属单位是**大连医科大学中山学院**（独立法人），
+    #    与"大连医科大学本部"是两所不同法人 —— 写错等于单位归属错误，
+    #    审稿人会按 affiliation 核对。
+    #    ROR 已核实：中山学院 https://ror.org/02ajraz35（status=active）
+    #
+    # 🔴 第一版实现有假阴性：检查的是"整个文件是否含 Zhongshan"，
+    #    而文件里的说明文字（_creators_note）本就含 ROR ID → 永远通过。
+    #    正确做法：**只取 affiliation 字段的值**来判断。
+    ROR_ZS = "02ajraz35"
+    ROR_ZS_NAME = "Zhongshan College of Dalian Medical University"
+    _aff_values = []
+
+    def _collect_affs(obj, out):
+        """从 JSON 结构里收集 creators/contributors 的 affiliation 字段。"""
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                if k == "affiliation" and isinstance(v, str):
+                    out.append(v)
+                else:
+                    _collect_affs(v, out)
+        elif isinstance(obj, list):
+            for v in obj:
+                _collect_affs(v, out)
+
+    for rel in (".zenodo.json", "code/zenodo_metadata.json"):
+        fp = os.path.join(REPO, rel)
+        if not os.path.isfile(fp):
+            continue
+        try:
+            with open(fp, encoding="utf-8") as f:
+                obj = json.load(f)
+        except Exception as e:
+            ck(f"{rel} 可解析为 JSON", False, str(e))
+            continue
+        affs = []
+        _collect_affs(obj, affs)
+        ck(f"{rel} 至少一个 affiliation", len(affs) > 0)
+        for a in affs:
+            ck(f"{rel} affiliation 指向中山学院而非本部",
+               ROR_ZS_NAME in a or ROR_ZS in a,
+               f"当前值：{a!r}")
+            ck(f"{rel} affiliation 未误写为附属医院",
+               not any(b in a for b in ("Affiliated Hospital", "附属第一医院",
+                                        "附属第二医院")),
+               f"当前值：{a!r}")
+        _aff_values.extend(affs)
+
+    # CITATION.cff 是 YAML，只能按行找 affiliation:
+    cff_path = os.path.join(REPO, "CITATION.cff")
+    if os.path.isfile(cff_path):
+        with open(cff_path, encoding="utf-8") as f:
+            for line in f:
+                m = re.match(r"\s*affiliation:\s*\"?(.+?)\"?\s*$", line)
+                if m:
+                    a = m.group(1)
+                    ck("CITATION.cff affiliation 指向中山学院而非本部",
+                       ROR_ZS_NAME in a or ROR_ZS in a, f"当前值：{a!r}")
+
+    # 三处 affiliation 必须完全一致（单一数据源）
+    ck("各处 affiliation 文本一致", len(set(_aff_values)) <= 1,
+       f"出现 {len(set(_aff_values))} 种不同写法")
+
     # ---------- H. 术语一致性：基线值不得与观测值混淆 ----------
     # observed_change_rate 的最小值 82.2% 与基线下界 82.5% 接近，
     # 复制粘贴时容易把观测值当基线写进稿件 —— 这里做一次显式核对。

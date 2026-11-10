@@ -25,13 +25,19 @@
     "🔴 作者姓名与顺序**尚未与导师谈定**，此处为显式占位，不得直接发布。",
     "   GitHub 用户名是 dian440（可核实），但这不是可发表的作者名。",
     "   发布前必须由用户填入真实姓名与顺序；详见操作指引。",
-    "   Zenodo 元数据可在存档后直接编辑且不产生新 DOI，顺序定了之后",
-    "   改这里 + 发一个新 release 即可，不必推倒重来。"
+    "   ✅ Zenodo 元数据可在存档后**直接编辑且不产生新 DOI** —— 顺序定了之后",
+    "      回到记录页改 creators 即可，**不需要发新版本、不需要重发 DOI**。",
+    "",
+    "   机构署名（已核实，2026-11-10）：",
+    "   所属单位是**大连医科大学中山学院**（独立法人），不是大连医科大学本部。",
+    "   ROR 里有对应记录 → Zenodo「隶属关系」里搜 'Zhongshan College of Dalian",
+    "   Medical University' 可自动补全，选它（带 ROR 标识，审稿人可自动识别）。",
+    "   ROR ID: https://ror.org/02ajraz35"
   ],
   "creators": [
     {
       "name": "AUTHOR NAME TO BE FILLED (GitHub: dian440)",
-      "affiliation": "School of Electronic Information Engineering, Dalian Medical University, Dalian, China",
+      "affiliation": "School of Electronic Information Engineering, Zhongshan College of Dalian Medical University, Dalian, China (ROR: https://ror.org/02ajraz35)",
       "type": "ProjectMember"
     }
   ],
@@ -60,5 +66,18 @@
       "identifier": "https://github.com/dian440/medical-ai-flagship",
       "resource_type": "software"
     }
+  ],
+  "_zenodo_role_options": [
+    "contactperson, datacollector, datacurator, datamanager, distributor, editor,",
+    "funder, hostinginstitution, producer, projectleader, projectmanager, projectmember,",
+    "registrationagency, registrationauthority, relatedperson, researcher, researchgroup,",
+    "rightsholder, supervisor, sponsor, workpackageleader, other"
+  ],
+  "_role_recommendation": [
+    "本项目（软件 + 论文配套存档）的建议职责：",
+    "  · 你本人 → Researcher（若为通讯作者则 ContactPerson）",
+    "  · 指导老师 → Supervisor",
+    "  · 若某位老师只是提供建议、未参与作者署名 → 放 Contributors 而非 Creators",
+    "    （Zenodo 官方：Creators 出现在引用串里，Contributors 不出现）"
   ]
 }
