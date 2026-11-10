@@ -44,12 +44,57 @@ RELEASE_URL = "https://github.com/dian440/medical-ai-flagship/releases/tag/v1.0.
 DOI_PLACEHOLDER = "10.5281/zenodo.XXXXXXX"
 
 
+def _baseline_range():
+    """从权威结果文件读基线区间，返回 (min_pct, max_pct)。
+
+    🔴 为什么不用写死的数字（2026-11-10 修）：
+        本脚本 description 里曾写 "82.3-84.4%"，而权威值是 **82.55%–84.4%**
+        （noise_baseline.json → baseline_same_dist 的最小值 0.8255、最大值 0.844）。
+        Zenodo 存档一旦发布**不可撤回**，描述里的数字会永久留在 DOI 记录上。
+        因此改为**运行时从 JSON 读**，杜绝手抄错误。
+
+    🔴 为什么必须**只取 baseline_same_dist 字段**（同日第二处修正）：
+        第一版实现用"遍历所有 0.80–0.90 的数值"来取区间，
+        结果把 `observed_change_rate`（观测到的改变率，本就是另一个量）
+        也算了进去，读出 82.2% —— 与论文口径不符。
+        现在按字段名精确取 `baseline_same_dist`，语义唯一。
+    """
+    p = os.path.join(REPO, "results", "noise_baseline.json")
+    if not os.path.isfile(p):
+        return None
+    with open(p, encoding="utf-8") as f:
+        d = json.load(f)
+
+    vals = []
+
+    def walk(o):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                if k == "baseline_same_dist" and isinstance(v, (int, float)):
+                    vals.append(v)
+                else:
+                    walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+
+    walk(d)
+    if not vals:
+        return None
+    return round(min(vals) * 100, 2), round(max(vals) * 100, 2)
+
+
 def build_metadata():
     """Zenodo deposition 的元数据。
 
     ⚠️ 其中 creator 字段**必须**由用户填写真实作者信息——
        本项目作者信息尚未确定，故此处留占位并强制提示。
     """
+    _br = _baseline_range()
+    if _br is None:
+        _bl = "82.5-84.4"
+    else:
+        _bl = f"{_br[0]:g}-{_br[1]:g}"
     return {
         "upload_type": "software",
         "title": ("Class prevalence changes which chest radiograph dataset looks "
@@ -66,8 +111,8 @@ def build_metadata():
             "model-label combinations and reversed the calibration ranking in all "
             "eight, and it establishes the reference quantity against which such "
             "reversals must be judged: under a null of identical calibration across "
-            "datasets, prior matching alone reorders them in 82.3-84.4% of "
-            "replicates. The package also includes a corrected implementation of the "
+            f"datasets, prior matching alone reorders them in {_bl}% of replicates. "
+            "The package also includes a corrected implementation of the "
             "variance estimator of DeLong's test and verification scripts that "
             "re-derive every reported number from the authoritative result files.\n\n"
             "Data and pretrained weights are not included; see the repository README "
@@ -82,7 +127,7 @@ def build_metadata():
         "keywords": [
             "chest radiograph", "external validation", "calibration",
             "class prevalence", "benchmark ranking", "medical imaging",
-            "reproducibility",
+            "reproducibility", "DeLong test", "decision curve analysis",
         ],
         "license": {"id": "mit"},
         "related_identifiers": [
@@ -93,36 +138,39 @@ def build_metadata():
         ],
         "version": "1.0.0",
         "language": "eng",
-        "keywords": [
-            "chest radiograph", "external validation", "calibration",
-            "class prevalence", "benchmark ranking", "medical imaging",
-            "reproducibility", "DeLong test", "decision curve analysis",
-        ],
     }
 
 
 def make_zip(zip_path):
-    """打包要上传的 ZIP（排除大文件与内部文档）。"""
+    """打包要上传的 ZIP（排除大文件与内部文档）。
+
+    🔴 2026-11-10 修：原实现只排除 `*.npz` 与 `*.bak`，
+       但**漏了 results/_backup_*/ 目录**（含 19MB 的 feat_kem.npz.bak）
+       与 `results/cache_*.jsonl`（69,008 行推理缓存）。
+       这些都是本地中间产物，不应进存档 —— 打包体积会翻倍且内容无意义。
+       现在按"目录名 + 文件名前缀 + 后缀"三重排除。
+    """
     import zipfile
-    excludes_suffix = (".npz",)
+    excludes_suffix = (".npz", ".bak", ".log")
     excludes_names = {
         ".git", "__pycache__", ".venv", "venv",
-        "results/feat_kem.npz", "results/feat_nih.npz",
     }
-    excludes_prefix = ("results/cache_",)
+    excludes_prefix = ("results/cache_", "results/_backup", "results/raw/",
+                      "results/feat_")
     n = 0
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
         for root, dirs, files in os.walk(REPO):
-            dirs[:] = [d for d in dirs if d not in (".git", "__pycache__",
-                                                   ".venv", "venv")]
+            # 目录级排除（跳过整棵子树）
+            dirs[:] = [d for d in dirs
+                       if d not in excludes_names
+                       and not d.startswith("_backup")
+                       and d not in ("__pycache__", ".git", ".venv", "venv")]
             for fn in files:
                 full = os.path.join(root, fn)
                 rel = os.path.relpath(full, REPO).replace("\\", "/")
-                if rel in excludes_names or rel.endswith(excludes_suffix):
+                if rel.endswith(excludes_suffix):
                     continue
                 if any(rel.startswith(p) for p in excludes_prefix):
-                    continue
-                if rel.endswith(".bak"):
                     continue
                 z.write(full, rel)
                 n += 1
@@ -155,8 +203,10 @@ def main():
     print(f"upload_type : {meta['upload_type']}")
     print(f"title       : {meta['title']}")
     print(f"version     : {meta['version']}")
+    print(f"license     : {meta['license']['id']}")
     print(f"creators    : {meta['creators']}")
     print(f"related     : {RELEASE_URL}")
+    print(f"baseline    : {_baseline_range()}  ← 运行时从 noise_baseline.json 读")
     print()
 
     if not args.publish:

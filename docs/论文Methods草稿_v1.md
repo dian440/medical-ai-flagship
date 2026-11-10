@@ -98,9 +98,20 @@ Uncertainty was quantified for each retrained AUC by stratified bootstrap resamp
 
 Analyses were implemented in Python 3.12.14 with PyTorch 2.14.1 (CPU), torchxrayvision 1.5.7, NumPy 2.5.2, scikit-learn 1.9.1, SciPy 1.18.1, scikit-image 0.26.0, and pandas 3.1.0. All random procedures used fixed seeds declared in the analysis scripts; the seeds were 20261030 for the cross-dataset evaluation, 20261103 for bootstrap resampling and the verification of the DeLong estimator, and 20261104 for the prior-matched, ranking-stability, decision-curve, and retraining analyses. Analysis code, the derived per-image predictions, and the scripts that produced every reported figure are available at the repository accompanying this article (https://github.com/dian440/medical-ai-flagship), and the derived per-image prediction files that reproduce every reported result are provided there.
 
-### 2.6 Data availability
+### 2.6 Availability of data and materials
 
-All three datasets are publicly available: NIH ChestX-ray14 from the National Library of Medicine; the Kermany chest X-ray classification dataset from its public distribution channel; and VinDr-CXR from the PhysioNet repository. The derived prediction files that reproduce every result reported here are provided with the analysis code. The pre-trained weights were obtained from the torchxrayvision distribution and are used under their original licence.
+All three datasets are publicly available: NIH ChestX-ray14 from the National Library of Medicine; the Kermany chest X-ray classification dataset from its public distribution channel; and VinDr-CXR from the PhysioNet repository. The pre-trained weights were obtained from the torchxrayvision distribution and are used under their original licence.
+
+Project name: medical-ai-flagship — Class prevalence changes which chest radiograph dataset looks better: a cross-dataset audit of four publicly released classifiers.
+Project home page: https://github.com/dian440/medical-ai-flagship
+Archived version: **[ZENODO DOI TO BE COMPLETED]**
+Operating system(s): Platform independent (Windows, macOS or Linux).
+Programming language: Python 3.12 or higher.
+Other requirements: PyTorch 2.14 (CPU), torchxrayvision 1.5.7, NumPy 2.5, scikit-learn 1.9, SciPy 1.18, scikit-image 0.26, pandas 3.1. The complete dependency set is listed in `requirements.txt`. All analyses were executed on CPU hardware and no GPU is required.
+License: MIT (see the `LICENSE` file in the repository).
+Any restrictions to use by non-academics: none.
+
+The archived package contains the analysis code, the derived per-image prediction files that reproduce every result reported here, the figure-generation scripts, and the verification scripts that re-derive each reported number from the authoritative result files. The source datasets and the pre-trained weights are not redistributed and must be obtained from the sources named above, under their own terms of use.
 
 ### 2.7 Declarations
 

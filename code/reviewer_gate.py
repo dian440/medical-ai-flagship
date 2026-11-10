@@ -220,14 +220,35 @@ def gate_manuscript():
     # --- 必需声明 ---
     if "Methods" in contents:
         m = contents["Methods"]
+        # 🔴 2026-11-10 修：数据可得性小节的标题须按 BMC 官方措辞匹配。
+        #    原正则 `[Dd]ata availability` 只认旧写法，
+        #    导致把标题改为 BMC 实际使用的 "Availability of data and materials"
+        #    后反而误报"缺声明"。此处同时接受两种写法。
         for label, pat in (("伦理审批", r"[Ee]thics"),
                            ("利益冲突", r"competing interests"),
-                           ("数据可用性", r"[Dd]ata availability"),
+                           ("数据可用性",
+                            r"[Dd]ata availability|"
+                            r"[Aa]vailability of data and materials"),
                            ("资助", r"[Ff]unding"),
                            ("作者贡献", r"[Aa]uthors.? contributions")):
             if not re.search(pat, m):
                 r.add("MAJOR", f"Methods 缺 {label} 声明",
                       "BMC desk-check 必备", True)
+        # 🔴 数据可得性段必须含 BMC 规定的固定字段（2026-11-10 加）
+        #    BMC 原文要求 software 存档时给出：项目名、主页、存档版 DOI、
+        #    操作系统、编程语言、依赖、许可、使用限制。缺项会被编辑部退回。
+        _need = ["Project name:", "Project home page:", "Archived version:",
+                 "Operating system(s):", "Programming language:", "License:"]
+        _miss = [x for x in _need if x not in m]
+        if not _miss:
+            r.add("NOTE", "数据可得性段含 BMC 全部必需字段", "格式合规", False)
+        else:
+            r.add("MAJOR", f"数据可得性段缺字段：{'、'.join(_miss)}",
+                  "按 BMC 模板补齐", True)
+        # DOI 占位符未替换 → 阻塞（DOI 拿到后才有意义）
+        if re.search(r"\[ZENODO DOI TO BE COMPLETED\]", m):
+            r.add("MAJOR", "数据可得性段仍含 Zenodo DOI 占位符",
+                  "拿到 DOI 后替换，并建对应参考文献条目", True)
     # --- 参考文献占位 ---
     for k, c in contents.items():
         if re.search(r"\[reference\]|\[TO BE COMPLETED|\[待补充", c):
