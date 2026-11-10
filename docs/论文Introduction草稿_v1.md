@@ -28,14 +28,6 @@ The second is that the degree to which calibration differences between datasets 
 
 The third is that the statistical machinery used for comparing ROC curves is itself subject to implementation error. The variance estimator of DeLong's test depends on an implementation detail that is frequently transcribed incorrectly. The consequences grow as the classes become imbalanced. Such errors can convert a significant result into a non-significant one while leaving the point estimates untouched.
 
-The fourth is that, as a consequence, the question of whether these effects are properties of a particular architecture, of a particular task, or of the evaluation protocol in general has not been separated. Audits of this kind have so far been conducted within a single model family.
-
-The first is that the reversal of model rankings under prevalence variation has been reported through point estimates of a single summary statistic. The null distribution against which such a reversal should be judged has not been established. This is not a technicality. When the same resampling procedure is applied to three datasets of *identical* calibration, it reorders them in more than four fifths of cases. A reported reversal therefore carries no information about the datasets unless it is shown to exceed that noise. No procedure we could identify establishes whether a reversal observed in a given comparison is a systematic property of the evaluation or an artefact of the sampling.
-
-The second is that the degree to which calibration differences between datasets are arithmetic consequences of prevalence, rather than evidence about model behaviour, has not been quantified directly. Existing work reweights a fixed sample to a specified prevalence. That preserves the conditional score distributions of the sample. It therefore cannot separate a genuine calibration difference from a difference in how the two classes are weighted.
-
-The third is that the statistical machinery used for comparing ROC curves is itself subject to implementation error. The variance estimator of DeLong's test depends on an implementation detail that is frequently transcribed incorrectly. The consequences grow as the classes become imbalanced. Such errors can convert a significant result into a non-significant one while leaving the point estimates untouched.
-
 The fourth is that, as a consequence, the question remains open. Whether these effects are properties of a particular architecture, of a particular task, or of the evaluation protocol in general has not been separated. Audits of this kind have so far been conducted within a single model family.
 
 We therefore ask three questions. Are cross-dataset comparisons of chest radiograph classifiers robust to the metric, the label definition, and the class prevalence? Is the answer stable across models trained on different source data? And by how much does the observed instability exceed what resampling alone would produce?
