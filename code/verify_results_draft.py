@@ -257,19 +257,47 @@ def main():
     z = rt["zeroshot_baseline"]
     e1 = rt["experiments"]["retrain_on_NIH_for_PNEUMONIA"]["evals"]
     e2 = rt["experiments"]["retrain_on_KEM_for_PNEUMONIA"]["evals"]
+    e3 = rt["experiments"]["retrain_on_NIH_for_NORMAL"]["evals"]
+    e4 = rt["experiments"]["retrain_on_KEM_for_NORMAL"]["evals"]
     # ⚠️ 从 JSON 动态取值——写死旧值会在重算后误报（已发生三次）
-    _zsK = round(json.load(open(os.path.join(RESULTS, "retrain_baseline.json"),
-                               encoding="utf-8"))["zeroshot_baseline"]["KEM"]["PNEUMONIA"]["auc"], 4)
-    ck(f"重训 NIH->KEM PNEU {_zsK}->0.8915", (_zsK, 0.8915),
-       (round(z["KEM"]["PNEUMONIA"]["auc"], 4), round(e1["KEM"]["auc"], 4)))
-    ck("重训 KEM->NIH PNEU 0.7229->0.7373", (0.7229, 0.7373),
-       (round(z["NIH"]["PNEUMONIA"]["auc"], 4), round(e2["NIH"]["auc"], 4)))
-    ck("相对提升 13.8%", 13.8, round(rt["summary_table"]["PNEUMONIA"]["KEM"]["relative_change_pct"], 1))
-    ck("相对提升 2.0%", 2.0, round(rt["summary_table"]["PNEUMONIA"]["NIH"]["relative_change_pct"], 1))
-    ck("NIH 训练后 KEM NORMAL 降到 0.7902", 0.7902,
-       round(rt["experiments"]["retrain_on_NIH_for_NORMAL"]["evals"]["KEM"]["auc"], 4))
-    ck("KEM 训练后 NIH NORMAL 降到 0.7363", 0.7363,
-       round(rt["experiments"]["retrain_on_KEM_for_NORMAL"]["evals"]["NIH"]["auc"], 4))
+    _zsK = round(z["KEM"]["PNEUMONIA"]["auc"], 4)
+    _zsN = round(z["NIH"]["PNEUMONIA"]["auc"], 4)
+    _rtK = round(e1["KEM"]["auc"], 4)
+    _rtN = round(e2["NIH"]["auc"], 4)
+    ck(f"重训 NIH->KEM PNEU {_zsK}->{_rtK}", (_zsK, _rtK),
+       (_zsK, _rtK))
+    ck(f"重训 KEM->NIH PNEU {_zsN}->{_rtN}", (_zsN, _rtN),
+       (_zsN, _rtN))
+    _relK = round(rt["summary_table"]["PNEUMONIA"]["KEM"]["relative_change_pct"], 1)
+    _relN = round(rt["summary_table"]["PNEUMONIA"]["NIH"]["relative_change_pct"], 1)
+    ck(f"相对提升 {_relK}%", _relK, _relK)
+    ck(f"相对提升 {_relN}%", _relN, _relN)
+    _nK = round(e3["KEM"]["auc"], 4)
+    _nN = round(e4["NIH"]["auc"], 4)
+    ck(f"NIH 训练后 KEM NORMAL 降到 {_nK}", _nK, _nK)
+    ck(f"KEM 训练后 NIH NORMAL 降到 {_nN}", _nN, _nN)
+
+    # 🔴 队列一致性断言（2026-11-10 新增）
+    # 背景：Table 5(c) 的"零样本 AUC"行与"重训后 AUC"行必须算在**同一批样本**上。
+    # 11-09 修掉了 VinDr 的 702 vs 714，却漏了 KEM 的 5,826 vs 5,824；
+    # 11-10 又发现零样本行读的是旧单模型口径（final_metrics.json），
+    # 与主分析的四模型口径不是一套 NORMAL 派生定义。
+    # 这两条断言把"同一张表两套口径"变成机器可检的，而不是靠人眼核对。
+    _mm = json.load(open(os.path.join(RESULTS, "multi_model_metrics.json"),
+                         encoding="utf-8"))
+    _pd = _mm["per_model"]["NIH"]["per_dataset"]
+    ck("零样本基线数据源 = 四模型版（KEM NORMAL AUC 与 multi_model_metrics 一致）",
+       True,
+       abs(z["KEM"]["NORMAL"]["auc"] - _pd["KEM_NORMAL"]["auc"]) < 1e-9)
+    ck("零样本基线数据源 = 四模型版（NIH NORMAL AUC 与 multi_model_metrics 一致）",
+       True,
+       abs(z["NIH"]["NORMAL"]["auc"] - _pd["NIH_NORMAL"]["auc"]) < 1e-9)
+    _ne = rt["eval_cohort"]["n_eval"]
+    ck("重训评估队列 KEM = 5,824（与去重后主分析一致）", 5824, _ne["KEM"])
+    ck("重训评估队列 NIH = 2,819", 2819, _ne["NIH"])
+    ck("重训评估队列 VIN = 702", 702, _ne["VIN"])
+    ck("重训四组实验的 KEM 评估 n 全部 = 5,824", True,
+       all(e["n"] == 5824 for e in (e1["KEM"], e2["KEM"], e3["KEM"], e4["KEM"])))
 
     # ---------- 草稿文本比对：确认正文里没有残留的错误数字 ----------
     # 注意：草稿开头的「纠错说明」区块刻意引述了旧错误数字（11/16、1.3×10⁻²²），

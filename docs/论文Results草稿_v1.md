@@ -75,7 +75,7 @@ Of the remaining six model–label combinations, three changed at two of the thr
 
 ### 3.8 Retraining recovered performance in one direction only
 
-Retraining a linear classification head on the source domain, with the convolutional backbone frozen, recovered most but not all of the difference between domains in one direction and little in the other. Training on NIH and evaluating on Kermany raised the PNEUMONIA AUC from 0.7832 to 0.8915, a relative increase of 13.8%, while training on Kermany and evaluating on NIH raised the same AUC from 0.7229 to 0.7373, a relative increase of 2.0%. The asymmetry was the same in the other direction: training on NIH raised the NORMAL AUC on Kermany from 0.9077 to 0.7902, which was a decrease, whereas training on Kermany raised the NORMAL AUC on NIH from 0.7618 to 0.7363, also a decrease.
+Retraining a linear classification head on the source domain, with the convolutional backbone frozen, recovered most but not all of the difference between domains in one direction and little in the other. Training on NIH and evaluating on Kermany raised the PNEUMONIA AUC from 0.7832 to 0.8916, a relative increase of 13.8%, while training on Kermany and evaluating on NIH raised the same AUC from 0.7229 to 0.7346, a relative increase of 1.6%. The asymmetry was the same in the other direction: training on NIH lowered the NORMAL AUC on Kermany from 0.9077 to 0.7904, a relative decrease of 12.9%, whereas training on Kermany lowered the NORMAL AUC on NIH from 0.7618 to 0.7369, a relative decrease of 3.3%.
 
 ---
 
@@ -143,7 +143,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 ### 3.8 重训只在一个方向上救回了性能
 
-在源域上重训线性分类头（冻结卷积骨干），在一个方向上救回了域间差异的大部分，在另一个方向上几乎无效。在 NIH 上训练后评估 Kermany，PNEUMONIA AUC 从 0.7832 升至 0.8915，相对提升 13.8%；而在 Kermany 上训练后评估 NIH，同一 AUC 从 0.7229 升至 0.7373，相对提升仅 2.0%。另一方向同样呈现不对称：在 NIH 上训练把 Kermany 上的 NORMAL AUC 从 0.9077 降到 0.7902，在 Kermany 上训练把 NIH 上的 NORMAL AUC 从 0.7618 降到 0.7363。
+在源域上重训线性分类头（冻结卷积骨干），在一个方向上救回了域间差异的大部分，在另一个方向上几乎无效。在 NIH 上训练后评估 Kermany，PNEUMONIA AUC 从 0.7832 升至 0.8916，相对提升 13.8%；而在 Kermany 上训练后评估 NIH，同一 AUC 从 0.7229 升至 0.7346，相对提升仅 1.6%。另一方向同样呈现不对称：在 NIH 上训练把 Kermany 上的 NORMAL AUC 从 0.9077 降到 0.7904，相对下降 12.9%；在 Kermany 上训练把 NIH 上的 NORMAL AUC 从 0.7618 降到 0.7369，相对下降 3.3%。
 
 ---
 

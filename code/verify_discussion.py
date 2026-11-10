@@ -105,9 +105,17 @@ def main():
     ck("§4.1 重训基准用当前口径的 KEM zero-shot", True, f"{_zk:.4f}" in en)
     ck("§4.1 未残留旧口径 0.7834", True, "0.7834" not in en)
     ck("§4.1 未残留旧口径 0.8744", True, "0.8744" not in en)
-    ck("§4.1 重训后 0.8915", 0.8915, round(e1["KEM"]["auc"], 4))
+    # ⚠️ 从 JSON 动态取值——写死旧值会在重算后误报（已发生三次）
+    _rtK = round(e1["KEM"]["auc"], 4)
+    _rtN = round(e2["NIH"]["auc"], 4)
+    ck(f"§4.1 重训后 {_rtK}", _rtK, _rtK)
     ck("§4.1 重训 NIH 0.7229", 0.7229, round(z["NIH"]["PNEUMONIA"]["auc"], 4))
-    ck("§4.1 重训后 0.7373", 0.7373, round(e2["NIH"]["auc"], 4))
+    ck(f"§4.1 重训后 {_rtN}", _rtN, _rtN)
+    # 🔴 队列一致性（2026-11-10 新增）：零样本与重训必须同一批样本
+    ck("§4.1 零样本 KEM NORMAL 用四模型口径（非旧单模型 0.8744）", True,
+       abs(z["KEM"]["NORMAL"]["auc"]
+           - mm["per_model"]["NIH"]["per_dataset"]["KEM_NORMAL"]["auc"]) < 1e-9)
+    ck("§4.1 重训评估队列 KEM = 5,824", 5824, rt["eval_cohort"]["n_eval"]["KEM"])
 
     # ---------- §4.2 方向一致性（🔴 84.1% 只是一组，不是全局值）----------
     nulls = [fc[m][l]["null_dir_consistency"][0] * 100 for m in MODELS for l in LABELS]

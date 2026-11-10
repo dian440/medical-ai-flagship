@@ -88,6 +88,30 @@
     {
       "value": 84.1,
       "reason": "去重前 NIH/PNEUMONIA 方向一致性（现为 84.8）"
+    },
+    {
+      "value": 0.8915,
+      "reason": "去重前重训 NIH->KEM PNEUMONIA AUC（现为 0.8916）"
+    },
+    {
+      "value": 0.9834,
+      "reason": "去重前重训 KEM 内评估 AUC（现为 0.9835）"
+    },
+    {
+      "value": 0.7902,
+      "reason": "去重前重训 NIH->KEM NORMAL AUC（现为 0.7904）"
+    },
+    {
+      "value": 0.7363,
+      "reason": "去重前重训 KEM->NIH NORMAL AUC（现为 0.7369）"
+    },
+    {
+      "value": 0.7373,
+      "reason": "去重前重训 KEM->NIH PNEUMONIA AUC（现为 0.7346）"
+    },
+    {
+      "value": 0.7294,
+      "reason": "去重前重训 KEM->VIN PNEUMONIA AUC（现为 0.7171）"
     }
   ]
 }

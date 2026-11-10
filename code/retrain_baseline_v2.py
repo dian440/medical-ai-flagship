@@ -175,14 +175,32 @@ def index_vindr():
 # 同时把"12 张被漏掉"这件事写进结果 JSON 的 disclosure 字段 ——
 # 论文 Limitations 必须主动交代，不能藏。
 def canonical_eval_cohort():
-    """读主评估的权威清单，返回 {dataset: set(filename)}"""
-    path = os.path.join(RESULTS, "cross_dataset_predictions.csv")
+    """读主评估的权威清单，返回 {dataset: set(filename)}
+
+    🔴 权威源切换（2026-11-10 修）：**必须用 multi_model_predictions.csv**
+       （四模型版，KEM 5,824），不能用 cross_dataset_predictions.csv
+       （旧单模型版，KEM 5,826 —— 含 2 个 valid-mini 重复占位文件
+        `image.jpg0.jpg` / `image.jpg1.jpg`）。
+
+       11-09 修的是 VinDr 的 702 vs 714，但**KEM 的 5,826 vs 5,824 漏了**。
+       后果：Table 5(c) 的"零样本 AUC"行取自 multi_model_metrics.json
+       （四模型版，5,824），"重训后 AUC"行取自本脚本（5,826）——
+       **同一张表里两行的 KEM 样本集不同**，与 11-09 修掉的
+       "跨样本集比较"是同一个错误，只是换了一个数据集。
+       审稿人核一下 n 就能发现。
+
+       四模型清单里取 model == "NIH" 的那一组：它与本脚本的重训骨干
+       （densenet121-res224-nih）同源，且是主分析实际使用的队列。
+    """
+    path = os.path.join(RESULTS, "multi_model_predictions.csv")
     cohort = {"NIH": set(), "KEM": set(), "VIN": set()}
     if not os.path.isfile(path):
         return None
     import csv as _csv
     with open(path, encoding="utf-8") as f:
         for r in _csv.DictReader(f):
+            if r.get("model") != "NIH":
+                continue
             ds = r.get("dataset")
             fn = r.get("file")
             if ds in cohort and fn:
@@ -478,7 +496,7 @@ def main():
     cohort = canonical_eval_cohort()
     eval_cohort_note = None
     if cohort is None:
-        log("  [警告] 找不到 results/cross_dataset_predictions.csv —— "
+        log("  [警告] 找不到 results/multi_model_predictions.csv —— "
             "无法对齐评估队列，本次结果不可与主评估直接比较")
     else:
         def _restrict(items, ds):
@@ -549,8 +567,10 @@ def main():
         "epochs": args.epochs,
         "fixed_epochs_sensitivity": args.fixed_epochs,
         "eval_cohort": {
-            "source": "results/cross_dataset_predictions.csv (authoritative list "
-                      "produced by cross_dataset_eval.py)",
+            "source": "results/multi_model_predictions.csv, rows with "
+                      "model == 'NIH' (authoritative four-model evaluation "
+                      "list; identical to the cohort used by "
+                      "multi_model_metrics.json)",
             "note": "Evaluation samples are restricted to exactly the images "
                     "that entered the main cross-dataset evaluation, so that "
                     "zero-shot and retrained AUC are computed on identical "
@@ -742,16 +762,31 @@ def main():
     log("汇总：重训能否救回跨数据集衰减？")
     log("=" * 72)
 
-    fm_path = os.path.join(RESULTS, "final_metrics.json")
-    if os.path.isfile(fm_path):
-        with open(fm_path, encoding="utf-8") as f:
-            fm = json.load(f)
+    # 🔴 零样本基线的数据源必须是**四模型版** multi_model_metrics.json
+    #    （2026-11-10 修）。原实现读 final_metrics.json —— 那是**旧单模型版**，
+    #    两者的 NORMAL 派生口径不同（14 病种全量 vs 四模型共同 7 病种），
+    #    于是同一张 Table 5(c) 里出现了两套不可比的数字：
+    #      旧单模型口径：KEM NORMAL 0.8744 / NIH NORMAL 0.7853 / VIN 0.8301
+    #      四模型口径：  KEM NORMAL 0.9077 / NIH NORMAL 0.7618 / VIN 0.8071
+    #    审稿人核一下 Table 5(c) 的零样本行与 Table 5(a)/正文对不上就能发现。
+    _mm_path = os.path.join(RESULTS, "multi_model_metrics.json")
+    if os.path.isfile(_mm_path):
+        with open(_mm_path, encoding="utf-8") as f:
+            _mm = json.load(f)
+        _pd = _mm["per_model"]["NIH"]["per_dataset"]
         results["zeroshot_baseline"] = {
-            ds: {lbl: {"auc": fm["per_dataset"][ds][lbl]["auc"],
-                       "ece": fm["per_dataset"][ds][lbl]["ece_10bins"]}
-                 for lbl in LABELS if lbl in fm["per_dataset"].get(ds, {})}
-            for ds in fm["per_dataset"]
+            ds: {lbl: {"auc": _pd[f"{ds}_{lbl}"]["auc"],
+                       "ece": _pd[f"{ds}_{lbl}"]["ece_10bins"]}
+                 for lbl in LABELS if f"{ds}_{lbl}" in _pd}
+            for ds in ("NIH", "KEM", "VIN")
         }
+        results["zeroshot_baseline_source"] = (
+            "results/multi_model_metrics.json → per_model.NIH.per_dataset "
+            "(four-model NIH-pretrained classifier; same model and cohort as "
+            "the retrained probes)")
+    else:
+        log("  [警告] 找不到 multi_model_metrics.json —— "
+            "零样本基线缺失，本次结果不可与主评估直接比较")
 
     zs = results.get("zeroshot_baseline", {})
     summary = {}

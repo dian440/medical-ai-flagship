@@ -154,10 +154,10 @@ Net benefit was computed at threshold probabilities of 0.10, 0.30 and 0.50. The 
 
 | Target label | Retrained on | NIH AUC | Kermany AUC | VinDr-CXR AUC |
 |---|---|---|---|---|
-| PNEUMONIA | NIH | 0.8272 | 0.8915 | 0.7784 |
-| PNEUMONIA | Kermany | 0.7373 | 0.9834 | 0.7294 |
-| NORMAL | NIH | 0.7899 | 0.7902 | 0.7846 |
-| NORMAL | Kermany | 0.7363 | 0.9834 | 0.7248 |
+| PNEUMONIA | NIH | 0.8272 | 0.8916 | 0.7784 |
+| PNEUMONIA | Kermany | 0.7346 | 0.9835 | 0.7171 |
+| NORMAL | NIH | 0.7899 | 0.7904 | 0.7846 |
+| NORMAL | Kermany | 0.7369 | 0.9835 | 0.7248 |
 
 | Target label | Zero-shot NIH | Zero-shot Kermany | Zero-shot VinDr-CXR |
 |---|---|---|---|
