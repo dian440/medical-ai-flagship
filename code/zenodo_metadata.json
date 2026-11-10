@@ -1,0 +1,64 @@
+{
+  "_comment": [
+    "🔴 单一元数据源 —— Zenodo DOI 记录、GitHub CITATION.cff、README 引用段、",
+    "   论文 References 条目全部从这里生成，不要在任何地方手抄。",
+    "",
+    "   为什么需要它：",
+    "   ① Zenodo 记录一旦发布不可撤回，手抄错一个数字就永久留在 DOI 上；",
+    "   ② 此前 README 里的基线数字（82.3）与权威值（82.5）漂移了，",
+    "      核验链只查论文正文、没查 README，所以没被抓到；",
+    "   ③ 生成 .zenodo.json 后，GitHub 自动集成抓的就是这份文件，",
+    "      Zenodo 界面上手改反而会被下次 release 覆盖。",
+    "",
+    "   署名说明：",
+    "   authors 的顺序目前为待定状态（需与赵微巍、刘禹鸶两位老师面谈确定）。",
+    "   Zenodo 的元数据可在存档后直接编辑且不产生新 DOI，因此这里可以先填",
+    "   一个确定的版本，顺序定了之后再改此文件并发一个新 release 即可。",
+    "   详见 docs/Zenodo_DOI操作指引_2026-11-10.md。"
+  ],
+  "title": "Class prevalence changes which chest radiograph dataset looks better: a cross-dataset audit of four publicly released classifiers",
+  "version": "1.0.1",
+  "upload_type": "software",
+  "access_right": "open",
+  "language": "eng",
+  "_creators_note": [
+    "🔴 作者姓名与顺序**尚未与导师谈定**，此处为显式占位，不得直接发布。",
+    "   GitHub 用户名是 dian440（可核实），但这不是可发表的作者名。",
+    "   发布前必须由用户填入真实姓名与顺序；详见操作指引。",
+    "   Zenodo 元数据可在存档后直接编辑且不产生新 DOI，顺序定了之后",
+    "   改这里 + 发一个新 release 即可，不必推倒重来。"
+  ],
+  "creators": [
+    {
+      "name": "AUTHOR NAME TO BE FILLED (GitHub: dian440)",
+      "affiliation": "School of Electronic Information Engineering, Dalian Medical University, Dalian, China",
+      "type": "ProjectMember"
+    }
+  ],
+  "contributors": [],
+  "description": "Analysis code and derived results accompanying a manuscript submitted to BMC Medical Imaging.\n\nThe study audits four publicly released chest radiograph classifiers (identical architecture, differing pretraining source) on three independently collected datasets (NIH ChestX-ray14, Kermany, VinDr-CXR), each reduced to one identically defined binary task. It reports that resampling all cohorts to a common class prevalence contracted the calibration spread in seven of eight model-label combinations and reversed the calibration ranking in all eight, and it establishes the reference quantity against which such reversals must be judged: under a null of identical calibration across datasets, prior matching alone reorders them in {{BASELINE_MIN}}-{{BASELINE_MAX}}% of replicates. The analytic expectation for three exchangeable datasets is 1 - 1/3! = 83.33%. The package also includes a corrected implementation of the variance estimator of DeLong's test and verification scripts that re-derive every reported number from the authoritative result files.\n\nData and pretrained weights are not included; see the repository README for their original sources and terms of use.",
+  "keywords": [
+    "chest radiograph",
+    "external validation",
+    "calibration",
+    "class prevalence",
+    "benchmark ranking",
+    "medical imaging",
+    "reproducibility",
+    "DeLong test",
+    "decision curve analysis"
+  ],
+  "license": "mit",
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://github.com/dian440/medical-ai-flagship/releases/tag/v1.0.1",
+      "resource_type": "software"
+    },
+    {
+      "relation": "isVersionOf",
+      "identifier": "https://github.com/dian440/medical-ai-flagship",
+      "resource_type": "software"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Class prevalence changes which chest radiograph dataset looks better: a cross-dataset audit of four publicly released classifiers",
+  "version": "1.0.1",
+  "upload_type": "software",
+  "access_right": "open",
+  "language": "eng",
+  "creators": [
+    {
+      "name": "AUTHOR NAME TO BE FILLED (GitHub: dian440)",
+      "affiliation": "School of Electronic Information Engineering, Dalian Medical University, Dalian, China",
+      "type": "ProjectMember"
+    }
+  ],
+  "contributors": [],
+  "description": "Analysis code and derived results accompanying a manuscript submitted to BMC Medical Imaging.\n\nThe study audits four publicly released chest radiograph classifiers (identical architecture, differing pretraining source) on three independently collected datasets (NIH ChestX-ray14, Kermany, VinDr-CXR), each reduced to one identically defined binary task. It reports that resampling all cohorts to a common class prevalence contracted the calibration spread in seven of eight model-label combinations and reversed the calibration ranking in all eight, and it establishes the reference quantity against which such reversals must be judged: under a null of identical calibration across datasets, prior matching alone reorders them in 82.5-84.4% of replicates. The analytic expectation for three exchangeable datasets is 1 - 1/3! = 83.33%. The package also includes a corrected implementation of the variance estimator of DeLong's test and verification scripts that re-derive every reported number from the authoritative result files.\n\nData and pretrained weights are not included; see the repository README for their original sources and terms of use.",
+  "keywords": [
+    "chest radiograph",
+    "external validation",
+    "calibration",
+    "class prevalence",
+    "benchmark ranking",
+    "medical imaging",
+    "reproducibility",
+    "DeLong test",
+    "decision curve analysis"
+  ],
+  "license": "mit",
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://github.com/dian440/medical-ai-flagship/releases/tag/v1.0.1",
+      "resource_type": "software"
+    },
+    {
+      "relation": "isVersionOf",
+      "identifier": "https://github.com/dian440/medical-ai-flagship",
+      "resource_type": "software"
+    }
+  ]
+}

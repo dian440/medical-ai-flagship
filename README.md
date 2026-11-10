@@ -19,7 +19,7 @@ evaluation cohorts to a common class prevalence contracted the calibration sprea
 eight model–label combinations and reversed the calibration ranking in all eight. More
 consequentially, the paper establishes the **reference quantity against which such a reversal
 must be judged**: under a null in which the three datasets are of *identical* calibration and
-differ only in resampling noise, prior matching alone reorders them in **82.3–84.4%** of
+differ only in resampling noise, prior matching alone reorders them in **82.5–84.4%** of
 replicates. A cross-dataset calibration comparison that omits such a baseline cannot be
 interpreted.
 
@@ -180,7 +180,26 @@ If you use the prevalence-matched null baseline, the corrected DeLong variance e
 the verification scripts in this repository, please cite the corresponding paper. A
 methodological description of the baseline is given in the section that introduces it.
 
----
+The archived version of this software carries a Zenodo DOI:
+
+> Class prevalence changes which chest radiograph dataset looks better: a cross-dataset audit of four publicly released classifiers
+> Version 1.0.1 — archived from https://github.com/dian440/medical-ai-flagship/releases/tag/v1.0.1
+> DOI: <!-- ZENODO_DOI_PLACEHOLDER -->
+
+When the DOI has been assigned, replace the line above with the Zenodo record link:
+
+```bibtex
+@software{medai_flagship_1.0.1,
+  author    = {AUTHOR NAME TO BE FILLED (GitHub: dian440)},
+  title     = {Class prevalence changes which chest radiograph dataset looks better: a cross-dataset audit of four publicly released classifiers},
+  version   = {1.0.1},
+  year      = {2026},
+  doi       = {<!-- ZENODO_DOI -->},
+  url       = {https://github.com/dian440/medical-ai-flagship},
+  license   = {MIT},
+  keywords  = {chest radiograph, external validation, calibration, class prevalence, benchmark ranking}
+}
+```
 
 ## Licence
 

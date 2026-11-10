@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software or the prevalence-matched null baseline it implements, please cite the associated manuscript."
+title: "Class prevalence changes which chest radiograph dataset looks better: a cross-dataset audit of four publicly released classifiers"
+abstract: "Analysis code and derived results accompanying a manuscript submitted to BMC Medical Imaging. The study audits four publicly released chest radiograph classifiers (identical architecture, differing pretraining source) on three independently collected datasets (NIH ChestX-ray14, Kermany, VinDr-CXR), each reduced to one identically defined binary task. It reports that resampling all cohorts to a common class prevalence contracted the calibration spread in seven of eight model-label combinations and reversed the calibration ranking in all eight, and it establishes the reference quantity against which such reversals must be judged: under a null of identical calibration across datasets, prior matching alone reorders them in 82.5-84.4% of replicates. The analytic expectation for three exchangeable datasets is 1 - 1/3! = 83.33%. The package also includes a corrected implementation of the variance estimator of DeLong's test and verification scripts that re-derive every reported number from the authoritative result files. Data and pretrained weights are not included; see the repository README for their original sources and terms of use."
+type: software
+version: 1.0.1
+license: mit
+keywords:
+  - chest radiograph
+  - external validation
+  - calibration
+  - class prevalence
+  - benchmark ranking
+  - medical imaging
+  - reproducibility
+  - DeLong test
+  - decision curve analysis
+repository-code: "https://github.com/dian440/medical-ai-flagship"
+url: "https://github.com/dian440/medical-ai-flagship"
+authors:
+  - family-names: "AUTHOR NAME TO BE FILLED (GitHub: dian440)"
+    affiliation: "School of Electronic Information Engineering, Dalian Medical University, Dalian, China"

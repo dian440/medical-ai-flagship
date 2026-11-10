@@ -157,29 +157,68 @@ def main():
         todo("填入 Zenodo DOI",
              "拿到 DOI 后替换 [ZENODO DOI TO BE COMPLETED] 占位符")
 
-    # ---------- 脚本元数据 ----------
-    print("\n[5] 发布脚本元数据")
-    zp = os.path.join(HERE, "zenodo_publish.py")
-    if os.path.isfile(zp):
-        zt = open(zp, encoding="utf-8").read()
-        if "[AUTHOR NAME TO BE FILLED]" in zt:
+    # ---------- 元数据源（2026-11-10 改：改为查真实来源）----------
+    # 🔴 此前这里查的是 zenodo_publish.py 的源码，而实际发布流程已改为
+    #    "元数据单一源 → .zenodo.json → GitHub release → Zenodo 自动抓取"，
+    #    检查对象与真实流程脱节。现改为查 code/zenodo_metadata.json 与
+    #    仓库根目录的 .zenodo.json / CITATION.cff。
+    print("\n[5] 元数据（单一源 → .zenodo.json → GitHub release → Zenodo 自动抓取）")
+    mpath = os.path.join(HERE, "zenodo_metadata.json")
+    if os.path.isfile(mpath):
+        m = json.load(open(mpath, encoding="utf-8"))
+        cr = m.get("creators", [])
+        if any("TO BE FILLED" in c.get("name", "") for c in cr):
             todo("填 creators 真实作者信息",
-                 "脚本会拒绝发布占位符；署名顺序需与老师谈定后填")
+                 "运行 `python code/fill_zenodo_authors.py` 交互填写；"
+                 "占位符若进了 DOI 记录会很难看")
         else:
-            ok("creators 已填真实信息")
-        if "_baseline_range()" in zt:
-            ok("描述中的基线区间运行时从 JSON 读（杜绝手抄错误）")
+            ok(f"creators 已填真实信息（{len(cr)} 位）")
+        ok(f"元数据单一源存在（version {m.get('version')}）")
+    else:
+        todo("创建 code/zenodo_metadata.json", "元数据单一源缺失")
+
+    for fname, label in ((".zenodo.json", ".zenodo.json（Zenodo 读取的）"),
+                         ("CITATION.cff", "CITATION.cff（GitHub cite 按钮）")):
+        fp = os.path.join(REPO, fname)
+        if os.path.isfile(fp):
+            ok(f"{label} 已生成")
         else:
-            todo("基线区间改为运行时读取", "硬编码数字可能与正文不一致")
+            todo(f"生成 {fname}",
+                 f"运行 `python code/make_zenodo_metadata.py`")
+
+    # 基线数字一致性：README / .zenodo.json / CITATION.cff 三处必须一致
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "mz", os.path.join(HERE, "make_zenodo_metadata.py"))
+        mz = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mz)
+        lo, hi = mz.baseline_range()
+        bad = []
+        for fn in ("README.md", ".zenodo.json", "CITATION.cff"):
+            fp = os.path.join(REPO, fn)
+            if not os.path.isfile(fp):
+                continue
+            t = open(fp, encoding="utf-8").read()
+            if "82.3" in t:
+                bad.append(fn)
+        if bad:
+            todo("清除 README/.zenodo.json/CITATION.cff 中的旧基线值 82.3",
+                 f"发现于 {', '.join(bad)}；权威值是 {lo:.1f}–{hi:.1f}")
+        else:
+            ok(f"三处元数据的基线数字均为权威值（{lo:.1f}–{hi:.1f}）")
+    except Exception as e:
+        print(f"  ⚠️ 基线一致性检查未能执行：{e}")
 
     # ---------- Zenodo 侧（需人工） ----------
     print("\n[6] Zenodo 账号（需人工完成，脚本无法代劳）")
     print("  ⬜ 在 https://zenodo.org/login/ 用 GitHub 账号登录")
     print("  ⬜ 在 https://zenodo.org/account/settings/github/ "
-          "打开仓库开关")
+          "点 Sync now → 打开仓库开关")
     print("  ⬜ 在 GitHub 发一个新 Release（Zenodo 自动分配 DOI）")
-    print("     或：拿 token → 填 creators → 运行 "
-          "code/zenodo_publish.py --publish")
+    print("     注意：已连接的仓库只自动存档「之后」的新 Release，"
+          "11-09 发的 v1.0.0 不会被补档")
+    print("     或：走 API 路线 → code/zenodo_publish.py --publish")
 
     # ---------- 汇总 ----------
     print("\n" + "=" * 84)
@@ -190,8 +229,10 @@ def main():
         for i, (t, why) in enumerate(todo_items, 1):
             print(f"  {i}. {t}")
             print(f"     {why}")
-    print("\n💡 真正的瓶颈是**作者署名顺序**——需与赵微巍、刘禹鸶两位老师谈定。")
-    print("   其余步骤（登录 Zenodo / 开开关 / 发 Release）合计约 10 分钟。")
+    print("\n💡 已核实（Zenodo 官方文档）：**元数据在存档后可直接编辑且不产生新 DOI**，")
+    print("   所以作者署名顺序谈定与否**不阻塞拿 DOI**。")
+    print("   可以先发 release 解除投稿阻塞，署名定了再改元数据发一个新版本。")
+    print("   但发 release 前请至少把 creators 填上真实姓名。")
     return 0
 
 

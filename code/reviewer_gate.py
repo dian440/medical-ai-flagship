@@ -147,7 +147,7 @@ def gate_numbers():
     for script in ("verify_results_draft.py", "verify_figures.py",
                    "verify_tables.py", "verify_discussion.py",
                    "verify_teacher_brief.py", "scan_stale_values.py",
-                   "verify_readability.py"):
+                   "verify_readability.py", "verify_repo_metadata.py"):
         p = os.path.join(HERE, script)
         if not os.path.exists(p):
             r.add("MINOR", f"{script} 不存在", "无法机械核验", False)
@@ -160,8 +160,17 @@ def gate_numbers():
         if ok:
             r.add("NOTE", f"{script} 全部通过（{detail}）", "无需处置", False)
         else:
-            r.add("FATAL", f"{script} 有失败项（{detail}）",
-                  "修正后重跑，不得带错数字投稿", True)
+            # 🔴 区分"待办"与"缺陷"（2026-11-10 新增）
+            #   待办 = 真实存在但要人填信息（如 Zenodo 署名占位符）
+            #   缺陷 = 代码/文档出错，应当立即修
+            # 混在一起的话，闸门会常红，用户分辨不出它在等什么。
+            if "⏳" in res.stdout and "❌" not in res.stdout:
+                r.add("MAJOR",
+                      f"{script} 有 {detail} 项待填（需人工填写真实信息）",
+                      "占位符填妥后重跑", True)
+            else:
+                r.add("FATAL", f"{script} 有失败项（{detail}）",
+                      "修正后重跑，不得带错数字投稿", True)
     return r
 
 
