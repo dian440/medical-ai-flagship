@@ -241,6 +241,43 @@ def main():
     ck("零分布方向一致性（NIH/PNEUMONIA）84.8%", 84.8, round(
         fc["NIH"]["PNEUMONIA"]["null_dir_consistency"][0] * 100, 1))
 
+    # ---------- §3.5 独立实现复现段（2026-11-10 补）----------
+    # 🔴 这段此前**完全没有被任何脚本核验** —— 导致稿件里
+    #    "81.8% to 84.0%" 与 8 个错的观测改变率长期无人发现。
+    #    （81.8 在代码里根本不存在；独立实现的真实区间是 82.5%–84.0%）
+    #    权威来源：results/pmnb_independent_output.json（由 validate_pmnb.py 生成）
+    _pmnb_p = os.path.join(RESULTS, "pmnb_independent_output.json")
+    # ⚠️ 本脚本的 ck(name, expected, ok) 语义是 `ok = (expected == ok)`，
+    #    因此第三个参数必须是**与 expected 可比较的值**，不能是说明字符串。
+    ck("PMNB 独立实现输出文件存在", True, os.path.isfile(_pmnb_p))
+    if os.path.isfile(_pmnb_p):
+        with open(_pmnb_p, encoding="utf-8") as f:
+            _po = json.load(f)
+        _blr = _po.get("baseline_rate_range_pct", [])
+        _obs = _po.get("observed_change_rates_pct", [])
+        ck("PMNB 基线区间下界 = 82.5", 82.5, round(_blr[0], 1) if len(_blr) == 2 else None)
+        ck("PMNB 基线区间上界 = 84.0", 84.0, round(_blr[1], 1) if len(_blr) == 2 else None)
+        ck("PMNB 观测改变率 8 项", 8, len(_obs))
+        # 逐项：独立实现算出的观测改变率必须与主分析完全一致
+        # （观测改变率是确定性结果，两套独立代码必须给出同一个数）
+        _main_obs = [round(nb[m][lb]["observed_change_rate"] * 100, 1)
+                     for m in nb["models"] for lb in ("PNEUMONIA", "NORMAL")]
+        ck("PMNB 观测改变率与主分析逐项一致",
+           _main_obs, [round(x, 1) for x in _obs])
+
+        # 正文里出现的这串数字必须与权威值一致
+        _txt = _doc_text("论文Results草稿_v1.md")
+        _obs_str = ", ".join(f"{x:.1f}%" for x in _obs)
+        ck("§3.5 独立实现观测改变率串与权威一致",
+           True, (_obs_str in _txt or
+                  all(f"{x:.1f}%" in _txt for x in _obs)))
+        _bl_str = f"{_blr[0]:.1f}% to {_blr[1]:.1f}%"
+        ck("§3.5 独立实现基线区间与权威一致",
+           True, (_bl_str in _txt or
+                  f"{_blr[0]:.1f}%–{_blr[1]:.1f}%" in _txt))
+        # 旧的错误值不得残留
+        ck("§3.5 无手写错值 81.8", True, "81.8" not in _txt)
+
     # ---------- §3.6 严格口径 ----------
     strict_rows = [(m, k) for m in ls["models"] for k in ("PNEUMONIA_strict", "NORMAL_strict")]
     n_cont_s = sum(1 for m, k in strict_rows if ls[m][k]["ece_span_matched"] < ls[m][k]["ece_span_raw"])

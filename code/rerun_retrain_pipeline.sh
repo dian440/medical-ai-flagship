@@ -63,7 +63,8 @@ echo "════════════════════════�
 echo "5/5  全链核验"
 echo "════════════════════════════════════════════════════════════"
 for s in verify_results_draft verify_tables verify_discussion verify_figures \
-         validate_pmnb verify_teacher_brief scan_stale_values verify_readability; do
+         validate_pmnb verify_teacher_brief scan_stale_values verify_readability \
+         verify_repo_metadata; do
   printf "  %-24s " "$s"
   "$PY_ANY" code/$s.py 2>&1 | grep -oE "通过 [0-9]+，失败 [0-9]+|失败 [0-9]+ 项|✅ 全部通过|未发现过时值" | head -1
 done

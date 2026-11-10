@@ -94,6 +94,49 @@ def main():
                   f"{'OK' if ok_base and ok_obs else 'DIFF':>6s}")
 
     print()
+    # ---------- 输出独立实现的权威区间（供稿件与守卫引用）----------
+    # 🔴 2026-11-10 补：Results 里"独立实现基线 81.8%–84.0%"是**手写数字**，
+    #    与本工具实际算出的 82.5%–84.0% 不符 —— 代码里根本没有 81.8。
+    #    根因与 Zenodo 脚本那次相同：数字靠手抄，无单一数据源。
+    #    修法：把独立实现的实际输出落盘，稿件与核验脚本都从该文件取值。
+    tool_b = []
+    tool_o = []
+    for m in MODELS:
+        for lbl in LABELS:
+            ds = {}
+            for d in DATASETS:
+                pairs = data[m][d][lbl]
+                ds[d] = {
+                    "y": np.array([p[0] for p in pairs], dtype=float),
+                    "score": np.array([p[1] for p in pairs], dtype=float),
+                }
+            res = pmnb(ds, metric="ece", n_reps=500, seed=20261104)
+            tool_b.append(res.baseline_rate)
+            tool_o.append(res.observed_change_rate)
+
+    out = {
+        "source": ("prevalence_matched_null_baseline.py"
+                   "（独立实现，seed=20261104, n_reps=500）"),
+        "n_combos": len(tool_b),
+        "baseline_rate_range_pct": [round(min(tool_b) * 100, 1),
+                                    round(max(tool_b) * 100, 1)],
+        "observed_change_rate_range_pct": [round(min(tool_o) * 100, 1),
+                                            round(max(tool_o) * 100, 1)],
+        "observed_change_rates_pct": [round(x * 100, 1) for x in tool_o],
+        "note": ("本文件为独立实现的权威输出。稿件中提及独立实现的数字时"
+                 "必须引用此处的值，不得手写。"),
+    }
+    outp = os.path.join(RESULTS, "pmnb_independent_output.json")
+    with open(outp, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print(f"独立实现权威输出已写入：{outp}")
+    print(f"  基线区间   = {out['baseline_rate_range_pct'][0]}% – "
+          f"{out['baseline_rate_range_pct'][1]}%")
+    print(f"  观测改变率 = {out['observed_change_rate_range_pct'][0]}% – "
+          f"{out['observed_change_rate_range_pct'][1]}%")
+    print(f"  逐项观测   = {out['observed_change_rates_pct']}")
+
+    print()
     print("=" * 88)
     print(f"核验：{len(checks)} 条，通过 {len(checks)-len(failures)}，失败 {len(failures)}")
     print("=" * 88)

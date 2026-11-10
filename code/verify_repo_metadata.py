@@ -187,6 +187,98 @@ def main():
                             "邮箱地址")):
             ck(f".zenodo.json 无{label}", not re.search(pat, blob))
 
+    # ---------- G. 投稿件的基线值核验 ----------
+    # 🔴 2026-11-10 补：Cover Letter 曾写 "82.3% to 84.4%"（权威 82.55%–84.4%），
+    #    而当时只有 README / .zenodo.json / CITATION.cff 被检查 —— 投稿件是盲区。
+    #    Cover Letter 是直接寄给编辑的投稿件，数字错误会直接被看见。
+    #    凡是写进论文的稿件（草稿 + 投稿件），一律纳入核验。
+    SUBMISSION_FILES = [
+        ("docs/论文Abstract草稿_v1.md", "Abstract"),
+        ("docs/论文Introduction草稿_v1.md", "Introduction"),
+        ("docs/论文Methods草稿_v1.md", "Methods"),
+        ("docs/论文Results草稿_v1.md", "Results"),
+        ("docs/论文Discussion正文_v1.md", "Discussion"),
+        ("docs/论文CoverLetter_v1.md", "Cover Letter"),
+        ("docs/论文Tables草稿_v1.md", "Tables"),
+    ]
+    # 只匹配"基线区间"形态：下界 8x.x 与上界 84.4 成对出现。
+    #   实际书写形态有多种，中间隔着 % 与连接符：
+    #     "82.5% to 84.4%"  "82.5%–84.4%"  "82.5-84.4"  "82.5 – 84.4"
+    #   🔴 2026-11-10 修：原正则 `\s*[–\-~]\s*` 要求两端紧邻，
+    #      对 "82.5% to 84.4%" 完全不匹配 → 守卫成了假阴性（永远"通过"）。
+    #      假阴性守卫比没有守卫更危险，因为它给出虚假的安全感。
+    #   单独的 82.2% 是 observed_change_rate（另一个量），不能误判，
+    #      因此必须要求"成对出现"才判定。
+    # 独立的可复用实现（PMNB 工具）算出的基线是**另一套来源**：
+    #   主分析   82.5%–84.4%（noise_baseline.py）
+    #   PMNB 工具 82.5%–84.0%（prevalence_matched_null_baseline.py，两份独立代码）
+    # 两者量级吻合但逐项不同 —— 这正是"独立裁判"应有的样子，不是错误。
+    # 🔴 2026-11-10 修：这两个值都**不得手写**，一律从权威文件读：
+    #   主分析 ← noise_baseline.json 的 baseline_same_dist
+    #   PMNB   ← pmnb_independent_output.json（由 validate_pmnb.py 生成）
+    #   手写白名单 = 下一次的同类事故等着发生（已发生 3 次）。
+    ALLOWED_BASELINE_RANGES = {(lo, hi): "主分析基线（noise_baseline.py）"}
+    _pmnb_path = os.path.join(RESULTS, "pmnb_independent_output.json")
+    if os.path.isfile(_pmnb_path):
+        with open(_pmnb_path, encoding="utf-8") as f:
+            _po = json.load(f)
+        _pbr = _po.get("baseline_rate_range_pct")
+        if _pbr and len(_pbr) == 2:
+            ALLOWED_BASELINE_RANGES[(round(_pbr[0], 1), round(_pbr[1], 1))] = \
+                "独立实现基线（PMNB 工具）"
+    ck("PMNB 独立实现权威输出存在", os.path.isfile(_pmnb_path),
+       "运行 code/validate_pmnb.py 生成" if not os.path.isfile(_pmnb_path) else "")
+
+    _range_pat = re.compile(
+        r"\b(8[0-9]\.[0-9])\s*%?\s*(?:to|[–\-~]|—)\s*%?\s*(84\.[0-9])\b",
+        re.IGNORECASE)
+    for rel, label in SUBMISSION_FILES:
+        fp = os.path.join(REPO, rel)
+        if not os.path.isfile(fp):
+            ck(f"{label} 文件存在", False, rel)
+            continue
+        with open(fp, encoding="utf-8") as f:
+            txt = f.read()
+        hits = _range_pat.findall(txt)
+        # 自检：正则必须能匹配到标准写法，否则守卫是假阴性
+        if label == "Cover Letter":
+            ck("区间正则可匹配标准写法（防假阴性自检）",
+               bool(_range_pat.search("82.5% to 84.4%")) and
+               bool(_range_pat.search("82.5%–84.4%")),
+               "正则对标准写法不匹配，守卫会漏报")
+        if not hits:
+            ck(f"{label} 含基线区间表述", True, "（未出现区间形态，跳过）")
+            continue
+        bad = []
+        for a, b in hits:
+            fa, fb = round(float(a), 1), round(float(b), 1)
+            if not any(abs(fa - k0) <= 0.06 and abs(fb - k1) <= 0.06
+                       for k0, k1 in ALLOWED_BASELINE_RANGES):
+                bad.append(f"{a}–{b}")
+        ck(f"{label} 基线区间数值在权威白名单内", not bad,
+           f"不符：{bad}；允许 {sorted(ALLOWED_BASELINE_RANGES)}" if bad else "")
+        # 不得出现历史手抄错值
+        stale = [v for v in STALE_BASELINE_VALUES if v in txt]
+        ck(f"{label} 无历史错值残留", not stale, f"残留 {stale}" if stale else "")
+
+    # ---------- H. 术语一致性：基线值不得与观测值混淆 ----------
+    # observed_change_rate 的最小值 82.2% 与基线下界 82.5% 接近，
+    # 复制粘贴时容易把观测值当基线写进稿件 —— 这里做一次显式核对。
+    obs_vals = []
+    try:
+        with open(os.path.join(RESULTS, "noise_baseline.json"), encoding="utf-8") as f:
+            _nb = json.load(f)
+        for _m in ("NIH", "CHEX", "MIMIC_CH", "MIMIC_NB"):
+            for _l in ("PNEUMONIA", "NORMAL"):
+                _o = _nb.get(_m, {}).get(_l, {}).get("observed_change_rate")
+                if _o is not None:
+                    obs_vals.append(round(_o * 100, 1))
+        ck("观测改变率与基线可分别读取",
+           len(obs_vals) == 8,
+           f"obs={len(obs_vals)}（基线由 baseline_range() 单独读取，n=8）")
+    except Exception as e:
+        ck("观测改变率与基线可分别读取", False, str(e))
+
     # ---------- 输出 ----------
     npass = sum(1 for _, ok, _ in checks if ok)
 

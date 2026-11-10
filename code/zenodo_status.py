@@ -210,15 +210,37 @@ def main():
     except Exception as e:
         print(f"  ⚠️ 基线一致性检查未能执行：{e}")
 
+    # ---------- 待上传 ZIP（路线 A 的核心交付物）----------
+    print("\n[1b] 待上传 ZIP（路线 A：手动上传用）")
+    zip_candidates = []
+    for fn in sorted(os.listdir(REPO)):
+        if fn.startswith("medical-ai-flagship-v") and fn.endswith(".zip"):
+            zip_candidates.append(os.path.join(REPO, fn))
+    if zip_candidates:
+        zp = max(zip_candidates, key=os.path.getmtime)
+        size_mb = os.path.getsize(zp) / 1024 / 1024
+        ok(f"待上传 ZIP 已就绪：{os.path.basename(zp)}（{size_mb:.1f} MB）")
+        print(f"       → {zp}")
+        print("       → 拖进 https://zenodo.org/uploads/new（只上传这一个 ZIP）")
+    else:
+        todo("生成待上传 ZIP",
+             "运行 code/zenodo_publish.py 的 make_zip()，或重跑流水线第 2 步")
+
     # ---------- Zenodo 侧（需人工） ----------
-    print("\n[6] Zenodo 账号（需人工完成，脚本无法代劳）")
-    print("  ⬜ 在 https://zenodo.org/login/ 用 GitHub 账号登录")
-    print("  ⬜ 在 https://zenodo.org/account/settings/github/ "
-          "点 Sync now → 打开仓库开关")
-    print("  ⬜ 在 GitHub 发一个新 Release（Zenodo 自动分配 DOI）")
-    print("     注意：已连接的仓库只自动存档「之后」的新 Release，"
-          "11-09 发的 v1.0.0 不会被补档")
-    print("     或：走 API 路线 → code/zenodo_publish.py --publish")
+    print("\n[6] Zenodo 账号与发布（需人工完成，脚本无法代劳）")
+    print("  🔴 推荐路线 A：手动上传（不依赖 GitHub 集成页）")
+    print("     ① 打开 https://zenodo.org/uploads/new")
+    print("     ② 拖入 medical-ai-flagship-v1.0.1.zip（只这一个 ZIP）")
+    print("     ③ Resource type 选 Software；License 选 MIT；")
+    print("        Title / Description / Creators 见 docs/Zenodo_DOI操作指引_2026-11-10.md")
+    print("     ④ Related identifiers 加 https://github.com/dian440/medical-ai-flagship")
+    print("     ⑤ Preview → Publish → 把 DOI 发给助手")
+    print("")
+    print("  ℹ️ 备选路线 B：GitHub 自动集成")
+    print("     入口是 https://zenodo.org/account/settings/ 左侧 GitHub（不是直接访问")
+    print("     /account/settings/github/ 那个旧地址，旧地址在新界面下返回 403）")
+    print("     → Sync now → 打开仓库开关 → 再发一个 Release（v1.0.0 发在集成之前，不会被补档）")
+    print("     注意：dian440 的 GitHub profile name 为空，集成路线抓到的作者信息不理想")
 
     # ---------- 汇总 ----------
     print("\n" + "=" * 84)
@@ -229,10 +251,12 @@ def main():
         for i, (t, why) in enumerate(todo_items, 1):
             print(f"  {i}. {t}")
             print(f"     {why}")
-    print("\n💡 已核实（Zenodo 官方文档）：**元数据在存档后可直接编辑且不产生新 DOI**，")
-    print("   所以作者署名顺序谈定与否**不阻塞拿 DOI**。")
-    print("   可以先发 release 解除投稿阻塞，署名定了再改元数据发一个新版本。")
-    print("   但发 release 前请至少把 creators 填上真实姓名。")
+    print("\n💡 已核实（Zenodo 官方文档《Manage records》原文）：")
+    print('   "You can edit the metadata (title, creators, etc) of a published record')
+    print('    at any time... This does not affect your DOI."')
+    print("   → 作者署名顺序**不阻塞拿 DOI**，且事后改署名**不需要发新版本**，DOI 不变。")
+    print("   → 但论文引用里的作者信息要与 Zenodo 记录一致，")
+    print("     所以署名谈定后回记录页改一次 creators（1 分钟）即可。")
     return 0
 
 

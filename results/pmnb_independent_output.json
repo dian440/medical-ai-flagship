@@ -1,0 +1,23 @@
+{
+  "source": "prevalence_matched_null_baseline.py（独立实现，seed=20261104, n_reps=500）",
+  "n_combos": 8,
+  "baseline_rate_range_pct": [
+    82.5,
+    84.0
+  ],
+  "observed_change_rate_range_pct": [
+    82.2,
+    100.0
+  ],
+  "observed_change_rates_pct": [
+    97.0,
+    98.6,
+    99.0,
+    97.8,
+    82.2,
+    100.0,
+    99.6,
+    100.0
+  ],
+  "note": "本文件为独立实现的权威输出。稿件中提及独立实现的数字时必须引用此处的值，不得手写。"
+}

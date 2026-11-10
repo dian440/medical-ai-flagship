@@ -81,3 +81,6 @@ docs/首轮结果与解读.md
 docs/三数据集全量结果与解读.md
 docs/论文Results_S3_S4_草稿.md
 docs/论文Discussion提纲_v1.md
+
+# 待上传 Zenodo 的打包产物（可由 code/zenodo_publish.py 的 make_zip 重建）
+medical-ai-flagship-v*.zip
