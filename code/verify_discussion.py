@@ -110,7 +110,19 @@ def main():
     pk = max(nb[m][l]["p_vs_same"] for m in MODELS for l in LABELS
              if nb[m][l]["exceeds_same"])
     ck("§4.1 p 上界 5.7e-20", 5.7e-20, float(f"{pk:.1e}"))
-    ck("§4.1 含 '2.9 × 10⁻²²'", True, "2.9 × 10⁻²²" in en)
+    # 🔴 2026-11-10 修：此处原为硬编码断言 ck("§4.1 含 '2.9 × 10⁻²²'", ...)，
+    #    与上一行"从 JSON 动态取 p 上界"**自相矛盾** ——
+    #    上界实际是 5.7×10⁻²⁰，而正文写的 2.9×10⁻²² 在任何结果文件里都不存在
+    #    （是去重重算前的历史值）。硬编码断言把错误值固化成了"必须出现"。
+    #    → 改为动态构造：上标指数由 JSON 推导，不写死。
+    _pk_e = int(f"{pk:.1e}".split("e")[1])
+    _sup = str.maketrans("0123456789-", "⁰¹²³⁴⁵⁶⁷⁸⁹⁻")
+    _pk_str = (f"{pk:.1e}".split("e")[0] + " × 10"
+               + str(_pk_e).translate(_sup))
+    ck(f"§4.1 含权威 p 上界 {_pk_str}", True, _pk_str in en)
+    # 不得残留历史错值
+    for _stale in ("2.9 × 10⁻²²", "1.3 × 10⁻²²", "2.876"):
+        ck(f"§4.1 无历史错值 {_stale}", True, _stale not in en)
 
     # ---------- §4.1 显著组数 ----------
     sig = sum(1 for m in MODELS

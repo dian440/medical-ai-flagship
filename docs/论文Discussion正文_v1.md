@@ -17,7 +17,7 @@
 
 ### 4.1 Principal findings
 
-Reporting practice rarely examines three choices together. We asked whether the ranking of chest radiograph datasets by the performance of a deployed classifier is stable under them. The three choices are the metric, the label definition, and the class prevalence of the evaluation cohort. Across four classifiers pretrained on three different source datasets, the answer was no. Resampling all three evaluation cohorts to a common prevalence contracted the calibration spread in seven of eight model–label combinations. It retained between 24% and 78% of the original spread, and reversed the calibration ranking in all eight. The change exceeded what resampling noise alone would produce in seven of the eight (p ≤ 2.9 × 10⁻²²). The exception was a configuration in which the ordering did not change at all.
+Reporting practice rarely examines three choices together. We asked whether the ranking of chest radiograph datasets by the performance of a deployed classifier is stable under them. The three choices are the metric, the label definition, and the class prevalence of the evaluation cohort. Across four classifiers pretrained on three different source datasets, the answer was no. Resampling all three evaluation cohorts to a common prevalence contracted the calibration spread in seven of eight model–label combinations. It retained between 24% and 78% of the original spread, and reversed the calibration ranking in all eight. The change exceeded what resampling noise alone would produce in seven of the eight (p ≤ 5.7 × 10⁻²⁰). The exception was a configuration in which the ordering did not change at all.
 
 The more consequential result is the baseline against which that change was judged. Consider a null in which the three datasets are of identical calibration and differ only in resampling noise. Under it, prior matching alone reordered them in 82.5% to 84.4% of replicates. A reader who encounters a reported change in dataset ranking without such a baseline cannot determine whether the change reflects anything about the datasets. The quantity is not specific to chest radiographs, to these three cohorts, or to this metric. It is a property of the comparison procedure.
 
@@ -101,7 +101,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 
 ### 4.1 主要发现
 
-报告实践很少把三个选择放在一起考察。我们考察的是：当它们——指标、标签定义、评估队列的类别先验——发生变化时，按已部署分类器的表现对胸片数据集所作的排序是否稳定。四个在不同源数据集上预训练的分类器给出的答案是：并不稳定。把三个评估队列重采样到共同先验后，8 个"模型×标签"组合中有 7 个的校准跨度收缩，仅保留原跨度的 24%–78%，且 8 个组合的校准排序全部反转。排序改变超出了仅由重采样噪声所能产生的程度（8 个中有 7 个，p ≤ 2.9×10⁻²²），唯一的例外是一个排序根本没有改变的配置。
+报告实践很少把三个选择放在一起考察。我们考察的是：当它们——指标、标签定义、评估队列的类别先验——发生变化时，按已部署分类器的表现对胸片数据集所作的排序是否稳定。四个在不同源数据集上预训练的分类器给出的答案是：并不稳定。把三个评估队列重采样到共同先验后，8 个"模型×标签"组合中有 7 个的校准跨度收缩，仅保留原跨度的 24%–78%，且 8 个组合的校准排序全部反转。排序改变超出了仅由重采样噪声所能产生的程度（8 个中有 7 个，p ≤ 5.7 × 10⁻²⁰），唯一的例外是一个排序根本没有改变的配置。
 
 比这一改变更具后果的，是用来判断该改变的基线。在"三个数据集校准水平完全相同、仅存在重采样噪声"的零假设下，仅先验匹配本身就会在 82.5%–84.4% 的重复中改变它们的排序。**读者若遇到一个报告出来的排序改变而没有这样的基线，就无法判断该改变是否反映了数据集中的任何差异。**这个量不专属于胸片、不专属于这三个队列、也不专属于这个指标——它是比较过程的属性。
 
@@ -187,7 +187,7 @@ Cross-dataset comparisons of chest radiograph classifiers are not invariant to c
 | 正文位置 | 数字 | 来源文件 | 字段 |
 |---|---|---|---|
 | §4.1 | 7/8 收缩、24–78% 保留、8/8 反转 | `multi_model_prior_matched.json` | `ece_span_raw/matched`、`span_retained_pct`、`rank_reversed` |
-| §4.1 | 7/8 超出、p ≤ 2.9×10⁻²² | `noise_baseline.json` | `exceeds_same`、`p_vs_same` |
+| §4.1 | 7/8 超出、p ≤ 5.7 × 10⁻²⁰ | `noise_baseline.json` | `exceeds_same`、`p_vs_same` |
 | §4.1 | 基线 82.5–84.4% | 同上 | `baseline_same_dist` |
 | §4.2 | 解析交换性基准 83.33% | `baseline_sensitivity.json` | `analytic_exchangeability_floor_k3` |
 | §4.1 | 三个分类器中复现 | 同上 | `exceeds_same` |

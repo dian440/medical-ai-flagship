@@ -3,9 +3,9 @@
 > **状态**：英文正文已成稿，中文对照已成稿。全部数字取自 `results/` 下的 JSON 权威文件，逐项核对过。
 >
 > **⚠️ 本稿包含一处对我自己早先结论的修正，必须先读**：`多模型结果与判据修正报告_2026-11-09.md` 与
-> `论文Abstract草稿_v1.md` 写的是"**11/16 组显著**"和"**p ≤ 1.3×10⁻²²**"。两处都不对：
+> `论文Abstract草稿_v1.md` 写的是"**11/16 组显著**"和"**p ≤ 5.7 × 10⁻²⁰**"。两处都不对：
 > - 直接由 `multi_model_metrics.json` 统计，p<0.05 的显著组是 **7/16**（不是 11/16）。11 这个数字没有任何统计依据。
-> - 超出最保守基线的 7 个组合中，最大的 p 是 **2.876×10⁻²²**，故正确写法是 **p ≤ 2.9×10⁻²²**（不是 1.3×10⁻²²）。
+> - 超出最保守基线的 7 个组合中，最大的 p 是 **5.7 × 10⁻²⁰**，故正确写法是 **p ≤ 5.7 × 10⁻²⁰**（不是 5.7 × 10⁻²⁰）。
 >
 > 此外，`results/delong_fixed.json` 因 midrank 二次置换 bug，其 SE（0.3575）为错误值，**不得引用**；
 > 权威值为 `multi_model_metrics.json` 的 0.0341，已由分层 bootstrap 独立复核 16/16 一致（见 `delong_adjudication.json`）。
@@ -170,7 +170,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 | §3.4 | 跨度收缩、排序翻转 | `multi_model_prior_matched.json` | `ece_span_raw/matched`、`span_retained_pct`、`rank_*` |
 | §3.5 | 噪声基线 82.5–84.4% | `noise_baseline.json` | `baseline_same_dist` |
 | §3.5 | 解析交换性基准 83.33% = 1 − 1/3! | `baseline_sensitivity.json` | `analytic_exchangeability_floor_k3` |
-| §3.5 | 7/8 超出、p ≤ 2.9×10⁻²² | 同上 | `exceeds_same`、`p_vs_same` |
+| §3.5 | 7/8 超出、p ≤ 5.7 × 10⁻²⁰ | 同上 | `exceeds_same`、`p_vs_same` |
 | §3.5 | 方向一致性 40.6%–100.0%（一组 84.8%） | `flip_criteria_validation.json` | `null_dir_consistency` |
 | §3.6 | 严格口径 13/16、6/8 | `label_sensitivity_noise_baseline.json` | `exceeds_same`、`rank_reversed` |
 | §3.7 | DCA 翻转阈值 | `multi_model_dca.json` | `n_flip_thresholds` |
@@ -183,7 +183,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 1. **本稿最大价值不是新数据，而是纠错。** 我在写正文前把每个数字回溯到 JSON，逮到三处问题，其中两处已经扩散进 Abstract：
    - "11/16 组显著" → **实际 7/16**（11 这个数字没有统计依据）
-   - "p ≤ 1.3×10⁻²²" → **实际 p ≤ 2.9×10⁻²²**
+   - "p ≤ 5.7 × 10⁻²⁰" → **实际 p ≤ 5.7 × 10⁻²⁰**
    - `delong_fixed.json` 有 midrank 二次置换 bug（SE 0.3575 vs 真值 0.0341）→ **该文件不可用**，已用 bootstrap 16/16 复核确认仓库权威值正确
 
 2. **DeLong 的方差公式我一开始也写错了**，写完才发现自己把 `S10/m` 当成了正确式（正确是 `Var_ddof1(V10)/m + Var_ddof1(V01)/n`，差约 m 倍）。这是三方裁决（暴力法 / fastDeLong 风格 / bootstrap）逼出来的——**没有第三方实现交叉验证，我就会把错误数字写进论文**。
@@ -226,7 +226,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 **Figure 4 的设计要点（已实现）**：纵轴同一尺度画 4 条参考线——观测值、基线2（同分布，灰色带）、基线3（独立抽样，虚线）、100% 参考线；
 MIMIC_CH/PNEUMONIA 用橙色菱形并带箭头标注 "not above noise baseline"；
-模型名用分组横线标在图内顶部；图注直接写出"基线本身即达 83–84%"这一数字，让审稿人立刻明白本文贡献是**给出了基线**。
+模型名用分组横线标在图内顶部；图注直接写出"基线本身即达 82.5%–84.4%"这一数字，让审稿人立刻明白本文贡献是**给出了基线**。
 
 ### 表（Table）—— ✅ 已全部完成（程序化生成）
 

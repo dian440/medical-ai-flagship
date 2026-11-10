@@ -147,7 +147,8 @@ def gate_numbers():
     for script in ("verify_results_draft.py", "verify_figures.py",
                    "verify_tables.py", "verify_discussion.py",
                    "verify_teacher_brief.py", "scan_stale_values.py",
-                   "verify_readability.py", "verify_repo_metadata.py"):
+                   "verify_readability.py", "verify_repo_metadata.py",
+                   "verify_p_values.py"):
         p = os.path.join(HERE, script)
         if not os.path.exists(p):
             r.add("MINOR", f"{script} 不存在", "无法机械核验", False)
@@ -314,8 +315,10 @@ def gate_claims():
         raw = open(p, encoding="utf-8").read()
         kind = "results" if "Results" in f else "other"
         body = manuscript_body(raw, kind)
+        # 🔴 2026-11-10 补：2.9×10⁻²² / 2.876 同样是已撤回的历史 p 上界
         for bad in ("eleven significant", "11 组显著", "11/16 组显著",
-                    "p ≤ 1.3 × 10⁻²²", "1.3×10⁻²²"):
+                    "p ≤ 1.3 × 10⁻²²", "1.3×10⁻²²",
+                    "p ≤ 2.9 × 10⁻²²", "2.9×10⁻²²", "2.876"):
             if bad in body:
                 r.add("FATAL", f"{f} 稿件本体仍含已撤回数字「{bad}」",
                       "立即更正", True)

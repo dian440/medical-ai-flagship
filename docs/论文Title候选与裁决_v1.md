@@ -14,7 +14,7 @@
 | T3 | Prevalence-driven reversals in cross-dataset calibration rankings of chest radiograph classifiers | 12 | ⚠️ 最短，但"reversals"未限定类型，且缺少"我们建立了基线"这一真正增量，容易被归为对已知现象的再报告 |
 | T4 | Cross-dataset rankings of chest radiograph classifiers are not invariant to class prevalence | 14 | ⚠️ 准确但平铺，无"怎么办"的暗示；不突出基线贡献 |
 | T5 | Quantifying the instability of cross-dataset calibration comparisons in chest radiograph classifiers | 13 | ⚠️ "instability"偏弱，且"quantifying"未点明基线的角色 |
-| T6 | Class prevalence reorders chest radiograph datasets in 82–84% of resamples: a cross-dataset audit of four classifiers | 18 | ⚠️ 把最反直觉的数字放进标题，极吸引眼球；但 82–84% 是**零假设下的基线**而非本文观测值，放在标题有被误读为"我们发现 82–84% 会重排"的风险——**审稿人可能认为标题夸大**。这是典型的"标题诱饵"，我不建议 |
+| T6 | Class prevalence reorders chest radiograph datasets in 82.5%–84.4% of resamples: a cross-dataset audit of four classifiers | 18 | ⚠️ 把最反直觉的数字放进标题，极吸引眼球；但 82.5%–84.4% 是**零假设下的基线**而非本文观测值，放在标题有被误读为"我们发现 82.5%–84.4% 会重排"的风险——**审稿人可能认为标题夸大**。这是典型的"标题诱饵"，我不建议 |
 | T7 | Auditing cross-dataset evaluation of chest radiograph classifiers: prevalence-dependent calibration rankings and a noise baseline | 17 | ⚠️ 结构清楚但两个冒号并列导致重心分散；"noise baseline"未命名，检索性弱 |
 | T8 | When identical datasets are not identical: prevalence-matched null baselines for cross-dataset calibration comparison in chest radiograph classifiers | 19 | ⚠️ 修辞漂亮但过于文学化，且"identical datasets"表意含混 |
 
