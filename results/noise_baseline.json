@@ -21,10 +21,21 @@
    ],
    "baseline_same_dist": 0.844,
    "baseline_actual_dist": 0.49275,
-   "p_vs_same": 5.677797691550482e-20,
-   "p_vs_actual": 9.51247047425031e-126,
+   "rate_diff_vs_same": 0.126,
+   "mc_ci95_vs_same": [
+    0.812,
+    0.876
+   ],
+   "rate_diff_vs_actual": 0.47724999999999995,
+   "mc_ci95_vs_actual": [
+    0.45,
+    0.536
+   ],
    "exceeds_same": true,
    "exceeds_actual": true,
+   "p_vs_same": 5.677797691550482e-20,
+   "p_vs_actual": 9.51247047425031e-126,
+   "_deprecated": "p_vs_same / p_vs_actual 为 2026-11-11 前口径：把 500 次相关重采样当作独立伯努利试验，统计上不成立。2026-11-12 起改报 rate_diff + mc_ci95 + 数据集层面 sign_flip_p。",
    "ece_dist_medians": {
     "NIH": 0.10605742011561359,
     "KEM": 0.06357832336088795,
@@ -58,10 +69,21 @@
    ],
    "baseline_same_dist": 0.83925,
    "baseline_actual_dist": 0.50725,
-   "p_vs_same": 2.252921759221426e-28,
-   "p_vs_actual": 5.7160167861335634e-133,
+   "rate_diff_vs_same": 0.14674999999999994,
+   "mc_ci95_vs_same": [
+    0.806,
+    0.87
+   ],
+   "rate_diff_vs_actual": 0.47875,
+   "mc_ci95_vs_actual": [
+    0.464,
+    0.55
+   ],
    "exceeds_same": true,
    "exceeds_actual": true,
+   "p_vs_same": 2.252921759221426e-28,
+   "p_vs_actual": 5.7160167861335634e-133,
+   "_deprecated": "p_vs_same / p_vs_actual 为 2026-11-11 前口径：把 500 次相关重采样当作独立伯努利试验，统计上不成立。2026-11-12 起改报 rate_diff + mc_ci95 + 数据集层面 sign_flip_p。",
    "ece_dist_medians": {
     "NIH": 0.16941154184448115,
     "KEM": 0.22684873340199507,
@@ -97,10 +119,21 @@
    ],
    "baseline_same_dist": 0.83875,
    "baseline_actual_dist": 0.5065,
-   "p_vs_same": 9.433187645972958e-31,
-   "p_vs_actual": 4.4924914035445695e-137,
+   "rate_diff_vs_same": 0.15125,
+   "mc_ci95_vs_same": [
+    0.806,
+    0.87
+   ],
+   "rate_diff_vs_actual": 0.48350000000000004,
+   "mc_ci95_vs_actual": [
+    0.464,
+    0.55
+   ],
    "exceeds_same": true,
    "exceeds_actual": true,
+   "p_vs_same": 9.433187645972958e-31,
+   "p_vs_actual": 4.4924914035445695e-137,
+   "_deprecated": "p_vs_same / p_vs_actual 为 2026-11-11 前口径：把 500 次相关重采样当作独立伯努利试验，统计上不成立。2026-11-12 起改报 rate_diff + mc_ci95 + 数据集层面 sign_flip_p。",
    "ece_dist_medians": {
     "NIH": 0.1608681759417998,
     "KEM": 0.10947747949576941,
@@ -134,10 +167,21 @@
    ],
    "baseline_same_dist": 0.82775,
    "baseline_actual_dist": 0.02575,
-   "p_vs_same": 5.44151142058675e-27,
-   "p_vs_actual": 0.0,
+   "rate_diff_vs_same": 0.15025,
+   "mc_ci95_vs_same": [
+    0.794,
+    0.86
+   ],
+   "rate_diff_vs_actual": 0.9522499999999999,
+   "mc_ci95_vs_actual": [
+    0.012,
+    0.04
+   ],
    "exceeds_same": true,
    "exceeds_actual": true,
+   "p_vs_same": 5.44151142058675e-27,
+   "p_vs_actual": 0.0,
+   "_deprecated": "p_vs_same / p_vs_actual 为 2026-11-11 前口径：把 500 次相关重采样当作独立伯努利试验，统计上不成立。2026-11-12 起改报 rate_diff + mc_ci95 + 数据集层面 sign_flip_p。",
    "ece_dist_medians": {
     "NIH": 0.2156388265791641,
     "KEM": 0.27323852525748443,
@@ -173,10 +217,21 @@
    ],
    "baseline_same_dist": 0.83625,
    "baseline_actual_dist": 0.296,
-   "p_vs_same": 0.39734993214419745,
-   "p_vs_actual": 3.5060154250743775e-131,
+   "rate_diff_vs_same": -0.014250000000000096,
+   "mc_ci95_vs_same": [
+    0.804,
+    0.868
+   ],
+   "rate_diff_vs_actual": 0.526,
+   "mc_ci95_vs_actual": [
+    0.256,
+    0.336
+   ],
    "exceeds_same": false,
    "exceeds_actual": true,
+   "p_vs_same": 0.39734993214419745,
+   "p_vs_actual": 3.5060154250743775e-131,
+   "_deprecated": "p_vs_same / p_vs_actual 为 2026-11-11 前口径：把 500 次相关重采样当作独立伯努利试验，统计上不成立。2026-11-12 起改报 rate_diff + mc_ci95 + 数据集层面 sign_flip_p。",
    "ece_dist_medians": {
     "NIH": 0.12838096617577743,
     "KEM": 0.16084718264463033,
@@ -210,10 +265,21 @@
    ],
    "baseline_same_dist": 0.8255,
    "baseline_actual_dist": 0.44825,
-   "p_vs_same": 3.4959036759347016e-42,
-   "p_vs_actual": 5.756375513458744e-175,
+   "rate_diff_vs_same": 0.1745,
+   "mc_ci95_vs_same": [
+    0.792,
+    0.858
+   ],
+   "rate_diff_vs_actual": 0.55175,
+   "mc_ci95_vs_actual": [
+    0.404,
+    0.492
+   ],
    "exceeds_same": true,
    "exceeds_actual": true,
+   "p_vs_same": 3.4959036759347016e-42,
+   "p_vs_actual": 5.756375513458744e-175,
+   "_deprecated": "p_vs_same / p_vs_actual 为 2026-11-11 前口径：把 500 次相关重采样当作独立伯努利试验，统计上不成立。2026-11-12 起改报 rate_diff + mc_ci95 + 数据集层面 sign_flip_p。",
    "ece_dist_medians": {
     "NIH": 0.23171767547792763,
     "KEM": 0.3135816021078437,
@@ -249,10 +315,21 @@
    ],
    "baseline_same_dist": 0.8255,
    "baseline_actual_dist": 0.2945,
-   "p_vs_same": 2.2408320529949114e-38,
-   "p_vs_actual": 2.5017284265026275e-260,
+   "rate_diff_vs_same": 0.17049999999999998,
+   "mc_ci95_vs_same": [
+    0.792,
+    0.858
+   ],
+   "rate_diff_vs_actual": 0.7015,
+   "mc_ci95_vs_actual": [
+    0.254,
+    0.334
+   ],
    "exceeds_same": true,
    "exceeds_actual": true,
+   "p_vs_same": 2.2408320529949114e-38,
+   "p_vs_actual": 2.5017284265026275e-260,
+   "_deprecated": "p_vs_same / p_vs_actual 为 2026-11-11 前口径：把 500 次相关重采样当作独立伯努利试验，统计上不成立。2026-11-12 起改报 rate_diff + mc_ci95 + 数据集层面 sign_flip_p。",
    "ece_dist_medians": {
     "NIH": 0.11603699838907934,
     "KEM": 0.1621282556860228,
@@ -286,10 +363,21 @@
    ],
    "baseline_same_dist": 0.834,
    "baseline_actual_dist": 0.29125,
-   "p_vs_same": 6.02264950830369e-40,
-   "p_vs_actual": 1.358210291926267e-268,
+   "rate_diff_vs_same": 0.16600000000000004,
+   "mc_ci95_vs_same": [
+    0.8,
+    0.866
+   ],
+   "rate_diff_vs_actual": 0.70875,
+   "mc_ci95_vs_actual": [
+    0.252,
+    0.332
+   ],
    "exceeds_same": true,
    "exceeds_actual": true,
+   "p_vs_same": 6.02264950830369e-40,
+   "p_vs_actual": 1.358210291926267e-268,
+   "_deprecated": "p_vs_same / p_vs_actual 为 2026-11-11 前口径：把 500 次相关重采样当作独立伯努利试验，统计上不成立。2026-11-12 起改报 rate_diff + mc_ci95 + 数据集层面 sign_flip_p。",
    "ece_dist_medians": {
     "NIH": 0.23818267438803198,
     "KEM": 0.3080281854204878,
@@ -310,5 +398,12 @@
     ]
    }
   }
+ },
+ "sign_flip_test_dataset_level": {
+  "n": 8,
+  "observed_median_rate_diff": 0.15075,
+  "p_one_sided": 0.03125,
+  "min_attainable_p": 0.00390625,
+  "note": "符号翻转检验：H0 = 8 个组合的率差中位为 0。2^8=256 种翻转，单侧最小可达 p=0.0039。"
  }
 }

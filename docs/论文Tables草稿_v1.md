@@ -95,22 +95,26 @@ Under the strict definition the spread still contracted in **8 of 8** combinatio
 
 ### Table 4. Observed ranking change against three noise baselines
 
-| Classifier | Class | Observed | Null: identical calibration | Null: independent sampling | p (vs identical) | Direction consistency (observed) | Direction consistency (permutation null) | Empirical p | Above baseline? |
-|---|---|---|---|---|---|---|---|---|---|
-| NIH-pretrained | PNEUMONIA | 97.0% | 84.4% | 49.3% | 5.7 × 10⁻20 | 89.7% | 84.8% | 0.404 | **yes** |
-| NIH-pretrained | NORMAL | 98.6% | 83.9% | 50.7% | 2.3 × 10⁻28 | 55.6% | 71.4% | 0.762 | **yes** |
-| CheXpert-pretrained | PNEUMONIA | 99.0% | 83.9% | 50.6% | 9.4 × 10⁻31 | 48.9% | 50.4% | 0.576 | **yes** |
-| CheXpert-pretrained | NORMAL | 97.8% | 82.8% | 2.6% | 5.4 × 10⁻27 | 0.0% | 100.0% | 1.000 | **yes** |
-| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 82.2% | 83.6% | 29.6% | 0.397 | 14.6% | 40.6% | 0.848 | **no** |
-| MIMIC-CXR (CheXpert labels) | NORMAL | 100.0% | 82.5% | 44.8% | 3.5 × 10⁻42 | 100.0% | 97.5% | 0.742 | **yes** |
-| MIMIC-CXR (noise-handled labels) | PNEUMONIA | 99.6% | 82.5% | 29.4% | 2.2 × 10⁻38 | 99.4% | 56.7% | 0.020 | **yes** |
-| MIMIC-CXR (noise-handled labels) | NORMAL | 100.0% | 83.4% | 29.1% | 6.0 × 10⁻40 | 99.8% | 99.4% | 0.914 | **yes** |
+**Reporting note.** The observed rate and the null rate are both *sampling estimates*, so the comparison is reported as a **rate difference with a Monte Carlo 95% confidence interval** for the null, not as a binomial p-value. A binomial test would treat the 500 correlated resamples as 500 independent Bernoulli trials and understate the uncertainty by many orders of magnitude. The dataset-level inference is given in the note below the table (sign-flip test over the eight model-label combinations).
 
-The observed rate exceeded the most conservative null in **7 of 8** combinations. That null assumes the three datasets were of *identical* calibration and differed only in resampling noise; under it, prior matching alone reordered the datasets in **82.5–84.4% of replicates**, which is the baseline against which any reported reversal must be judged.
+| Classifier | Class | Observed | Null: identical calibration | Null: independent sampling | Rate difference vs identical-calibration null | Monte Carlo 95% CI for the null | Direction consistency (observed) | Direction consistency (permutation null) | Empirical p | Above baseline? |
+|---|---|---|---|---|---|---|---|---|---|---|
+| NIH-pretrained | PNEUMONIA | 97.0% | 84.4% | 49.3% | +12.6 pp | [81.2%, 87.6%] | 89.7% | 84.8% | 0.404 | **yes** |
+| NIH-pretrained | NORMAL | 98.6% | 83.9% | 50.7% | +14.7 pp | [80.6%, 87.0%] | 55.6% | 71.4% | 0.762 | **yes** |
+| CheXpert-pretrained | PNEUMONIA | 99.0% | 83.9% | 50.6% | +15.1 pp | [80.6%, 87.0%] | 48.9% | 50.4% | 0.576 | **yes** |
+| CheXpert-pretrained | NORMAL | 97.8% | 82.8% | 2.6% | +15.0 pp | [79.4%, 86.0%] | 0.0% | 100.0% | 1.000 | **yes** |
+| MIMIC-CXR (CheXpert labels) | PNEUMONIA | 82.2% | 83.6% | 29.6% | -1.4 pp | [80.4%, 86.8%] | 14.6% | 40.6% | 0.848 | **no** |
+| MIMIC-CXR (CheXpert labels) | NORMAL | 100.0% | 82.5% | 44.8% | +17.4 pp | [79.2%, 85.8%] | 100.0% | 97.5% | 0.742 | **yes** |
+| MIMIC-CXR (noise-handled labels) | PNEUMONIA | 99.6% | 82.5% | 29.4% | +17.0 pp | [79.2%, 85.8%] | 99.4% | 56.7% | 0.020 | **yes** |
+| MIMIC-CXR (noise-handled labels) | NORMAL | 100.0% | 83.4% | 29.1% | +16.6 pp | [80.0%, 86.6%] | 99.8% | 99.4% | 0.914 | **yes** |
+
+The observed rate exceeded the most conservative null in **7 of 8** combinations. That null assumes the three datasets were of *identical* calibration and differed only in resampling noise; under it, prior matching alone reordered the datasets in **82.5–84.4% of replicates**, which is the baseline against which any reported reordering must be judged.
+
+**Dataset-level inference.** Across the eight model-label combinations the median rate difference over the null was **+15.1 percentage points** (range -1.4 to +17.4 pp). A sign-flip test over the eight combinations gives a one-sided p of **0.031** (8 combinations, 2^8 = 256 sign flips, minimum attainable p = 0.0039). The inference is therefore carried by the rate difference and its confidence interval, not by a p-value computed from the number of resamples.
 
 **Why the direction-consistency test is reported but not relied upon.** Under label permutation (a model with no discriminative power), the direction of complete reversal is itself highly structured, with a mean consistency of 40.6–100.0%. A binomial test against an expectation of a random direction (0.5) therefore overstates the evidence by many orders of magnitude. We report the permutation-based null throughout instead.
 
-*Source: `noise_baseline.json` → `observed_change_rate`, `baseline_same_dist`, `baseline_actual_dist`, `p_vs_same`, `exceeds_same`; `flip_criteria_validation.json` → `observed.dir_consistency`, `null_dir_consistency`, `emp_p_dir_consistency`.*
+*Source: `noise_baseline.json` → `observed_change_rate`, `baseline_same_dist`, `baseline_actual_dist`, `rate_diff_vs_same`, `mc_ci95_vs_same`, `exceeds_same`, `sign_flip_test_dataset_level`; `flip_criteria_validation.json` → `observed.dir_consistency`, `null_dir_consistency`, `emp_p_dir_consistency`.*
 
 ---
 

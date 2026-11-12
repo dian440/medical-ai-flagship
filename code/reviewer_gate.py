@@ -255,6 +255,88 @@ def gate_manuscript():
         else:
             r.add("MAJOR", f"数据可得性段缺字段：{'、'.join(_miss)}",
                   "按 BMC 模板补齐", True)
+        # 🔴 2026-11-11 加：AI/LLM 使用声明是 BMC desk-check 必备项。
+        #    Springer Nature 官方条款原文（Generative AI - Usage Guidelines）：
+        #    "Use of an LLM should be properly documented in the Methods section"
+        #    且"AI assisted copy editing"须在 cover letter 中声明。
+        #    2026-11-11 实测发现 Methods §2.7 完全无 AI 声明 —— 属投稿阻塞项。
+        for label, pat in (("Methods 中的 AI 使用声明",
+                            r"[Uu]se of AI tools"),
+                           ("Methods 中的 AI 声明（中文）",
+                            r"AI 工具的使用")):
+            if not re.search(pat, m):
+                r.add("MAJOR", f"Methods 缺 {label}",
+                      "BMC/ Springer Nature 官方条款要求 LLM 使用须在 Methods 交代",
+                      True)
+            else:
+                r.add("NOTE", f"Methods 含 {label}", "AI 使用已披露", False)
+
+        # 🔴 2026-11-11 加：投稿信必须声明 AI 辅助 copy editing。
+        #    官方条款："The use of an LLM for 'AI assisted copy editing' purposes
+        #    does not need to be declared in the manuscript, but must be declared
+        #    in the cover letter accompanying a submission."
+        _cl_path = os.path.join(DOCS, "论文CoverLetter_v1.md")
+        if not os.path.exists(_cl_path):
+            r.add("MAJOR", "缺 Cover Letter", "投稿信必备", True)
+        else:
+            _cl = open(_cl_path, encoding="utf-8").read()
+            if not re.search(r"generative artificial intelligence|"
+                             r"AI-assisted copy editing", _cl, re.I):
+                r.add("MAJOR", "投稿信缺 AI 使用声明",
+                      "BMC 条款要求 copy editing 类 AI 使用须在 cover letter 声明",
+                      True)
+            else:
+                r.add("NOTE", "投稿信含 AI 使用声明", "AI 使用已披露", False)
+
+        # 🔴 2026-11-11 加：标题跨文件一致性。
+        #    2026-11-11 实测发现：标题裁决已定为"changes"，
+        #    但 Cover Letter 的页首与中文对照两处仍写"determines"——
+        #    编辑把投稿信与正文并排看即发现标题不一致。
+        #    🔴 权威源取 code/zenodo_metadata.json（元数据单一源，铁律 8）：
+        #    **不能**从 论文Title候选与裁决_v1.md 直接正则取 —— 那个文件的
+        #    候选对照表里 T1 仍保留原始措辞 "determines"，先匹配会取到
+        #    未裁决的候选值（2026-11-11 反向测试实测踩中，已修）。
+        _canon = None
+        _zm = os.path.join(HERE, "zenodo_metadata.json")
+        if os.path.exists(_zm):
+            try:
+                import json as _json
+                _z = _json.load(open(_zm, encoding="utf-8"))
+                _mt = re.search(r"Class prevalence (changes|determines) which "
+                                r"chest radiograph dataset looks better",
+                                _z.get("title", ""))
+                if _mt:
+                    _canon = _mt.group(1)
+            except Exception:
+                _canon = None
+        if not _canon:
+            r.add("MAJOR", "无法确定权威标题（元数据缺失）",
+                  "检查 code/zenodo_metadata.json 的 title 字段", True)
+        else:
+            _bad = []
+            for k, f in files.items():
+                _p = os.path.join(DOCS, f)
+                if not os.path.exists(_p):
+                    continue
+                _c = open(_p, encoding="utf-8").read()
+                _mm = re.search(r"Class prevalence (changes|determines) which "
+                                r"chest radiograph dataset looks better", _c)
+                if _mm and _mm.group(1) != _canon:
+                    _bad.append(f"{k}:{_mm.group(1)}")
+            if os.path.exists(_cl_path):
+                _c = open(_cl_path, encoding="utf-8").read()
+                for _mm in re.finditer(r"Class prevalence (changes|determines) "
+                                       r"which chest radiograph dataset looks better",
+                                       _c):
+                    if _mm.group(1) != _canon:
+                        _bad.append(f"CoverLetter:{_mm.group(1)}")
+            if _bad:
+                r.add("MAJOR",
+                      f"标题跨文件不一致（裁决为 '{_canon}'）：{'、'.join(_bad)}",
+                      "标题必须逐字统一，否则编辑并排核对即发现", True)
+            else:
+                r.add("NOTE", f"标题跨文件一致（{_canon}）", "无需处置", False)
+
         # DOI 占位符未替换 → 阻塞（DOI 拿到后才有意义）
         if re.search(r"\[ZENODO DOI TO BE COMPLETED\]", m):
             r.add("MAJOR", "数据可得性段仍含 Zenodo DOI 占位符",

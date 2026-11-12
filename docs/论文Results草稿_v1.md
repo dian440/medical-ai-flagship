@@ -3,9 +3,10 @@
 > **状态**：英文正文已成稿，中文对照已成稿。全部数字取自 `results/` 下的 JSON 权威文件，逐项核对过。
 >
 > **⚠️ 本稿包含一处对我自己早先结论的修正，必须先读**：`多模型结果与判据修正报告_2026-11-09.md` 与
-> `论文Abstract草稿_v1.md` 写的是"**11/16 组显著**"和"**p ≤ 5.7 × 10⁻²⁰**"。两处都不对：
+> `论文Abstract草稿_v1.md` 写的是"**11/16 组显著**"。这处不对：
 > - 直接由 `multi_model_metrics.json` 统计，p<0.05 的显著组是 **7/16**（不是 11/16）。11 这个数字没有任何统计依据。
-> - 超出最保守基线的 7 个组合中，最大的 p 是 **5.7 × 10⁻²⁰**，故正确写法是 **p ≤ 5.7 × 10⁻²⁰**（不是 5.7 × 10⁻²⁰）。
+> - 超出最保守基线的组合数为 **7/8**；
+> - 🔴 **2026-11-12 追加**：该二项口径 p 值（5.7 × 10⁻²⁰）**已撤回** —— `binomtest` 把 500 次相关重采样当作 500 次独立伯努利试验，统计上不成立。现改报率差中位 **+15.1pp** + Monte Carlo 95% CI + 数据集层面符号翻转检验（单侧 p = **0.031**，最小可达 0.0039）。
 >
 > 此外，`results/delong_fixed.json` 因 midrank 二次置换 bug，其 SE（0.3575）为错误值，**不得引用**；
 > 权威值为 `multi_model_metrics.json` 的 0.0341，已由分层 bootstrap 独立复核 16/16 一致（见 `delong_adjudication.json`）。
@@ -51,7 +52,7 @@ To separate model miscalibration from the arithmetic consequences of differing p
 
 ### 3.5 The change in ranking exceeded a noise baseline, but the baseline itself was large
 
-**The observed reversals exceeded the null in seven of the eight model–label combinations (Figure 4A).** For the NIH-pretrained classifier on PNEUMONIA, 97.0% of replicates changed the ordering against a baseline of 84.4% (p = 5.7 × 10⁻²⁰). For the MIMIC_CXR classifier with CheXpert labels on NORMAL, the observed rate was 100% against a baseline of 82.5% (p = 3.5 × 10⁻⁴²). The single exception was PNEUMONIA for the MIMIC_CXR classifier with CheXpert labels (82.2% observed against 83.6%, p = 0.40). All eight combinations exceeded the less conservative null, in which each dataset retained its own calibration distribution but was sampled independently rather than synchronously.
+**The observed reversals exceeded the null in seven of the eight model–label combinations (Figure 4A).** For the NIH-pretrained classifier on PNEUMONIA, 97.0% of replicates changed the ordering against a baseline of 84.4%, an excess of 12.6 percentage points (Monte Carlo 95% CI for the baseline, 81.2%–87.6%). For the MIMIC_CXR classifier with CheXpert labels on NORMAL, the observed rate was 100% against a baseline of 82.5%, an excess of 17.4 percentage points. The single exception was PNEUMONIA for the MIMIC_CXR classifier with CheXpert labels (82.2% observed against 83.6%, an excess of −1.4 percentage points). Across the eight combinations the median excess over the null was 15.1 percentage points; a sign-flip test over the eight combinations gives a one-sided p of 0.031 (2⁸ = 256 sign flips, minimum attainable p = 0.0039). Because the observed and null rates are both sampling estimates, this inference rests on the rate difference and its interval rather than on a p-value computed from the number of resamples. All eight combinations exceeded the less conservative null, in which each dataset retained its own calibration distribution but was sampled independently rather than synchronously.
 
 **The baseline against which those reversals were judged is itself large, and that is the point of the comparison.** Under a null in which the three datasets are of identical calibration and differ only in resampling noise, prior matching alone reordered them in 82.5% to 84.4% of replicates. We refer to this quantity as the **prevalence-matched null baseline**, and it is the baseline against which any reported reversal must be judged; it has not previously been reported for this type of comparison.
 
@@ -121,7 +122,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 ### 3.5 排序改变超出了噪声基线，但基线本身很大
 
-**观测到的排序改变在 8 个"模型×标签"组合中的 7 个超出了该基线（Figure 4A）。**NIH/PNEUMONIA 为 97.0% 对 84.4%（p = 5.7×10⁻²⁰）；MIMIC_CH/NORMAL 为 100% 对 82.5%（p = 3.5×10⁻⁴²）。唯一例外是 MIMIC_CXR（CheXpert 标签）分类器的 PNEUMONIA（82.2% 对 83.6%，p = 0.40）。8 个组合全部超出了较宽松的零分布——该零分布下各库保留自身校准分布但独立抽样而非同步抽样。
+**观测到的排序改变在 8 个"模型×标签"组合中的 7 个超出了该基线（Figure 4A）。**NIH/PNEUMONIA 为 97.0% 对 84.4%，超出 12.6 个百分点（基线的 Monte Carlo 95% CI 为 81.2%–87.6%）；MIMIC_CH/NORMAL 为 100% 对 82.5%，超出 17.4 个百分点。唯一例外是 MIMIC_CXR（CheXpert 标签）分类器的 PNEUMONIA（82.2% 对 83.6%，超出 −1.4 个百分点）。8 个组合相对基线的超出幅度中位数为 15.1 个百分点；对这 8 个组合做符号翻转检验，单侧 p = 0.031（2⁸ = 256 种翻转，最小可达 p = 0.0039）。由于观测率与基线率**都是抽样估计量**，该推断由率差及其置信区间承担，而不是由重采样次数算出的 p 值承担。8 个组合全部超出了较宽松的零分布——该零分布下各库保留自身校准分布但独立抽样而非同步抽样。
 
 **用作判据的这个基线本身就很大，而这正是该比较的意义所在。**在"三个数据集校准水平完全相同、仅存在重采样噪声"的零假设下，仅先验匹配本身就会在 82.5%–84.4% 的重复中改变数据集排序。**我们把这个量命名为"先验匹配零基线"（prevalence-matched null baseline）**，它是任何反转报告必须据以判断的基线，此前在这一类比较中从未被报告过。
 
@@ -170,7 +171,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 | §3.4 | 跨度收缩、排序翻转 | `multi_model_prior_matched.json` | `ece_span_raw/matched`、`span_retained_pct`、`rank_*` |
 | §3.5 | 噪声基线 82.5–84.4% | `noise_baseline.json` | `baseline_same_dist` |
 | §3.5 | 解析交换性基准 83.33% = 1 − 1/3! | `baseline_sensitivity.json` | `analytic_exchangeability_floor_k3` |
-| §3.5 | 7/8 超出、p ≤ 5.7 × 10⁻²⁰ | 同上 | `exceeds_same`、`p_vs_same` |
+| §3.5 | 7/8 超出、率差中位 +15.1pp、符号翻转 p = 0.031 | 同上 | `exceeds_same`、`rate_diff_vs_same`、`mc_ci95_vs_same`、`sign_flip_test_dataset_level` |
 | §3.5 | 方向一致性 40.6%–100.0%（一组 84.8%） | `flip_criteria_validation.json` | `null_dir_consistency` |
 | §3.6 | 严格口径 13/16、6/8 | `label_sensitivity_noise_baseline.json` | `exceeds_same`、`rank_reversed` |
 | §3.7 | DCA 翻转阈值 | `multi_model_dca.json` | `n_flip_thresholds` |
@@ -183,7 +184,7 @@ ECE 在数据集间的差异，大于任一组比较中 AUC 的数据集间差�
 
 1. **本稿最大价值不是新数据，而是纠错。** 我在写正文前把每个数字回溯到 JSON，逮到三处问题，其中两处已经扩散进 Abstract：
    - "11/16 组显著" → **实际 7/16**（11 这个数字没有统计依据）
-   - "p ≤ 5.7 × 10⁻²⁰" → **实际 p ≤ 5.7 × 10⁻²⁰**
+   - "p ≤ 5.7 × 10⁻²⁰" → 🔴 **该值已撤回（二项口径不成立）**，现为率差中位 **+15.1pp** + 符号翻转检验单侧 p = **0.031**
    - `delong_fixed.json` 有 midrank 二次置换 bug（SE 0.3575 vs 真值 0.0341）→ **该文件不可用**，已用 bootstrap 16/16 复核确认仓库权威值正确
 
 2. **DeLong 的方差公式我一开始也写错了**，写完才发现自己把 `S10/m` 当成了正确式（正确是 `Var_ddof1(V10)/m + Var_ddof1(V01)/n`，差约 m 倍）。这是三方裁决（暴力法 / fastDeLong 风格 / bootstrap）逼出来的——**没有第三方实现交叉验证，我就会把错误数字写进论文**。

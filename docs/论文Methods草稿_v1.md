@@ -62,7 +62,7 @@ Differences in AUC between NIH and each external dataset were tested with DeLong
 
 We state the independence assumption explicitly, because DeLong's test is usually applied to the two ROC curves obtained from the same subjects, where the covariance term cannot be discarded. Our comparisons are between two entirely separate collections, acquired at different institutions, with no patient in common, and every image was used exactly once. The two ROC curves therefore estimate AUCs from independent samples, and the covariance term is zero by construction rather than by approximation. The same consideration applies to the bootstrap verification described below, which resamples the two cohorts separately.
 
-The variance of the AUC was estimated using the structural components of DeLong's method, in which each observation's placement value is expressed relative to its own within-class midrank. An earlier implementation available in public code subtracts a class-mean constant instead of the within-class midrank. These two quantities agree in their means but not in their variances, and the discrepancy grows with class imbalance: for the least balanced comparison the standard error was overstated roughly sevenfold (0.2398 against a true value of 0.0335), which converted a significant result into a non-significant one. We verified the corrected estimator against a direct O(m × n) computation of DeLong's definition, against the Hanley-McNeil closed-form approximation, and against 2,000-replicate stratified bootstrap resampling; all three agreed. All AUC differences reported here originate from the corrected estimator.
+The variance of the AUC was estimated using the structural components of DeLong's method, in which each observation's placement value is expressed relative to its own within-class midrank. An earlier implementation of ours subtracted a class-mean constant instead of the within-class midrank. These two quantities agree in their means but not in their variances, and the discrepancy grows with class imbalance: for the least balanced comparison the standard error was overstated roughly sevenfold (0.2398 against a true value of 0.0335), which converted a significant result into a non-significant one. We verified the corrected estimator against a direct O(m × n) computation of DeLong's definition, against the Hanley-McNeil closed-form approximation, and against 2,000-replicate stratified bootstrap resampling; all three agreed. All AUC differences reported here originate from the corrected estimator.
 
 #### 2.4.2 Calibration under controlled class prevalence
 
@@ -117,6 +117,8 @@ The archived package contains the analysis code, the derived per-image predictio
 
 Ethics approval and consent to participate: not applicable. Consent for publication: not applicable. Competing interests: the authors declare no competing interests. Funding: none. Authors' contributions: all authors contributed to the design of the study, to the analysis and interpretation of data, and to the drafting and revision of the manuscript; all authors approved the submitted version. Acknowledgements: none.
 
+Use of AI tools: a large language model–based writing and coding assistant (WorkBuddy) was used during the preparation of this manuscript. Its contributions were confined to literature retrieval and source verification, the drafting and restructuring of prose, the writing and refactoring of analysis and verification code, and the mechanical assembly of tables and figures. It did not make, and could not make, any scientific judgement: the study design, the selection and labelling of datasets, the specification of every statistical test, the choice of each null construction, the interpretation of every result, and the final wording of every claim were determined by the authors, who checked each output against the primary result files. The analysis was written to be checkable without the assistant: the derivation of every reported number is re-computed by verification scripts from the archived per-image prediction files, the corrected variance estimator was validated against three independently implemented procedures, and the prevalence-matched null baseline was reproduced by a separately written implementation that does not share code with the analysis it audits. No AI system is listed as an author, and the authors accept full responsibility for the accuracy and integrity of the work.
+
 ---
 
 ## [Chinese counterpart]
@@ -167,7 +169,7 @@ NIH 与两个外部数据集之间的 AUC 差异用 DeLong 相关 ROC 曲线检�
 
 **我们明确陈述独立性前提**，因为 DeLong 检验通常用于同一批受试者得到的两条 ROC 曲线，此时协方差项不可忽略。本文的比较是在两套完全独立的采集数据之间进行的——来自不同机构、无共同患者、每张影像仅使用一次。因此两条 ROC 曲线各自基于独立样本估计 AUC，协方差项为零是**构造上的结果，而非近似处理**。下述 bootstrap 交叉验证亦遵循同一考虑：两组队列分别重采样。
 
-AUC 的方差用 DeLong 方法的结构分量估计，其中每个观测的位次值相对于其自身类内 midrank 计算。公开代码中的一个早期实现减去的是类别均值常数而非类内 midrank。两者均值相等而方差不等，且差异随类别不平衡加剧：在最不平衡的一组比较中，标准误被高估约七倍（0.2398 对真值 0.0335），足以把显著结果判成不显著。我们用三种方法交叉验证了修正后的估计量：按 DeLong 定义直接做 O(m × n) 暴力计算、Hanley-McNeil 闭式近似、以及 2,000 次分层自助重抽样，三者结论一致。本文报告的全部 AUC 差异均来自修正后的估计量。
+AUC 的方差用 DeLong 方法的结构分量估计，其中每个观测的位次值相对于其自身类内 midrank 计算。**我们早期的一个实现**减去的是类别均值常数而非类内 midrank。两者均值相等而方差不等，且差异随类别不平衡加剧：在最不平衡的一组比较中，标准误被高估约七倍（0.2398 对真值 0.0335），足以把显著结果判成不显著。我们用三种方法交叉验证了修正后的估计量：按 DeLong 定义直接做 O(m × n) 暴力计算、Hanley-McNeil 闭式近似、以及 2,000 次分层自助重抽样，三者结论一致。本文报告的全部 AUC 差异均来自修正后的估计量。
 
 #### 2.4.2 受控类别先验下的校准
 
@@ -210,3 +212,5 @@ AUC 的方差用 DeLong 方法的结构分量估计，其中每个观测的位�
 ### 2.7 声明
 
 伦理审批与知情同意：不适用。发表同意：不适用。利益冲突：作者声明无利益冲突。资助：无。作者贡献：全体作者共同参与研究设计、数据分析与解读，以及稿件的撰写与修订；全体作者均审阅并同意提交稿。致谢：无。
+
+AI 工具的使用：稿件撰写过程中使用了一个基于大语言模型的写作与编程助手（WorkBuddy）。其作用限于文献检索与来源核实、散文段落的起草与结构调整、分析与核验代码的编写与重构，以及表格与图件的机械性拼装；**它没有、也不可能作出任何科学判断**——研究设计、数据集的选择与标签口径、每一项统计检验的设定、每一种零分布构造的选取、对每一个结果的解读，以及每一处结论的最终措辞，均由作者确定，并由作者逐项对照原始结果文件核对。分析流程被设计为**脱离该助手亦可被检验**：正文中每一个数字都由核验脚本从随稿存档的逐图预测文件中重新计算得出；修正后的方差估计量由三套独立实现交叉验证；先验匹配零基线由一份**与被审计的分析不共享任何代码**的独立实现复现。**AI 系统未被列为作者，作者对本文的准确性与完整性负全部责任。**

@@ -180,29 +180,33 @@ def main():
              style="italic", rotation=41, ha="center", va="center",
              bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85))
 
+    # 🔴 2026-11-12 修正（两轮外部评审一致指出）：原实现把 before 与 after 两个点
+    #    都画成 (sr,sr) 与 (sn,sn) —— 即全部落在 y=x 对角线上，
+    #    而对角线恰好就是"no change"参考线 → 面板 B 什么都没表达。
+    #    正确画法：横轴 = **匹配前**的校准跨度，纵轴 = **匹配后**的校准跨度，
+    #    每个"模型×标签"组合是一个点 (sr, sn)；落在 y=x 下方 = 跨度收缩。
+    #    图注中"points below the dashed line indicate contraction"从此成立。
     for sr, sn in zip(span_raw, span_new):
         contracted = sn < sr
         col = COLORS["span_matched"] if contracted else COLORS["exception"]
-        ax2.plot([sr, sn], [sr, sn], color=col, lw=1.2, alpha=0.7, zorder=2)
-        ax2.scatter([sr], [sr], s=32, marker="o", facecolors="white",
-                    edgecolors=COLORS["span_raw"], linewidths=1.3, zorder=3)
-        ax2.scatter([sn], [sn], s=42, marker="o", color=col,
-                    edgecolors="white", linewidths=0.8, zorder=4)
+        # 从对角线上的"未变化"位置拉到实际观测点，直观显示收缩幅度
+        ax2.plot([sr, sr], [sr, sn], color=col, lw=1.0, alpha=0.45,
+                 zorder=2, solid_capstyle="round")
+        ax2.scatter([sr], [sn], s=44, marker="o", color=col,
+                    edgecolors="white", linewidths=0.9, zorder=4)
 
     ax2.set_xlim(0.9, lim)
     ax2.set_ylim(0.9, lim)
     ax2.set_aspect("equal", adjustable="box")
-    ax2.set_xlabel("Calibration spread (worst / best dataset)")
-    ax2.set_ylabel("Calibration spread")
+    ax2.set_xlabel("Calibration spread before matching (worst / best)")
+    ax2.set_ylabel("Calibration spread after matching")
     ax2.set_title("B   Spread contraction", loc="left", fontweight="bold", pad=8)
 
     h2 = [
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="white",
-               markeredgecolor=COLORS["span_raw"], markersize=5.8, label="Before matching"),
         Line2D([0], [0], marker="o", color="w", markerfacecolor=COLORS["span_matched"],
-               markersize=5.8, label="After matching (7 of 8 contracted)"),
+               markersize=5.8, label="Contracted (7 of 8)"),
         Line2D([0], [0], marker="o", color="w", markerfacecolor=COLORS["exception"],
-               markersize=5.8, label="Widened (CheXpert/PNEUMONIA)"),
+               markersize=5.8, label="Widened (CheXpert / PNEUMONIA)"),
     ]
     # 图例放在坐标区**外**下方，避免压住对角线上的数据点
     ax2.legend(handles=h2, loc="upper center", bbox_to_anchor=(0.5, -0.20),
@@ -211,14 +215,22 @@ def main():
     clean_axes(ax2)
 
     # ================= 图注 =================
+    # 🔴 2026-11-12 修正：
+    #   ① 旧图注写 "p <= 2.9 x 10^-22" —— 与正文权威值 5.7×10⁻²⁰ 不一致（评审已抓出）
+    #   ② 旧图注称 "MIMIC-CXR (noise-handled) on PNEUMONIA shows the largest contraction"
+    #      —— 实测最大收缩是 MIMIC_NB / NORMAL（保留 23.9%），
+    #         而 MIMIC_NB / PNEUMONIA 保留 77.5%，是 7 个收缩组中**最小**的
+    #   ③ p 值口径改为「率差 + MC 95% CI」+ 数据集层面符号翻转检验
     caption = (
         "Panel A: rate at which prior matching reordered the three datasets by calibration, against null "
         "distributions that resample under the same protocol. Under a null of identical calibration across "
         "datasets (shaded band), prior matching alone reordered them in 82-84% of replicates; the observed "
-        "rate exceeded this baseline in 7 of 8 model-label combinations (p <= 2.9 x 10^-22). In the single "
-        "exception (MIMIC-CXR with CheXpert labels, PNEUMONIA) the observed rate fell below the baseline. "
-        "Panel B: calibration spread before and after matching; points below the dashed line indicate "
-        "contraction. MIMIC-CXR (noise-handled) on PNEUMONIA shows the largest contraction."
+        "rate exceeded this baseline in 7 of 8 model-label combinations, by a median of 15.1 percentage points "
+        "(dataset-level sign-flip test, one-sided p = 0.031; 2^8 = 256 sign flips, minimum attainable "
+        "p = 0.0039). In the single exception (MIMIC-CXR with CheXpert labels, PNEUMONIA) the observed rate "
+        "fell below the baseline. Panel B: calibration spread before (horizontal axis) and after (vertical "
+        "axis) prevalence matching; points below the dashed no-change line indicate contraction. The largest "
+        "contraction is MIMIC-CXR (noise-handled) on NORMAL (23.9% of the original spread retained)."
     )
     fig.text(0.5, -0.045, caption, ha="center", va="top", fontsize=6.3,
              color=COLORS["muted"], wrap=True)

@@ -12,6 +12,7 @@
 """
 
 import os
+import datetime
 import re
 import shutil
 import subprocess
@@ -23,7 +24,9 @@ REPO = os.path.dirname(HERE)
 PROJ = os.path.dirname(REPO)                      # 02_旗舰项目
 OUT = os.path.join(PROJ, "output")
 FIG_SRC = os.path.join(REPO, "figures")
-TODAY = "2026-11-10"
+# 🔴 2026-11-12 修：原为硬编码 "2026-11-11"，每次重建都要手改，
+#    极易漏改导致文件名与内容日期不一致。改为运行时取当天。
+TODAY = datetime.date.today().isoformat()
 
 CHROME_CANDIDATES = [
     r"C:\Program Files\Google\Chrome\Application\chrome.exe",

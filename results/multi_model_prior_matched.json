@@ -67,7 +67,11 @@
     "VIN",
     "NIH"
    ],
-   "rank_reversed": true
+   "order_changed": true,
+   "best_dataset_changed": true,
+   "full_reversal": false,
+   "rank_reversed": true,
+   "_deprecated_rank_reversed": "rank_reversed 实为 order_changed（排序有任何改变），非严格逆序。2026-11-12 起改用 order_changed / best_dataset_changed / full_reversal。"
   },
   "NORMAL": {
    "raw": {
@@ -128,7 +132,11 @@
     "VIN",
     "KEM"
    ],
-   "rank_reversed": true
+   "order_changed": true,
+   "best_dataset_changed": true,
+   "full_reversal": false,
+   "rank_reversed": true,
+   "_deprecated_rank_reversed": "rank_reversed 实为 order_changed（排序有任何改变），非严格逆序。2026-11-12 起改用 order_changed / best_dataset_changed / full_reversal。"
   },
   "model": "NIH"
  },
@@ -192,7 +200,11 @@
     "VIN",
     "NIH"
    ],
-   "rank_reversed": true
+   "order_changed": true,
+   "best_dataset_changed": true,
+   "full_reversal": false,
+   "rank_reversed": true,
+   "_deprecated_rank_reversed": "rank_reversed 实为 order_changed（排序有任何改变），非严格逆序。2026-11-12 起改用 order_changed / best_dataset_changed / full_reversal。"
   },
   "NORMAL": {
    "raw": {
@@ -253,7 +265,11 @@
     "NIH",
     "KEM"
    ],
-   "rank_reversed": true
+   "order_changed": true,
+   "best_dataset_changed": false,
+   "full_reversal": false,
+   "rank_reversed": true,
+   "_deprecated_rank_reversed": "rank_reversed 实为 order_changed（排序有任何改变），非严格逆序。2026-11-12 起改用 order_changed / best_dataset_changed / full_reversal。"
   },
   "model": "CHEX"
  },
@@ -317,7 +333,11 @@
     "NIH",
     "KEM"
    ],
-   "rank_reversed": true
+   "order_changed": true,
+   "best_dataset_changed": false,
+   "full_reversal": false,
+   "rank_reversed": true,
+   "_deprecated_rank_reversed": "rank_reversed 实为 order_changed（排序有任何改变），非严格逆序。2026-11-12 起改用 order_changed / best_dataset_changed / full_reversal。"
   },
   "NORMAL": {
    "raw": {
@@ -378,7 +398,11 @@
     "NIH",
     "KEM"
    ],
-   "rank_reversed": true
+   "order_changed": true,
+   "best_dataset_changed": true,
+   "full_reversal": false,
+   "rank_reversed": true,
+   "_deprecated_rank_reversed": "rank_reversed 实为 order_changed（排序有任何改变），非严格逆序。2026-11-12 起改用 order_changed / best_dataset_changed / full_reversal。"
   },
   "model": "MIMIC_CH"
  },
@@ -442,7 +466,11 @@
     "KEM",
     "VIN"
    ],
-   "rank_reversed": true
+   "order_changed": true,
+   "best_dataset_changed": true,
+   "full_reversal": true,
+   "rank_reversed": true,
+   "_deprecated_rank_reversed": "rank_reversed 实为 order_changed（排序有任何改变），非严格逆序。2026-11-12 起改用 order_changed / best_dataset_changed / full_reversal。"
   },
   "NORMAL": {
    "raw": {
@@ -503,7 +531,11 @@
     "VIN",
     "KEM"
    ],
-   "rank_reversed": true
+   "order_changed": true,
+   "best_dataset_changed": true,
+   "full_reversal": true,
+   "rank_reversed": true,
+   "_deprecated_rank_reversed": "rank_reversed 实为 order_changed（排序有任何改变），非严格逆序。2026-11-12 起改用 order_changed / best_dataset_changed / full_reversal。"
   },
   "model": "MIMIC_NB"
  }

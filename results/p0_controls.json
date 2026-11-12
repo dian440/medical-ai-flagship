@@ -1,0 +1,1826 @@
+{
+  "generated": "2026-11-12",
+  "purpose": "把「样本量效应」与「患病率效应」从先验匹配的校准跨度收缩中分离；并完成 Q7 slope/intercept、Q13 BH-FDR、统计量重构三项评审要求。",
+  "seed": 20261112,
+  "n_reps": 500,
+  "n_bins": 10,
+  "prediction_source": "multi_model_predictions.csv",
+  "exchangeability_floor_k3": 0.8333333333333334,
+  "selfcheck_vs_authoritative": {
+    "n": 24,
+    "n_match": 24,
+    "all_match": true,
+    "items": [
+      {
+        "model": "NIH",
+        "label": "PNEUMONIA",
+        "dataset": "NIH",
+        "recomputed": 0.23889582484630995,
+        "reference": 0.23889582484630995,
+        "match": true
+      },
+      {
+        "model": "NIH",
+        "label": "PNEUMONIA",
+        "dataset": "KEM",
+        "recomputed": 0.29266790687391286,
+        "reference": 0.29266790687391286,
+        "match": true
+      },
+      {
+        "model": "NIH",
+        "label": "PNEUMONIA",
+        "dataset": "VIN",
+        "recomputed": 0.08881313751759376,
+        "reference": 0.08881313751759376,
+        "match": true
+      },
+      {
+        "model": "NIH",
+        "label": "NORMAL",
+        "dataset": "NIH",
+        "recomputed": 0.43593195976498506,
+        "reference": 0.4359319597649851,
+        "match": true
+      },
+      {
+        "model": "NIH",
+        "label": "NORMAL",
+        "dataset": "KEM",
+        "recomputed": 0.18497733026423116,
+        "reference": 0.18497733026423116,
+        "match": true
+      },
+      {
+        "model": "NIH",
+        "label": "NORMAL",
+        "dataset": "VIN",
+        "recomputed": 0.1579720111672589,
+        "reference": 0.1579720111672589,
+        "match": true
+      },
+      {
+        "model": "CHEX",
+        "label": "PNEUMONIA",
+        "dataset": "NIH",
+        "recomputed": 0.2057183475536257,
+        "reference": 0.2057183475536257,
+        "match": true
+      },
+      {
+        "model": "CHEX",
+        "label": "PNEUMONIA",
+        "dataset": "KEM",
+        "recomputed": 0.20364498860038982,
+        "reference": 0.2036449886003898,
+        "match": true
+      },
+      {
+        "model": "CHEX",
+        "label": "PNEUMONIA",
+        "dataset": "VIN",
+        "recomputed": 0.1590473576587495,
+        "reference": 0.1590473576587495,
+        "match": true
+      },
+      {
+        "model": "CHEX",
+        "label": "NORMAL",
+        "dataset": "NIH",
+        "recomputed": 0.473620767725956,
+        "reference": 0.473620767725956,
+        "match": true
+      },
+      {
+        "model": "CHEX",
+        "label": "NORMAL",
+        "dataset": "KEM",
+        "recomputed": 0.11401509442545761,
+        "reference": 0.1140150944254576,
+        "match": true
+      },
+      {
+        "model": "CHEX",
+        "label": "NORMAL",
+        "dataset": "VIN",
+        "recomputed": 0.10675122375676989,
+        "reference": 0.1067512237567699,
+        "match": true
+      },
+      {
+        "model": "MIMIC_CH",
+        "label": "PNEUMONIA",
+        "dataset": "NIH",
+        "recomputed": 0.30847230204818793,
+        "reference": 0.30847230204818793,
+        "match": true
+      },
+      {
+        "model": "MIMIC_CH",
+        "label": "PNEUMONIA",
+        "dataset": "KEM",
+        "recomputed": 0.20663817275803564,
+        "reference": 0.2066381727580357,
+        "match": true
+      },
+      {
+        "model": "MIMIC_CH",
+        "label": "PNEUMONIA",
+        "dataset": "VIN",
+        "recomputed": 0.061165430559179695,
+        "reference": 0.0611654305591797,
+        "match": true
+      },
+      {
+        "model": "MIMIC_CH",
+        "label": "NORMAL",
+        "dataset": "NIH",
+        "recomputed": 0.5174145250917856,
+        "reference": 0.5174145250917856,
+        "match": true
+      },
+      {
+        "model": "MIMIC_CH",
+        "label": "NORMAL",
+        "dataset": "KEM",
+        "recomputed": 0.10313334325737841,
+        "reference": 0.1031333432573784,
+        "match": true
+      },
+      {
+        "model": "MIMIC_CH",
+        "label": "NORMAL",
+        "dataset": "VIN",
+        "recomputed": 0.21589653833936423,
+        "reference": 0.21589653833936423,
+        "match": true
+      },
+      {
+        "model": "MIMIC_NB",
+        "label": "PNEUMONIA",
+        "dataset": "NIH",
+        "recomputed": 0.37579176396048264,
+        "reference": 0.3757917639604827,
+        "match": true
+      },
+      {
+        "model": "MIMIC_NB",
+        "label": "PNEUMONIA",
+        "dataset": "KEM",
+        "recomputed": 0.19853180459832295,
+        "reference": 0.19853180459832295,
+        "match": true
+      },
+      {
+        "model": "MIMIC_NB",
+        "label": "PNEUMONIA",
+        "dataset": "VIN",
+        "recomputed": 0.18315185031766057,
+        "reference": 0.1831518503176606,
+        "match": true
+      },
+      {
+        "model": "MIMIC_NB",
+        "label": "NORMAL",
+        "dataset": "NIH",
+        "recomputed": 0.5159214368765977,
+        "reference": 0.5159214368765977,
+        "match": true
+      },
+      {
+        "model": "MIMIC_NB",
+        "label": "NORMAL",
+        "dataset": "KEM",
+        "recomputed": 0.0955752085255981,
+        "reference": 0.09557520852559809,
+        "match": true
+      },
+      {
+        "model": "MIMIC_NB",
+        "label": "NORMAL",
+        "dataset": "VIN",
+        "recomputed": 0.2424041824972528,
+        "reference": 0.2424041824972528,
+        "match": true
+      }
+    ]
+  },
+  "combos": {
+    "NIH/PNEUMONIA": {
+      "model": "NIH",
+      "label": "PNEUMONIA",
+      "matched_prior": 0.38746438746438744,
+      "n_target": 169,
+      "A_raw_full_nativeprior": {
+        "NIH": {
+          "n": 2819,
+          "prior": 0.02305782192266761,
+          "ece": 0.23889582484630995
+        },
+        "KEM": {
+          "n": 5824,
+          "prior": 0.7288804945054945,
+          "ece": 0.29266790687391286
+        },
+        "VIN": {
+          "n": 702,
+          "prior": 0.38746438746438744,
+          "ece": 0.08881313751759376
+        }
+      },
+      "B_native169_nativeprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.02305782192266761,
+          "ece_median": 0.23872768949792053,
+          "ece_p2.5": 0.20664147588578904,
+          "ece_p97.5": 0.2670987055350435
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.7288804945054945,
+          "ece_median": 0.294035243323712,
+          "ece_p2.5": 0.27664789146553936,
+          "ece_p97.5": 0.3167518901541559
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.09482287010694605,
+          "ece_p2.5": 0.06396076817046921,
+          "ece_p97.5": 0.13521579748511928
+        }
+      },
+      "C_matched169_commonprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.10567160928111707,
+          "ece_p2.5": 0.06783767834083997,
+          "ece_p97.5": 0.15040566606483524
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.06326554083959723,
+          "ece_p2.5": 0.02928833174918773,
+          "ece_p97.5": 0.11448331898518835
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.09746250321725403,
+          "ece_p2.5": 0.0709351256575257,
+          "ece_p97.5": 0.13852517911350629
+        }
+      },
+      "D_floor_native169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.02305782192266761,
+          "ece_median": 0.05121127629286497,
+          "ece_p2.5": 0.022240996019289933,
+          "ece_p97.5": 0.09277837618157078
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.7288804945054945,
+          "ece_median": 0.05184472249214639,
+          "ece_p2.5": 0.02238883659644923,
+          "ece_p97.5": 0.10708571467837921
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.056110715729318056,
+          "ece_p2.5": 0.029683789892547788,
+          "ece_p97.5": 0.10015151368798694
+        }
+      },
+      "E_floor_matched169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.05153594842805655,
+          "ece_p2.5": 0.021269526331557553,
+          "ece_p97.5": 0.09457848106341137
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.053827638478506044,
+          "ece_p2.5": 0.023637878526168887,
+          "ece_p97.5": 0.10800922481934183
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.056110715729318056,
+          "ece_p2.5": 0.029683789892547788,
+          "ece_p97.5": 0.10015151368798694
+        }
+      },
+      "spans": {
+        "span_raw": 3.295322235586326,
+        "span_native169": 3.1008895110650427,
+        "span_matched169": 1.670286982119314,
+        "span_floor_native169": 1.0956711058797748,
+        "span_floor_matched169": 1.0887684701805347,
+        "span_retained_pct_matched_vs_raw": 50.6866055186292,
+        "span_retained_pct_native169_vs_raw": 94.0997356063818
+      },
+      "effect_decomposition_log_scale": {
+        "fraction_from_sample_size": 0.08949843747043944,
+        "fraction_from_prevalence": 0.9105015625295606,
+        "note": "fraction_from_sample_size = (log span_raw - log span_native169) / (log span_raw - log span_matched169)"
+      },
+      "Q7_calibration_full_sample": {
+        "NIH": {
+          "slope": 0.4824085778620602,
+          "intercept": -3.2099739499753,
+          "calib_in_the_large": 0.23889582484630997,
+          "brier": 0.11690166382674536
+        },
+        "KEM": {
+          "slope": 0.911042930913176,
+          "intercept": 1.3715551481698776,
+          "calib_in_the_large": -0.2926679068739129,
+          "brier": 0.2550250734274922
+        },
+        "VIN": {
+          "slope": 0.5802364845704777,
+          "intercept": 0.13027310017127663,
+          "calib_in_the_large": -0.07882370743510408,
+          "brier": 0.2192814816620389
+        }
+      },
+      "statistic_reconstruction": {
+        "raw_order_best_to_worst": [
+          "VIN",
+          "NIH",
+          "KEM"
+        ],
+        "best_dataset": "VIN",
+        "n_valid_reps": 500,
+        "n_order_changed": 491,
+        "n_best_dataset_changed": 442,
+        "order_changed_rate": 0.982,
+        "best_dataset_changed_rate": 0.884,
+        "rate_diff_vs_exchangeability_floor": {
+          "observed_rate": 0.982,
+          "p0": 0.8333333333333334,
+          "diff": 0.1486666666666666,
+          "mc_ci95": [
+            0.8,
+            0.866
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 491
+        },
+        "rate_diff_best_vs_random": {
+          "observed_rate": 0.884,
+          "p0": 0.3333333333333333,
+          "diff": 0.5506666666666666,
+          "mc_ci95": [
+            0.292,
+            0.374
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 442
+        }
+      }
+    },
+    "NIH/NORMAL": {
+      "model": "NIH",
+      "label": "NORMAL",
+      "matched_prior": 0.6125356125356125,
+      "n_target": 169,
+      "A_raw_full_nativeprior": {
+        "NIH": {
+          "n": 2819,
+          "prior": 0.9769421780773324,
+          "ece": 0.43593195976498506
+        },
+        "KEM": {
+          "n": 5824,
+          "prior": 0.2711195054945055,
+          "ece": 0.18497733026423116
+        },
+        "VIN": {
+          "n": 702,
+          "prior": 0.6125356125356125,
+          "ece": 0.1579720111672589
+        }
+      },
+      "B_native169_nativeprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.9769421780773324,
+          "ece_median": 0.4361658868140172,
+          "ece_p2.5": 0.40886952586585,
+          "ece_p97.5": 0.46353399802671647
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.2711195054945055,
+          "ece_median": 0.19026717959390677,
+          "ece_p2.5": 0.1679314444588288,
+          "ece_p97.5": 0.2214171116621944
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.17176535549248464,
+          "ece_p2.5": 0.12827578492451616,
+          "ece_p97.5": 0.2152129616739901
+        }
+      },
+      "C_matched169_commonprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.1683885246438123,
+          "ece_p2.5": 0.131498242847514,
+          "ece_p97.5": 0.21297272731813172
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.2287556482864731,
+          "ece_p2.5": 0.18723454468569461,
+          "ece_p97.5": 0.2708102072638697
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.1730225023168784,
+          "ece_p2.5": 0.1284488263497261,
+          "ece_p97.5": 0.220060445964419
+        }
+      },
+      "D_floor_native169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.9769421780773324,
+          "ece_median": 0.06912757760773483,
+          "ece_p2.5": 0.03588713698334354,
+          "ece_p97.5": 0.1131021300040064
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.2711195054945055,
+          "ece_median": 0.059246917065100727,
+          "ece_p2.5": 0.028729511063942736,
+          "ece_p97.5": 0.11396653692461219
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.06426375200586207,
+          "ece_p2.5": 0.0326938334317911,
+          "ece_p97.5": 0.11664972705807887
+        }
+      },
+      "E_floor_matched169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.06912918112202159,
+          "ece_p2.5": 0.03652038939046458,
+          "ece_p97.5": 0.11999289727550741
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.06088186644800227,
+          "ece_p2.5": 0.027614907059713818,
+          "ece_p97.5": 0.11271705634040574
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.06426375200586207,
+          "ece_p2.5": 0.0326938334317911,
+          "ece_p97.5": 0.11664972705807887
+        }
+      },
+      "spans": {
+        "span_raw": 2.7595518759549464,
+        "span_native169": 2.5393123401598934,
+        "span_matched169": 1.358499035313444,
+        "span_floor_native169": 1.1667708807831672,
+        "span_floor_matched169": 1.1354642220284614,
+        "span_retained_pct_matched_vs_raw": 49.22897254262828,
+        "span_retained_pct_native169_vs_raw": 92.01901085049039
+      },
+      "effect_decomposition_log_scale": {
+        "fraction_from_sample_size": 0.117364773619736,
+        "fraction_from_prevalence": 0.882635226380264,
+        "note": "fraction_from_sample_size = (log span_raw - log span_native169) / (log span_raw - log span_matched169)"
+      },
+      "Q7_calibration_full_sample": {
+        "NIH": {
+          "slope": 1.1713410423025048,
+          "intercept": 3.8946037440555386,
+          "calib_in_the_large": -0.435931959764985,
+          "brier": 0.23936024117141305
+        },
+        "KEM": {
+          "slope": 4.813490514931404,
+          "intercept": -0.08881304663095992,
+          "calib_in_the_large": 0.16723693519060573,
+          "brier": 0.18143682127580826
+        },
+        "VIN": {
+          "slope": 2.118113895040698,
+          "intercept": 0.8245288610621346,
+          "calib_in_the_large": -0.12610301098778331,
+          "brier": 0.20613128567078062
+        }
+      },
+      "statistic_reconstruction": {
+        "raw_order_best_to_worst": [
+          "VIN",
+          "KEM",
+          "NIH"
+        ],
+        "best_dataset": "VIN",
+        "n_valid_reps": 500,
+        "n_order_changed": 489,
+        "n_best_dataset_changed": 247,
+        "order_changed_rate": 0.978,
+        "best_dataset_changed_rate": 0.494,
+        "rate_diff_vs_exchangeability_floor": {
+          "observed_rate": 0.978,
+          "p0": 0.8333333333333334,
+          "diff": 0.1446666666666666,
+          "mc_ci95": [
+            0.8,
+            0.866
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 489
+        },
+        "rate_diff_best_vs_random": {
+          "observed_rate": 0.494,
+          "p0": 0.3333333333333333,
+          "diff": 0.16066666666666668,
+          "mc_ci95": [
+            0.292,
+            0.374
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 247
+        }
+      }
+    },
+    "CHEX/PNEUMONIA": {
+      "model": "CHEX",
+      "label": "PNEUMONIA",
+      "matched_prior": 0.38746438746438744,
+      "n_target": 169,
+      "A_raw_full_nativeprior": {
+        "NIH": {
+          "n": 2819,
+          "prior": 0.02305782192266761,
+          "ece": 0.2057183475536257
+        },
+        "KEM": {
+          "n": 5824,
+          "prior": 0.7288804945054945,
+          "ece": 0.20364498860038982
+        },
+        "VIN": {
+          "n": 702,
+          "prior": 0.38746438746438744,
+          "ece": 0.1590473576587495
+        }
+      },
+      "B_native169_nativeprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.02305782192266761,
+          "ece_median": 0.20463712226705194,
+          "ece_p2.5": 0.171592510012223,
+          "ece_p97.5": 0.23958887569294596
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.7288804945054945,
+          "ece_median": 0.2114255176746898,
+          "ece_p2.5": 0.18510600029712695,
+          "ece_p97.5": 0.23748370590543968
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.16020014890250556,
+          "ece_p2.5": 0.13182766954237168,
+          "ece_p97.5": 0.18864977992356394
+        }
+      },
+      "C_matched169_commonprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.160097648044869,
+          "ece_p2.5": 0.10668588727213217,
+          "ece_p97.5": 0.22284953232503982
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.10863680348417465,
+          "ece_p2.5": 0.0754475779923026,
+          "ece_p97.5": 0.14606125190827898
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.15997831047183322,
+          "ece_p2.5": 0.13188950217684756,
+          "ece_p97.5": 0.18660017054813177
+        }
+      },
+      "D_floor_native169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.02305782192266761,
+          "ece_median": 0.05812050666165479,
+          "ece_p2.5": 0.03267827802699352,
+          "ece_p97.5": 0.09435112680687903
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.7288804945054945,
+          "ece_median": 0.07070061549841915,
+          "ece_p2.5": 0.03836133849294579,
+          "ece_p97.5": 0.11567877108505345
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.05552898259446322,
+          "ece_p2.5": 0.03136752256176424,
+          "ece_p97.5": 0.0899878746800995
+        }
+      },
+      "E_floor_matched169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.0633159976321019,
+          "ece_p2.5": 0.035241392192092574,
+          "ece_p97.5": 0.10372075251709688
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.0692308657518836,
+          "ece_p2.5": 0.03808876457817015,
+          "ece_p97.5": 0.09961375830069558
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.05552898259446322,
+          "ece_p2.5": 0.03136752256176424,
+          "ece_p97.5": 0.0899878746800995
+        }
+      },
+      "spans": {
+        "span_raw": 1.2934408378856128,
+        "span_native169": 1.3197585590470264,
+        "span_matched169": 1.4736962328626575,
+        "span_floor_native169": 1.2732200770678028,
+        "span_floor_matched169": 1.2467519215593659,
+        "span_retained_pct_matched_vs_raw": 113.93611440873539,
+        "span_retained_pct_native169_vs_raw": 102.03470621852601
+      },
+      "effect_decomposition_log_scale": {
+        "fraction_from_sample_size": 0.15438936711923681,
+        "fraction_from_prevalence": 0.8456106328807632,
+        "note": "fraction_from_sample_size = (log span_raw - log span_native169) / (log span_raw - log span_matched169)"
+      },
+      "Q7_calibration_full_sample": {
+        "NIH": {
+          "slope": 0.4786794201909134,
+          "intercept": -3.1439871736653746,
+          "calib_in_the_large": 0.2057183475536257,
+          "brier": 0.11446341296946493
+        },
+        "KEM": {
+          "slope": 1.7193558282390065,
+          "intercept": 1.852181122931827,
+          "calib_in_the_large": -0.20364498860038982,
+          "brier": 0.12880468553779068
+        },
+        "VIN": {
+          "slope": 1.0178060870530725,
+          "intercept": 1.2843822349190648,
+          "calib_in_the_large": -0.15904735765874944,
+          "brier": 0.1649353778567651
+        }
+      },
+      "statistic_reconstruction": {
+        "raw_order_best_to_worst": [
+          "VIN",
+          "KEM",
+          "NIH"
+        ],
+        "best_dataset": "VIN",
+        "n_valid_reps": 500,
+        "n_order_changed": 494,
+        "n_best_dataset_changed": 491,
+        "order_changed_rate": 0.988,
+        "best_dataset_changed_rate": 0.982,
+        "rate_diff_vs_exchangeability_floor": {
+          "observed_rate": 0.988,
+          "p0": 0.8333333333333334,
+          "diff": 0.15466666666666662,
+          "mc_ci95": [
+            0.8,
+            0.866
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 494
+        },
+        "rate_diff_best_vs_random": {
+          "observed_rate": 0.982,
+          "p0": 0.3333333333333333,
+          "diff": 0.6486666666666667,
+          "mc_ci95": [
+            0.292,
+            0.374
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 491
+        }
+      }
+    },
+    "CHEX/NORMAL": {
+      "model": "CHEX",
+      "label": "NORMAL",
+      "matched_prior": 0.6125356125356125,
+      "n_target": 169,
+      "A_raw_full_nativeprior": {
+        "NIH": {
+          "n": 2819,
+          "prior": 0.9769421780773324,
+          "ece": 0.473620767725956
+        },
+        "KEM": {
+          "n": 5824,
+          "prior": 0.2711195054945055,
+          "ece": 0.11401509442545761
+        },
+        "VIN": {
+          "n": 702,
+          "prior": 0.6125356125356125,
+          "ece": 0.10675122375676989
+        }
+      },
+      "B_native169_nativeprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.9769421780773324,
+          "ece_median": 0.472234345705265,
+          "ece_p2.5": 0.4345953091626337,
+          "ece_p97.5": 0.5170286716116295
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.2711195054945055,
+          "ece_median": 0.12065870568332587,
+          "ece_p2.5": 0.08525927018087644,
+          "ece_p97.5": 0.15621765493222417
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.12278583311867078,
+          "ece_p2.5": 0.08880548071510229,
+          "ece_p97.5": 0.160662447184203
+        }
+      },
+      "C_matched169_commonprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.21743355267653627,
+          "ece_p2.5": 0.16989292800922454,
+          "ece_p97.5": 0.2666462443333626
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.27297284997470633,
+          "ece_p2.5": 0.24975212982431408,
+          "ece_p97.5": 0.30020178614746357
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.12269302070989499,
+          "ece_p2.5": 0.08443089364283889,
+          "ece_p97.5": 0.16550383786753525
+        }
+      },
+      "D_floor_native169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.9769421780773324,
+          "ece_median": 0.07356610957026129,
+          "ece_p2.5": 0.040995078555931,
+          "ece_p97.5": 0.12148533099697428
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.2711195054945055,
+          "ece_median": 0.06018289730790452,
+          "ece_p2.5": 0.031202610201869138,
+          "ece_p97.5": 0.09569509414261614
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.07678500716932689,
+          "ece_p2.5": 0.04327801892605539,
+          "ece_p97.5": 0.11760798344531882
+        }
+      },
+      "E_floor_matched169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.0718545006345627,
+          "ece_p2.5": 0.04128227410479807,
+          "ece_p97.5": 0.11628438492344151
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.06996479683373807,
+          "ece_p2.5": 0.03946797713780632,
+          "ece_p97.5": 0.1131489560922839
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.07678500716932689,
+          "ece_p2.5": 0.04327801892605539,
+          "ece_p97.5": 0.11760798344531882
+        }
+      },
+      "spans": {
+        "span_raw": 4.436677642263752,
+        "span_native169": 3.913802514545987,
+        "span_matched169": 2.224844154910366,
+        "span_floor_native169": 1.2758609273409278,
+        "span_floor_matched169": 1.0974805994476926,
+        "span_retained_pct_matched_vs_raw": 50.146626243847884,
+        "span_retained_pct_native169_vs_raw": 88.214714480564
+      },
+      "effect_decomposition_log_scale": {
+        "fraction_from_sample_size": 0.18167627325087085,
+        "fraction_from_prevalence": 0.8183237267491291,
+        "note": "fraction_from_sample_size = (log span_raw - log span_native169) / (log span_raw - log span_matched169)"
+      },
+      "Q7_calibration_full_sample": {
+        "NIH": {
+          "slope": 0.48437749268083147,
+          "intercept": 4.110434400608284,
+          "calib_in_the_large": -0.47362076772595607,
+          "brier": 0.3180275580339259
+        },
+        "KEM": {
+          "slope": 2.6460089382930967,
+          "intercept": 1.7789230530427116,
+          "calib_in_the_large": -0.052080074101328255,
+          "brier": 0.09758905195751154
+        },
+        "VIN": {
+          "slope": 1.2984876189347174,
+          "intercept": 0.6386012788841443,
+          "calib_in_the_large": -0.09423322930130729,
+          "brier": 0.1600412628229629
+        }
+      },
+      "statistic_reconstruction": {
+        "raw_order_best_to_worst": [
+          "VIN",
+          "KEM",
+          "NIH"
+        ],
+        "best_dataset": "VIN",
+        "n_valid_reps": 500,
+        "n_order_changed": 490,
+        "n_best_dataset_changed": 0,
+        "order_changed_rate": 0.98,
+        "best_dataset_changed_rate": 0.0,
+        "rate_diff_vs_exchangeability_floor": {
+          "observed_rate": 0.98,
+          "p0": 0.8333333333333334,
+          "diff": 0.1466666666666666,
+          "mc_ci95": [
+            0.8,
+            0.866
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 490
+        },
+        "rate_diff_best_vs_random": {
+          "observed_rate": 0.0,
+          "p0": 0.3333333333333333,
+          "diff": -0.3333333333333333,
+          "mc_ci95": [
+            0.292,
+            0.374
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 0
+        }
+      }
+    },
+    "MIMIC_CH/PNEUMONIA": {
+      "model": "MIMIC_CH",
+      "label": "PNEUMONIA",
+      "matched_prior": 0.38746438746438744,
+      "n_target": 169,
+      "A_raw_full_nativeprior": {
+        "NIH": {
+          "n": 2819,
+          "prior": 0.02305782192266761,
+          "ece": 0.30847230204818793
+        },
+        "KEM": {
+          "n": 5824,
+          "prior": 0.7288804945054945,
+          "ece": 0.20663817275803564
+        },
+        "VIN": {
+          "n": 702,
+          "prior": 0.38746438746438744,
+          "ece": 0.061165430559179695
+        }
+      },
+      "B_native169_nativeprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.02305782192266761,
+          "ece_median": 0.30845449855082707,
+          "ece_p2.5": 0.2763604642779941,
+          "ece_p97.5": 0.3411644551931941
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.7288804945054945,
+          "ece_median": 0.20746677955226783,
+          "ece_p2.5": 0.19653853640599536,
+          "ece_p97.5": 0.22330676920094789
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.07948916985173904,
+          "ece_p2.5": 0.0503426713447401,
+          "ece_p97.5": 0.12387484117857443
+        }
+      },
+      "C_matched169_commonprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.12812108247397613,
+          "ece_p2.5": 0.06789943971643612,
+          "ece_p97.5": 0.19046723625923026
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.16151970407798796,
+          "ece_p2.5": 0.12932816805681713,
+          "ece_p97.5": 0.20159293145448318
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.08112673127483686,
+          "ece_p2.5": 0.045369067338168555,
+          "ece_p97.5": 0.12582209009577977
+        }
+      },
+      "D_floor_native169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.02305782192266761,
+          "ece_median": 0.056239717210141496,
+          "ece_p2.5": 0.02657625518095839,
+          "ece_p97.5": 0.09883445470618664
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.7288804945054945,
+          "ece_median": 0.04935871232190784,
+          "ece_p2.5": 0.019342181486623207,
+          "ece_p97.5": 0.10699809979366344
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.05873777980216331,
+          "ece_p2.5": 0.02974386494358748,
+          "ece_p97.5": 0.1064782664546269
+        }
+      },
+      "E_floor_matched169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.054571550807877046,
+          "ece_p2.5": 0.026937154938050805,
+          "ece_p97.5": 0.09860746834968553
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.04819190715985188,
+          "ece_p2.5": 0.021054953520775906,
+          "ece_p97.5": 0.10139907797214368
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.05873777980216331,
+          "ece_p2.5": 0.02974386494358748,
+          "ece_p97.5": 0.1064782664546269
+        }
+      },
+      "spans": {
+        "span_raw": 5.0432458208518645,
+        "span_native169": 3.880459427694964,
+        "span_matched169": 1.9909554044621869,
+        "span_floor_native169": 1.1900184797992102,
+        "span_floor_matched169": 1.2188307801832976,
+        "span_retained_pct_matched_vs_raw": 39.477659332613904,
+        "span_retained_pct_native169_vs_raw": 76.94368994766764
+      },
+      "effect_decomposition_log_scale": {
+        "fraction_from_sample_size": 0.28199525255320684,
+        "fraction_from_prevalence": 0.7180047474467932,
+        "note": "fraction_from_sample_size = (log span_raw - log span_native169) / (log span_raw - log span_matched169)"
+      },
+      "Q7_calibration_full_sample": {
+        "NIH": {
+          "slope": 0.38764303185578014,
+          "intercept": -3.4551174684334125,
+          "calib_in_the_large": 0.308472302048188,
+          "brier": 0.15585945466549106
+        },
+        "KEM": {
+          "slope": 0.6395981201174396,
+          "intercept": 0.9508930659544981,
+          "calib_in_the_large": -0.20663817275803575,
+          "brier": 0.236846729410358
+        },
+        "VIN": {
+          "slope": 1.082946484253881,
+          "intercept": -0.20237251650033136,
+          "calib_in_the_large": 0.04581462904450051,
+          "brier": 0.2132789946604876
+        }
+      },
+      "statistic_reconstruction": {
+        "raw_order_best_to_worst": [
+          "VIN",
+          "KEM",
+          "NIH"
+        ],
+        "best_dataset": "VIN",
+        "n_valid_reps": 500,
+        "n_order_changed": 407,
+        "n_best_dataset_changed": 65,
+        "order_changed_rate": 0.814,
+        "best_dataset_changed_rate": 0.13,
+        "rate_diff_vs_exchangeability_floor": {
+          "observed_rate": 0.814,
+          "p0": 0.8333333333333334,
+          "diff": -0.019333333333333425,
+          "mc_ci95": [
+            0.8,
+            0.866
+          ],
+          "ci_excludes_zero": false,
+          "n_valid": 500,
+          "n_changed": 407
+        },
+        "rate_diff_best_vs_random": {
+          "observed_rate": 0.13,
+          "p0": 0.3333333333333333,
+          "diff": -0.2033333333333333,
+          "mc_ci95": [
+            0.292,
+            0.374
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 65
+        }
+      }
+    },
+    "MIMIC_CH/NORMAL": {
+      "model": "MIMIC_CH",
+      "label": "NORMAL",
+      "matched_prior": 0.6125356125356125,
+      "n_target": 169,
+      "A_raw_full_nativeprior": {
+        "NIH": {
+          "n": 2819,
+          "prior": 0.9769421780773324,
+          "ece": 0.5174145250917856
+        },
+        "KEM": {
+          "n": 5824,
+          "prior": 0.2711195054945055,
+          "ece": 0.10313334325737841
+        },
+        "VIN": {
+          "n": 702,
+          "prior": 0.6125356125356125,
+          "ece": 0.21589653833936423
+        }
+      },
+      "B_native169_nativeprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.9769421780773324,
+          "ece_median": 0.5184069880278859,
+          "ece_p2.5": 0.48128280299605486,
+          "ece_p97.5": 0.5506140198338136
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.2711195054945055,
+          "ece_median": 0.10662429184603267,
+          "ece_p2.5": 0.06030509728475437,
+          "ece_p97.5": 0.16433054057098703
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.22646325103629972,
+          "ece_p2.5": 0.20483072871485583,
+          "ece_p97.5": 0.24999645356661998
+        }
+      },
+      "C_matched169_commonprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.23050590210522598,
+          "ece_p2.5": 0.19156241057380016,
+          "ece_p97.5": 0.27572549838220056
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.3139687450327111,
+          "ece_p2.5": 0.2939402379404158,
+          "ece_p97.5": 0.3443971842439217
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.22761533753230023,
+          "ece_p2.5": 0.2067724988404551,
+          "ece_p97.5": 0.25428796909617246
+        }
+      },
+      "D_floor_native169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.9769421780773324,
+          "ece_median": 0.07299124543174837,
+          "ece_p2.5": 0.037381434788618835,
+          "ece_p97.5": 0.1219142069847229
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.2711195054945055,
+          "ece_median": 0.05585529853606365,
+          "ece_p2.5": 0.021870706666856133,
+          "ece_p97.5": 0.103901637244154
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.06533177066925011,
+          "ece_p2.5": 0.030737558811814836,
+          "ece_p97.5": 0.1139978863221742
+        }
+      },
+      "E_floor_matched169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.07139447864872464,
+          "ece_p2.5": 0.040603970746184596,
+          "ece_p97.5": 0.11633065319978272
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.056751223887212175,
+          "ece_p2.5": 0.020664016611477317,
+          "ece_p97.5": 0.10451394270157673
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.06533177066925011,
+          "ece_p2.5": 0.030737558811814836,
+          "ece_p97.5": 0.1139978863221742
+        }
+      },
+      "spans": {
+        "span_raw": 5.016947077925437,
+        "span_native169": 4.861997008866184,
+        "span_matched169": 1.3793830786475745,
+        "span_floor_native169": 1.3067917877946833,
+        "span_floor_matched169": 1.2580253562568904,
+        "span_retained_pct_matched_vs_raw": 27.494471383141732,
+        "span_retained_pct_native169_vs_raw": 96.91146694090051
+      },
+      "effect_decomposition_log_scale": {
+        "fraction_from_sample_size": 0.024297316283882084,
+        "fraction_from_prevalence": 0.9757026837161179,
+        "note": "fraction_from_sample_size = (log span_raw - log span_native169) / (log span_raw - log span_matched169)"
+      },
+      "Q7_calibration_full_sample": {
+        "NIH": {
+          "slope": 0.5996747512670416,
+          "intercept": 4.065456752418037,
+          "calib_in_the_large": -0.5174145250917855,
+          "brier": 0.3397038333138587
+        },
+        "KEM": {
+          "slope": 2.535339844801253,
+          "intercept": 1.2758408971456001,
+          "calib_in_the_large": 0.0019583836105744323,
+          "brier": 0.16310106268075864
+        },
+        "VIN": {
+          "slope": 1.5429973567870212,
+          "intercept": 1.2344158515408146,
+          "calib_in_the_large": -0.21449075642431897,
+          "brier": 0.24564141909587214
+        }
+      },
+      "statistic_reconstruction": {
+        "raw_order_best_to_worst": [
+          "KEM",
+          "VIN",
+          "NIH"
+        ],
+        "best_dataset": "KEM",
+        "n_valid_reps": 500,
+        "n_order_changed": 500,
+        "n_best_dataset_changed": 500,
+        "order_changed_rate": 1.0,
+        "best_dataset_changed_rate": 1.0,
+        "rate_diff_vs_exchangeability_floor": {
+          "observed_rate": 1.0,
+          "p0": 0.8333333333333334,
+          "diff": 0.16666666666666663,
+          "mc_ci95": [
+            0.8,
+            0.866
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 500
+        },
+        "rate_diff_best_vs_random": {
+          "observed_rate": 1.0,
+          "p0": 0.3333333333333333,
+          "diff": 0.6666666666666667,
+          "mc_ci95": [
+            0.292,
+            0.374
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 500
+        }
+      }
+    },
+    "MIMIC_NB/PNEUMONIA": {
+      "model": "MIMIC_NB",
+      "label": "PNEUMONIA",
+      "matched_prior": 0.38746438746438744,
+      "n_target": 169,
+      "A_raw_full_nativeprior": {
+        "NIH": {
+          "n": 2819,
+          "prior": 0.02305782192266761,
+          "ece": 0.37579176396048264
+        },
+        "KEM": {
+          "n": 5824,
+          "prior": 0.7288804945054945,
+          "ece": 0.19853180459832295
+        },
+        "VIN": {
+          "n": 702,
+          "prior": 0.38746438746438744,
+          "ece": 0.18315185031766057
+        }
+      },
+      "B_native169_nativeprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.02305782192266761,
+          "ece_median": 0.3737403778689941,
+          "ece_p2.5": 0.3463990809464794,
+          "ece_p97.5": 0.4024595942937896
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.7288804945054945,
+          "ece_median": 0.20271271094679832,
+          "ece_p2.5": 0.18650171688410655,
+          "ece_p97.5": 0.2242779089148933
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.19000811566262554,
+          "ece_p2.5": 0.1478163374080901,
+          "ece_p97.5": 0.23949415791096418
+        }
+      },
+      "C_matched169_commonprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.12314108615884414,
+          "ece_p2.5": 0.06997491090721036,
+          "ece_p97.5": 0.1725607320412817
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.16422187588205175,
+          "ece_p2.5": 0.12725202600807836,
+          "ece_p97.5": 0.20538238221944785
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.19058712715139756,
+          "ece_p2.5": 0.1423451084257847,
+          "ece_p97.5": 0.23816496175796498
+        }
+      },
+      "D_floor_native169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.02305782192266761,
+          "ece_median": 0.061252492165865285,
+          "ece_p2.5": 0.030788061497650336,
+          "ece_p97.5": 0.10525990195032316
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.7288804945054945,
+          "ece_median": 0.05334827429532299,
+          "ece_p2.5": 0.024389931517680746,
+          "ece_p97.5": 0.10974549777838868
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.05840591811878091,
+          "ece_p2.5": 0.027575373030185018,
+          "ece_p97.5": 0.1142460469239165
+        }
+      },
+      "E_floor_matched169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.06279494384160408,
+          "ece_p2.5": 0.035854510338315666,
+          "ece_p97.5": 0.1111011228072264
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.052462214356034834,
+          "ece_p2.5": 0.021623262784515408,
+          "ece_p97.5": 0.10923948996540532
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.38746438746438744,
+          "ece_median": 0.05840591811878091,
+          "ece_p2.5": 0.027575373030185018,
+          "ece_p97.5": 0.1142460469239165
+        }
+      },
+      "spans": {
+        "span_raw": 2.0518043541941036,
+        "span_native169": 1.966970603153603,
+        "span_matched169": 1.5477135462777414,
+        "span_floor_native169": 1.1481625783579517,
+        "span_floor_matched169": 1.1969556491734448,
+        "span_retained_pct_matched_vs_raw": 75.43182872743458,
+        "span_retained_pct_native169_vs_raw": 95.8654073977818
+      },
+      "effect_decomposition_log_scale": {
+        "fraction_from_sample_size": 0.14976539146624654,
+        "fraction_from_prevalence": 0.8502346085337534,
+        "note": "fraction_from_sample_size = (log span_raw - log span_native169) / (log span_raw - log span_matched169)"
+      },
+      "Q7_calibration_full_sample": {
+        "NIH": {
+          "slope": 0.7880483870378334,
+          "intercept": -3.5301812494039955,
+          "calib_in_the_large": 0.37579176396048264,
+          "brier": 0.19199650682119543
+        },
+        "KEM": {
+          "slope": 1.0993702520909523,
+          "intercept": 0.905675088096512,
+          "calib_in_the_large": -0.19853180459832298,
+          "brier": 0.22299790510018086
+        },
+        "VIN": {
+          "slope": 2.181402746006257,
+          "intercept": -0.720930004762555,
+          "calib_in_the_large": 0.12791226238033543,
+          "brier": 0.23181633673717764
+        }
+      },
+      "statistic_reconstruction": {
+        "raw_order_best_to_worst": [
+          "VIN",
+          "KEM",
+          "NIH"
+        ],
+        "best_dataset": "VIN",
+        "n_valid_reps": 500,
+        "n_order_changed": 499,
+        "n_best_dataset_changed": 492,
+        "order_changed_rate": 0.998,
+        "best_dataset_changed_rate": 0.984,
+        "rate_diff_vs_exchangeability_floor": {
+          "observed_rate": 0.998,
+          "p0": 0.8333333333333334,
+          "diff": 0.16466666666666663,
+          "mc_ci95": [
+            0.8,
+            0.866
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 499
+        },
+        "rate_diff_best_vs_random": {
+          "observed_rate": 0.984,
+          "p0": 0.3333333333333333,
+          "diff": 0.6506666666666667,
+          "mc_ci95": [
+            0.292,
+            0.374
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 492
+        }
+      }
+    },
+    "MIMIC_NB/NORMAL": {
+      "model": "MIMIC_NB",
+      "label": "NORMAL",
+      "matched_prior": 0.6125356125356125,
+      "n_target": 169,
+      "A_raw_full_nativeprior": {
+        "NIH": {
+          "n": 2819,
+          "prior": 0.9769421780773324,
+          "ece": 0.5159214368765977
+        },
+        "KEM": {
+          "n": 5824,
+          "prior": 0.2711195054945055,
+          "ece": 0.0955752085255981
+        },
+        "VIN": {
+          "n": 702,
+          "prior": 0.6125356125356125,
+          "ece": 0.2424041824972528
+        }
+      },
+      "B_native169_nativeprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.9769421780773324,
+          "ece_median": 0.5164508181321021,
+          "ece_p2.5": 0.4795379476820135,
+          "ece_p97.5": 0.5498502344504749
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.2711195054945055,
+          "ece_median": 0.10213371661640483,
+          "ece_p2.5": 0.060753192953192266,
+          "ece_p97.5": 0.15012689448297906
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.2497883564269049,
+          "ece_p2.5": 0.22893036687030238,
+          "ece_p97.5": 0.2738052774859956
+        }
+      },
+      "C_matched169_commonprior": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.24010332072010407,
+          "ece_p2.5": 0.20529636638845214,
+          "ece_p97.5": 0.2784200412667626
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.30754982087121907,
+          "ece_p2.5": 0.2860080873511026,
+          "ece_p97.5": 0.3308967383523312
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.25005248651878376,
+          "ece_p2.5": 0.2274308385867515,
+          "ece_p97.5": 0.27298986191403934
+        }
+      },
+      "D_floor_native169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.9769421780773324,
+          "ece_median": 0.07295873005097434,
+          "ece_p2.5": 0.03884981785537181,
+          "ece_p97.5": 0.11871058581308763
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.2711195054945055,
+          "ece_median": 0.05539874053565709,
+          "ece_p2.5": 0.02524102167088605,
+          "ece_p97.5": 0.09840209012487405
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.058628617526864164,
+          "ece_p2.5": 0.028637162276361833,
+          "ece_p97.5": 0.11196946023395779
+        }
+      },
+      "E_floor_matched169_perfect_calibration": {
+        "NIH": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.06896432288564167,
+          "ece_p2.5": 0.039538892080246864,
+          "ece_p97.5": 0.1151533905989848
+        },
+        "KEM": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.06052656747268503,
+          "ece_p2.5": 0.029303197950653767,
+          "ece_p97.5": 0.11245698436830166
+        },
+        "VIN": {
+          "n": 169,
+          "prior": 0.6125356125356125,
+          "ece_median": 0.058628617526864164,
+          "ece_p2.5": 0.028637162276361833,
+          "ece_p97.5": 0.11196946023395779
+        }
+      },
+      "spans": {
+        "span_raw": 5.398067603885138,
+        "span_native169": 5.056614360483865,
+        "span_matched169": 1.2809061530212633,
+        "span_floor_native169": 1.3169745258741912,
+        "span_floor_matched169": 1.1762911321257334,
+        "span_retained_pct_matched_vs_raw": 23.728975756053146,
+        "span_retained_pct_native169_vs_raw": 93.674528211623
+      },
+      "effect_decomposition_log_scale": {
+        "fraction_from_sample_size": 0.04542585442421199,
+        "fraction_from_prevalence": 0.954574145575788,
+        "note": "fraction_from_sample_size = (log span_raw - log span_native169) / (log span_raw - log span_matched169)"
+      },
+      "Q7_calibration_full_sample": {
+        "NIH": {
+          "slope": 0.588738512869826,
+          "intercept": 4.187709335701932,
+          "calib_in_the_large": -0.5159214368765977,
+          "brier": 0.3371625320911252
+        },
+        "KEM": {
+          "slope": 2.3991293820178785,
+          "intercept": 1.1889437411833206,
+          "calib_in_the_large": -0.011537558701692707,
+          "brier": 0.15081624430113488
+        },
+        "VIN": {
+          "slope": 1.2947400436537606,
+          "intercept": 1.302754680815439,
+          "calib_in_the_large": -0.24240418249725276,
+          "brier": 0.2521995850599207
+        }
+      },
+      "statistic_reconstruction": {
+        "raw_order_best_to_worst": [
+          "KEM",
+          "VIN",
+          "NIH"
+        ],
+        "best_dataset": "KEM",
+        "n_valid_reps": 500,
+        "n_order_changed": 500,
+        "n_best_dataset_changed": 500,
+        "order_changed_rate": 1.0,
+        "best_dataset_changed_rate": 1.0,
+        "rate_diff_vs_exchangeability_floor": {
+          "observed_rate": 1.0,
+          "p0": 0.8333333333333334,
+          "diff": 0.16666666666666663,
+          "mc_ci95": [
+            0.8,
+            0.866
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 500
+        },
+        "rate_diff_best_vs_random": {
+          "observed_rate": 1.0,
+          "p0": 0.3333333333333333,
+          "diff": 0.6666666666666667,
+          "mc_ci95": [
+            0.292,
+            0.374
+          ],
+          "ci_excludes_zero": true,
+          "n_valid": 500,
+          "n_changed": 500
+        }
+      }
+    }
+  },
+  "summary": {
+    "mean_fraction_sample_size": 0.13055158327347882,
+    "mean_fraction_prevalence": 0.8694484167265212,
+    "n_combos_decomposed": 8,
+    "n_combos": 8,
+    "n_combos_order_changed_at_least_once": 8,
+    "n_combos_best_dataset_changed_at_least_once": 7,
+    "sign_flip_test_on_8_combo_rate_diffs": {
+      "n": 8,
+      "observed_median": 0.15166666666666662,
+      "p_one_sided": 0.03125,
+      "min_attainable_p": 0.00390625
+    },
+    "pairwise_flip_rates": {
+      "NIH_vs_KEM": {
+        "n_valid": 4000,
+        "flip_rate": 0.82325,
+        "mc_ci95": [
+          0.82175,
+          0.84475
+        ]
+      },
+      "NIH_vs_VIN": {
+        "n_valid": 4000,
+        "flip_rate": 0.44725,
+        "mc_ci95": [
+          0.82175,
+          0.84475
+        ]
+      },
+      "KEM_vs_VIN": {
+        "n_valid": 4000,
+        "flip_rate": 0.58,
+        "mc_ci95": [
+          0.82175,
+          0.84475
+        ]
+      }
+    },
+    "Q13_bh_fdr_16_delong": {
+      "n_tests": 16,
+      "alpha": 0.05,
+      "results": {
+        "CHEX:PNEUMONIA_NIH_vs_KEM": {
+          "p": 1.8984813721090177e-13,
+          "q": 3.0375701953744283e-12,
+          "significant": true
+        },
+        "CHEX:NORMAL_NIH_vs_KEM": {
+          "p": 1.0957901253050295e-12,
+          "q": 8.766321002440236e-12,
+          "significant": true
+        },
+        "NIH:NORMAL_NIH_vs_KEM": {
+          "p": 5.089686844428343e-06,
+          "q": 2.5077043660282072e-05,
+          "significant": true
+        },
+        "CHEX:PNEUMONIA_NIH_vs_VIN": {
+          "p": 6.269260915070518e-06,
+          "q": 2.5077043660282072e-05,
+          "significant": true
+        },
+        "MIMIC_CH:NORMAL_NIH_vs_KEM": {
+          "p": 3.381195030138784e-05,
+          "q": 0.00010819824096444108,
+          "significant": true
+        },
+        "MIMIC_NB:NORMAL_NIH_vs_KEM": {
+          "p": 0.00011978210296770264,
+          "q": 0.00031941894124720704,
+          "significant": true
+        },
+        "CHEX:NORMAL_NIH_vs_VIN": {
+          "p": 0.0003333549802864155,
+          "q": 0.0007619542406546641,
+          "significant": true
+        },
+        "NIH:PNEUMONIA_NIH_vs_KEM": {
+          "p": 0.07653851489591701,
+          "q": 0.1397265264740472,
+          "significant": false
+        },
+        "MIMIC_CH:NORMAL_NIH_vs_VIN": {
+          "p": 0.07907177343022553,
+          "q": 0.1397265264740472,
+          "significant": false
+        },
+        "MIMIC_NB:PNEUMONIA_NIH_vs_VIN": {
+          "p": 0.08732907904627951,
+          "q": 0.1397265264740472,
+          "significant": false
+        },
+        "MIMIC_NB:NORMAL_NIH_vs_VIN": {
+          "p": 0.14093002252729558,
+          "q": 0.2049891236760663,
+          "significant": false
+        },
+        "MIMIC_CH:PNEUMONIA_NIH_vs_KEM": {
+          "p": 0.1624299953740065,
+          "q": 0.21657332716534197,
+          "significant": false
+        },
+        "NIH:NORMAL_NIH_vs_VIN": {
+          "p": 0.20440266819813635,
+          "q": 0.2515725147053986,
+          "significant": false
+        },
+        "MIMIC_NB:PNEUMONIA_NIH_vs_KEM": {
+          "p": 0.3013754393927228,
+          "q": 0.34442907359168323,
+          "significant": false
+        },
+        "MIMIC_CH:PNEUMONIA_NIH_vs_VIN": {
+          "p": 0.34013849530195817,
+          "q": 0.3628143949887554,
+          "significant": false
+        },
+        "NIH:PNEUMONIA_NIH_vs_VIN": {
+          "p": 0.6207439016020322,
+          "q": 0.6207439016020322,
+          "significant": false
+        }
+      }
+    },
+    "n_delong_raw_p_le_0.05": 7,
+    "n_delong_bh_fdr_significant": 7
+  }
+}

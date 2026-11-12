@@ -353,6 +353,15 @@ def main():
             raw_rank = sorted(DATASETS, key=lambda d: raw_ece[d])
             mat_rank = sorted([d for d in DATASETS if matched[d]["ece_median"] is not None],
                               key=lambda d: matched[d]["ece_median"])
+            # 🔴 2026-11-12 修正（两轮外部评审一致指出）：原字段名 `rank_reversed`
+            #    名不符实 —— 代码算的是 `raw_rank != mat_rank`，即"排序有任何改变"，
+            #    而非"严格逆序"。逐行核对 8 个组合，无一为严格逆序
+            #    （完整反转仅 2/8，最优数据集改变 6/8）。
+            #    改口径：拆为三个语义清晰的字段，旧名保留但标记为 deprecated。
+            order_changed = (raw_rank != mat_rank)
+            best_dataset_changed = (raw_rank[0] != mat_rank[0])
+            full_reversal = (raw_rank[0] == mat_rank[-1] and raw_rank[-1] == mat_rank[0]
+                             and raw_rank == list(reversed(mat_rank)))
             pmres[label] = {
                 "raw": {d: {"n": int(len(vs[d][0])), "prior": priors[d],
                             "ece_10bins": raw_ece[d]} for d in DATASETS},
@@ -362,7 +371,16 @@ def main():
                 "span_retained_pct": (mat_span / raw_span * 100) if mat_span else None,
                 "rank_raw_best_to_worst": raw_rank,
                 "rank_matched_best_to_worst": mat_rank,
-                "rank_reversed": bool(raw_rank != mat_rank),
+                # ---- 新字段（主口径）----
+                "order_changed": bool(order_changed),
+                "best_dataset_changed": bool(best_dataset_changed),
+                "full_reversal": bool(full_reversal),
+                # ---- 旧字段（deprecated，保留仅为不破坏下游读取）----
+                "rank_reversed": bool(order_changed),
+                "_deprecated_rank_reversed": ("rank_reversed 实为 order_changed"
+                                              "（排序有任何改变），非严格逆序。"
+                                              "2026-11-12 起改用 order_changed / "
+                                              "best_dataset_changed / full_reversal。"),
             }
             log(f"  [{label:9s}] 先验匹配 跨度 {raw_span:.3f}× → "
                 f"{mat_span:.3f}× (保留 {pmres[label]['span_retained_pct']:.1f}%)  "

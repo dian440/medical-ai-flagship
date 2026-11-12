@@ -219,8 +219,17 @@ def table4(d):
     lines = [
         "### Table 4. Observed ranking change against three noise baselines",
         "",
-        "| Classifier | Class | Observed | Null: identical calibration | Null: independent sampling | p (vs identical) | Direction consistency (observed) | Direction consistency (permutation null) | Empirical p | Above baseline? |",
-        "|---|---|---|---|---|---|---|---|---|---|",
+        "**Reporting note.** The observed rate and the null rate are both *sampling estimates*, so the "
+        "comparison is reported as a **rate difference with a Monte Carlo 95% confidence interval** for "
+        "the null, not as a binomial p-value. A binomial test would treat the 500 correlated resamples "
+        "as 500 independent Bernoulli trials and understate the uncertainty by many orders of magnitude. "
+        "The dataset-level inference is given in the note below the table (sign-flip test over the "
+        "eight model-label combinations).",
+        "",
+        "| Classifier | Class | Observed | Null: identical calibration | Null: independent sampling | "
+        "Rate difference vs identical-calibration null | Monte Carlo 95% CI for the null | "
+        "Direction consistency (observed) | Direction consistency (permutation null) | Empirical p | Above baseline? |",
+        "|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for m in MODELS:
         for lbl in LABELS:
@@ -233,20 +242,38 @@ def table4(d):
             null_dc = f["null_dir_consistency"][0] * 100
             lines.append(
                 f"| {MODEL_LABEL[m]} | {lbl} | {obs:.1f}% | {b2:.1f}% | {b3:.1f}% | "
-                f"{fmt_p(r['p_vs_same'])} | {dc:.1f}% | {null_dc:.1f}% | "
+                f"{r['rate_diff_vs_same']*100:+.1f} pp | "
+                f"[{r['mc_ci95_vs_same'][0]*100:.1f}%, {r['mc_ci95_vs_same'][1]*100:.1f}%] | "
+                f"{dc:.1f}% | {null_dc:.1f}% | "
                 f"{fmt_p(f['emp_p_dir_consistency'])} | "
                 f"{'**yes**' if r['exceeds_same'] else '**no**'} |")
     n_ex = sum(1 for m in MODELS for l in LABELS if nb[m][l]["exceeds_same"])
     b2s = [nb[m][l]["baseline_same_dist"] * 100 for m in MODELS for l in LABELS]
     null_dcs = [fc[m][l]["null_dir_consistency"][0] * 100 for m in MODELS for l in LABELS]
+    diffs = [nb[m][l]["rate_diff_vs_same"] * 100 for m in MODELS for l in LABELS]
+    sf = nb.get("sign_flip_test_dataset_level")
     lines += [
         "",
         f"The observed rate exceeded the most conservative null in **{n_ex} of 8** combinations. "
         f"That null assumes the three datasets were of *identical* calibration and differed only in "
         f"resampling noise; under it, prior matching alone reordered the datasets in "
         f"**{min(b2s):.1f}–{max(b2s):.1f}% of replicates**, which is the baseline against which any "
-        f"reported reversal must be judged.",
+        f"reported reordering must be judged.",
         "",
+    ]
+    if sf:
+        lines += [
+            f"**Dataset-level inference.** Across the eight model-label combinations the median rate "
+            f"difference over the null was **{sf['observed_median_rate_diff']*100:+.1f} percentage points** "
+            f"(range {min(diffs):+.1f} to {max(diffs):+.1f} pp). A sign-flip test over the eight "
+            f"combinations gives a one-sided p of **{sf['p_one_sided']:.3f}** "
+            f"({sf['n']} combinations, 2^{sf['n']} = {1 << sf['n']} sign flips, minimum attainable "
+            f"p = {sf['min_attainable_p']:.4f}). The inference is therefore carried by the rate "
+            f"difference and its confidence interval, not by a p-value computed from the number of "
+            f"resamples.",
+            "",
+        ]
+    lines += [
         "**Why the direction-consistency test is reported but not relied upon.** Under label permutation "
         f"(a model with no discriminative power), the direction of complete reversal is itself highly "
         f"structured, with a mean consistency of {min(null_dcs):.1f}–{max(null_dcs):.1f}%. A binomial test "
@@ -254,7 +281,8 @@ def table4(d):
         "of magnitude. We report the permutation-based null throughout instead.",
         "",
         "*Source: `noise_baseline.json` → `observed_change_rate`, `baseline_same_dist`, "
-        "`baseline_actual_dist`, `p_vs_same`, `exceeds_same`; "
+        "`baseline_actual_dist`, `rate_diff_vs_same`, `mc_ci95_vs_same`, `exceeds_same`, "
+        "`sign_flip_test_dataset_level`; "
         "`flip_criteria_validation.json` → `observed.dir_consistency`, `null_dir_consistency`, "
         "`emp_p_dir_consistency`.*",
         "",

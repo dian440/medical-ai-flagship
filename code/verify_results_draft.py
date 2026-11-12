@@ -225,19 +225,31 @@ def main():
     n_ex_a = sum(1 for m in nb["models"] for lb in ("PNEUMONIA", "NORMAL") if nb[m][lb]["exceeds_actual"])
     ck("超出基线2 = 7", 7, n_ex)
     ck("超出基线3 = 8", 8, n_ex_a)
-    pk = max(nb[m][lb]["p_vs_same"] for m in nb["models"] for lb in ("PNEUMONIA", "NORMAL")
-             if nb[m][lb]["exceeds_same"])
-    ck("p 上界 = 5.7e-20", 5.7e-20, float(f"{pk:.1e}"))
+    # 🔴 2026-11-12 口径修正：原稿断言的 p 上界 5.7e-20 来自二项口径，
+    #    统计上不成立（把 500 次相关重采样当作 500 次独立伯努利试验），
+    #    已随评审 Q11 裁决撤回。改断言**新口径**：率差中位 + 数据集层面 p。
+    sf = nb.get("sign_flip_test_dataset_level")
+    ck("存在数据集层面符号翻转检验", True, sf is not None)
+    if sf:
+        ck("率差中位 = +15.1pp", 15.1,
+           round(sf["observed_median_rate_diff"] * 100, 1))
+        ck("数据集层面 p = 0.031", 0.031, round(sf["p_one_sided"], 3))
+        ck("最小可达 p = 0.0039", 0.0039, round(sf["min_attainable_p"], 4))
+    diffs = [nb[m][lb]["rate_diff_vs_same"] * 100
+             for m in nb["models"] for lb in ("PNEUMONIA", "NORMAL")]
+    ck("8 个组合率差中位 = 15.1", 15.1,
+       round(sorted(diffs)[len(diffs) // 2 - 1:len(diffs) // 2 + 1]
+             and (sorted(diffs)[3] + sorted(diffs)[4]) / 2, 1))
     ck("NIH PNEU 观测97.0% 基线84.4%", (97.0, 84.4),
        (round(nb["NIH"]["PNEUMONIA"]["observed_change_rate"] * 100, 1),
         round(nb["NIH"]["PNEUMONIA"]["baseline_same_dist"] * 100, 1)))
     ck("MIMIC_CH NORM 观测100% 基线82.5%", (100.0, 82.5),
        (round(nb["MIMIC_CH"]["NORMAL"]["observed_change_rate"] * 100, 1),
         round(nb["MIMIC_CH"]["NORMAL"]["baseline_same_dist"] * 100, 1)))
-    ck("MIMIC_CH PNEU 例外 82.2/83.6 p=0.40", (82.2, 83.6, 0.40),
+    ck("MIMIC_CH PNEU 例外 82.2/83.6 率差 -1.4pp", (82.2, 83.6, -1.4),
        (round(nb["MIMIC_CH"]["PNEUMONIA"]["observed_change_rate"] * 100, 1),
         round(nb["MIMIC_CH"]["PNEUMONIA"]["baseline_same_dist"] * 100, 1),
-        round(nb["MIMIC_CH"]["PNEUMONIA"]["p_vs_same"], 2)))
+        round(nb["MIMIC_CH"]["PNEUMONIA"]["rate_diff_vs_same"] * 100, 1)))
     ck("零分布方向一致性（NIH/PNEUMONIA）84.8%", 84.8, round(
         fc["NIH"]["PNEUMONIA"]["null_dir_consistency"][0] * 100, 1))
 
@@ -413,7 +425,12 @@ def main():
         ck(f"{tag}不含 'p ≤ 1.3 × 10⁻²²'", False, "p ≤ 1.3 × 10⁻²²" in seg)
     ck("英文正文含 '7/16'", True,
        ("7/16" in body or "seven of the sixteen" in body or "seven reached significance" in body))
-    ck("英文正文含 '5.7 × 10⁻²⁰'", True, "5.7 × 10⁻²⁰" in body)
+    # 🔴 2026-11-12：正文不再出现已撤回的二项口径 p；改为断言新口径在场
+    ck("英文正文不含已撤回的 '5.7 × 10⁻²⁰'", False, "5.7 × 10⁻²⁰" in body)
+    ck("英文正文含新口径率差中位 '15.1 percentage points'", True,
+       "15.1 percentage points" in body)
+    ck("英文正文含新口径数据集层面 p '0.031'", True, "0.031" in body)
+    ck("中文对照含新口径率差中位 '15.1 个百分点'", True, "15.1 个百分点" in body_zh)
     ck("中文对照含 '7/16'", True, "7/16" in body_zh or "7 组" in body_zh)
 
     # ---------- 汇总 ----------
