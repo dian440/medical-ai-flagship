@@ -12,6 +12,9 @@
 > **🔴 2026-11-12 第二次口径更正**：同日写下的"噪声基线 p 值上界 5.7 × 10⁻²⁰"**一并撤回** —— 该 p 值来自 `scipy.stats.binomtest`，把 500 次**相关**重采样当作 500 次独立伯努利试验，统计上不成立（两轮外部评审一致指出）。现改报**率差 + Monte Carlo 95% CI + 数据集层面符号翻转检验**（率差中位 +15.1pp，单侧 p = 0.031，2⁸ = 256 种翻转，最小可达 p = 0.0039）。
 >
 > **Writing discipline applied**: no "first", no "novel", no "AI large model"; the closest prior work (arXiv:2609.21763) is cited in the Background as having observed the reversal through point estimates, so that the contribution claimed here is the *statistical establishment of its systematicity* rather than the discovery of the effect.
+>
+> 🔴 **2026-11-15 摘要词数统一**：此处原写 "343"，是**自指计数**（把本行自己 9 词 + 4 个小标题 + 最外层章节标题行都算了进去）；审阅稿头部另硬编码 "348"。两轮外部评审（2026-11-11）已点名"摘要词数三版本并存"且当时**未修**。
+> 现统一到单一权威口径 `code/abstract_wordcount.py`：**正文 + 4 个小标题 = 329 词**，≤ BMC 上限 350，且满足评审要求的留余量 ≤335。本行与审阅稿头部均改为从该模块取值，不得手写。
 
 ---
 
@@ -33,7 +36,7 @@ Across four pretrained classifiers, discrimination did not fall externally, and 
 
 Cross-dataset comparisons of chest radiograph classifiers are not invariant to class prevalence, and the resulting ranking change exceeds the noise from resampling alone. Because even identically calibrated datasets are reordered in more than four fifths of resamples, any calibration comparison omitting prevalence control and a noise baseline may report artefactual conclusions, and a positive discrimination difference may indicate a weaker benchmark.
 
-**Abstract word count: 343 (excluding headings; BMC Medical Imaging limit 350).**
+**Abstract word count: 329 (including the four subheadings, excluding this line; BMC Medical Imaging limit 350).**
 
 ---
 

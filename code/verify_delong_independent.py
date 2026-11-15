@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 verify_delong_independent.py
-DeLong 方差的独立暴力复核（第三方实现，不复用仓库任何函数）
+DeLong 方差的独立暴力复核（独立实现，不复用仓库任何函数）
 
 ════ 目的 ════
 results/delong_fixed.json 里 se_fixed = 0.3575，但同一文件的 bootstrap CI
 宽度只对应 SE ≈ 0.033 —— 文件内部自相矛盾。
 results/final_metrics.json 与 results/multi_model_metrics.json 都给出
-SE = 0.0341。三者不一致时，必须由第三方实现裁决。
+SE = 0.0341。三者不一致时，必须由独立实现裁决。
 
 本脚本用 O(m×n) 暴力法从定义重算，完全不 import 仓库代码：
   AUC   = [Σ_{i,j} ψ(score_i, score_j)] / (m·n)

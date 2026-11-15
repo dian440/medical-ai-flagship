@@ -404,6 +404,28 @@ def audit_reporting(D):
     judge("报告指南", "PASS" if len(concl) < 4000 else "WARN", "minor",
           "结论段落长度合理，未引入新分析")
 
+    # ── 摘要词数一致性（2026-11-15 新增）────────────────────────────
+    # 背景：两轮外部评审（2026-11-11）都抓到"摘要词数三版本并存"，
+    # 当时只改了摘要正文自述值，审阅稿头部的硬编码 "348 词" 一直没改，
+    # 于是"348 / 343 / 真实值"三套数字继续同页并存 —— 导师一眼能看出矛盾。
+    # 现在把摘要词数钉到单一口径（code/abstract_wordcount.py），
+    # 并在此断言：① 不超 BMC 上限 ② 摘要自述值 == 权威值
+    #              ③ 审阅稿头部用的也是同一个权威值。
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from abstract_wordcount import (count_abstract_words,
+                                        self_declared_count,
+                                        BMC_LIMIT, SAFETY_TARGET)
+        n_abs = count_abstract_words()
+        declared = self_declared_count(D["Abstract"])
+        judge("投稿完备", "PASS" if n_abs <= BMC_LIMIT else "FAIL", "major",
+              f"摘要 {n_abs} 词 ≤ BMC 上限 {BMC_LIMIT}"
+              + ("" if n_abs <= SAFETY_TARGET else f"（超留余量目标 {SAFETY_TARGET}）"))
+        judge("投稿完备", "PASS" if declared == n_abs else "FAIL", "major",
+              f"摘要自述词数与权威口径一致（{declared} vs {n_abs}）")
+    except Exception as e:
+        judge("投稿完备", "WARN", "minor", f"摘要词数核对未能执行（{e}）")
+
 
 # ════════════════════════════════════════════════════════════════════
 # 本项目特有的历史错误模式复检

@@ -22,6 +22,7 @@
 import os
 import re
 import json
+import sys
 import datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -254,7 +255,7 @@ a cross-dataset audit of four publicly released classifiers**
 | **代码与结果** | https://github.com/dian440/medical-ai-flagship （已公开，MIT，含全部代码与可复现结果） |
 | **作者署名** | **待定** — 意向为一作者本人、两位老师共同作者/通讯作者，以两位老师意见为准 |
 | **本稿状态** | v1 · {date} · 供审阅 |
-| **篇幅** | 摘要 348 词（上限 350）· 正文四章 + 5 表 + 5 图 + 21 条参考文献 |
+| **篇幅** | 摘要 {abs_words} 词（上限 350）· 正文四章 + 5 表 + 5 图 + 21 条参考文献 |
 
 ---
 
@@ -588,7 +589,18 @@ def main():
         pass
 
     # --- 组装 Markdown ---
-    chunks = [TITLE_BLOCK.format(date=TODAY)]
+    # 摘要词数从单一权威口径取（code/abstract_wordcount.py），不手写。
+    # 2026-11-15 修：原先硬编码 "348 词"，而摘要正文自述 "343"、真实值 329，
+    # 三套互不相等的数字同页并存（两轮评审 2026-11-11 已点名，当时未修）。
+    try:
+        sys.path.insert(0, HERE)
+        from abstract_wordcount import count_abstract_words
+        abs_words = count_abstract_words()
+    except Exception as e:  # 兜底：宁可留空也不写一个可能错误的数字
+        print(f"⚠️  摘要词数读取失败（{e}），篇幅行暂不写词数")
+        abs_words = ""
+
+    chunks = [TITLE_BLOCK.format(date=TODAY, abs_words=abs_words)]
     for title, body in parts:
         if title == "__TITLE__":
             continue
