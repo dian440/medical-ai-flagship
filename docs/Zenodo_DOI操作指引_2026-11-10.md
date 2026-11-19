@@ -165,11 +165,18 @@ their original sources and terms of use.
 
 ## 六、如果你还是想用 GitHub 自动集成
 
+> ✅ **2026-11-19 实测：该仓库 webhook 数量 = 0 → 集成从未启用。**
+> 也就是说路线 B 目前**根本不会触发**，只有路线 A（手动上传）能拿到 DOI。
+> 另：v1.0.1 Release **已于 2026-11-19 建好并挂上 ZIP**，
+> 页面 <https://github.com/dian440/medical-ai-flagship/releases/tag/v1.0.1> 现在能打开。
+> 若日后你启用了集成，**还需要再发一个 v1.0.2 Release** 才会被自动存档
+> （Zenodo 只自动存档"连接之后"发布的新 release，v1.0.0/v1.0.1 都不会补档）。
+
 在 <https://zenodo.org/account/settings/> 左侧点 **GitHub** → **Sync now** →
 找到仓库 → 打开开关。然后**发一个新 Release**：
 
-- tag：`v1.0.1`（v1.0.0 发在集成之前，不会被补档）
-- 标题：`v1.0.1`
+- tag：`v1.0.2`（v1.0.0 发在集成之前，不会被补档；v1.0.1 已在集成之前发完，同样不会补档）
+- 标题：`v1.0.2`
 - 说明：可写"Data and results accompanying the manuscript; see
   the v1.0.0 release notes for the full change log."
 - 勾选 **Set as a new latest release**
@@ -181,18 +188,24 @@ Zenodo 会自动分配 DOI。**注意**：集成路线下 Zenodo 从 GitHub 抓�
 
 ---
 
-## 七、当前仓库状态（脚本实测）
+## 七、当前仓库状态（2026-11-19 脚本实测）
 
 ```
 ✅ 仓库公开 + LICENSE(MIT) + README + requirements.txt
-✅ 待上传 ZIP 已生成：161 文件 / 9.5 MB / 0 冗余
+✅ 待上传 ZIP 已重建并逐文件校验：194 文件 / 9.60 MB / 0 冗余 / 无自嵌
+   校验脚本：code/build_zenodo_zip.py（自检不过就不产出可上传的 ZIP）
+✅ GitHub Release v1.0.1 已发布并挂上同一份 ZIP
+   → https://github.com/dian440/medical-ai-flagship/releases/tag/v1.0.1
+   （此前 .zenodo.json 的 related_identifiers 指向这个 tag，但它当时**不存在** → 链接是死的，已修）
 ✅ .zenodo.json + CITATION.cff 已在仓库根目录（Zenodo 会自动读）
 ✅ 三处元数据的基线数字均为权威值
+✅ 仓库 webhook 数量 = 0 → Zenodo GitHub 集成未启用 → **手动上传是唯一可行路线**
 ⬜ creators 仍是占位符 → 填真实姓名（脚本会拒绝发布占位符）
 ⬜ 论文 Methods §2.6 的 DOI 占位符待替换
 ```
 
-随时可运行 `python code/zenodo_status.py` 复查。
+随时可运行 `python code/zenodo_status.py` 复查，
+或 `python code/build_zenodo_zip.py --check-only` 复核存档一致性。
 
 ---
 
