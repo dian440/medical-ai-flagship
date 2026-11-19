@@ -91,6 +91,10 @@ MUST_NOT_CONTAIN = [
     ".gh_api_push_map.json",           # 本地推送映射
 ]
 
+# 🔴 上述黑名单是**精确路径**，不能拿子串去搜 —— 否则 `code/gh_api_push.py`
+#    （公开的推送脚本，本就该入库）会被 ".gh_api_push" 子串误判成泄漏。
+#    这里统一用精确集合判定。
+
 # 论文头条统计量的来源字段（缺了就无法复现正文）
 HEADLINE_FIELD = ("results/noise_baseline.json", "sign_flip_test_dataset_level")
 
