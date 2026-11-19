@@ -31,6 +31,7 @@ Zenodo 会为 GitHub 仓库自动建镜像并分配 DOI（10.5281/zenodo.XXXXXXX
 import argparse
 import json
 import os
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -161,6 +162,17 @@ def make_zip(zip_path):
           若照此上传，DOI 上永久留存的存档**无法复现论文正文**。
           根因：ZIP 是手工生成的一次性产物，此后稿件与结果一直在改。
           对策见 `code/build_zenodo_zip.py`（每次投稿前重建 + 逐文件校验）。
+
+    🔴 2026-11-19 再修：**存档必须与公开仓库一致**。
+       实测原实现会把 **16 个被 .gitignore 明确排除的文件**打进存档，其中包括
+       `docs/论文的申请定位策略_v1.md`（**个人港校申请策略**）、
+       `docs/给老师的项目一页纸.md`（含学号位）、`docs/论文CoverLetter_v1.md`、
+       以及 `.gh_api_push_map.json`（本地推送映射）。
+       这些是作者**刻意**排除出公开仓库的内部材料，而 Zenodo 记录是
+       **公开 + 永久 + 会被 Software Heritage 收录**的 —— 曝光面比 GitHub 更广。
+       修法：**存档内容 = git 仓库内容**（`git ls-files --cached --others
+       --exclude-standard`），再叠加上面的体积/中间产物排除。
+       这样"仓库里能看到的"与"存档里能看到的"永远一致。
     """
     import zipfile
     excludes_suffix = (".npz", ".bak", ".log", ".zip")
@@ -171,6 +183,20 @@ def make_zip(zip_path):
                       "results/feat_")
     n = 0
     target = os.path.abspath(zip_path)
+
+    # 🔴 存档清单 = git 仓库清单（tracked + 未被忽略的 untracked）
+    #    🔴 必须用 `-z`：git 默认对非 ASCII 路径做八进制转义
+    #       （`docs/\350\247\250...`），不加 -z 会让所有中文路径匹配不上，
+    #       实测会把 5 个稿件草稿全部漏出存档。
+    tracked = None
+    try:
+        out = subprocess.run(
+            ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
+            cwd=REPO, capture_output=True, timeout=120).stdout
+        tracked = {p for p in out.decode("utf-8", "replace").split("\0") if p}
+    except Exception as e:
+        print(f"⚠️  git ls-files 失败（{type(e).__name__}）→ 退回全量遍历：{e}")
+
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
         for root, dirs, files in os.walk(REPO):
             # 目录级排除（跳过整棵子树）
@@ -187,6 +213,8 @@ def make_zip(zip_path):
                     continue
                 if any(rel.startswith(p) for p in excludes_prefix):
                     continue
+                if tracked is not None and rel not in tracked:
+                    continue          # 🔴 被 .gitignore 排除 → 不进公开存档
                 z.write(full, rel)
                 n += 1
     return n

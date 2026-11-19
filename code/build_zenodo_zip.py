@@ -51,6 +51,14 @@ ZIP_NAME = "medical-ai-flagship-v1.0.1.zip"
 ZIP_PATH = os.path.join(REPO, ZIP_NAME)
 
 # 必须出现在存档里的文件（引用链 / 论文证据链）
+# 🔴 2026-11-19：这份清单必须与「公开仓库里有什么」一致。
+#    存档 = git 仓库内容（`code/zenodo_publish.make_zip` 已改为按
+#    `git ls-files -z --cached --others --exclude-standard` 取文件），
+#    理由：Zenodo 记录是**公开 + 永久 + 会被 Software Heritage 收录**，
+#    曝光面比 GitHub 更广，绝不能把作者刻意排除的内部材料（个人申请策略、
+#    导师接触方案、投稿信、审稿自检记录等）带进去。
+#    ⚠️ 因此 `docs/论文CoverLetter_v1.md` **不在此列** —— 它是致编辑的文书，
+#    走投稿系统单独上传，本就不属于"代码+结果"存档。
 MUST_CONTAIN = [
     ".zenodo.json",
     "CITATION.cff",
@@ -65,10 +73,22 @@ MUST_CONTAIN = [
     "results/label_sensitivity_noise_baseline.json",
     "results/baseline_sensitivity.json",
     "docs/论文Abstract草稿_v1.md",
+    "docs/论文Introduction草稿_v1.md",
     "docs/论文Methods草稿_v1.md",
     "docs/论文Results草稿_v1.md",
     "docs/论文Discussion正文_v1.md",
-    "docs/论文CoverLetter_v1.md",
+    "docs/论文Tables草稿_v1.md",
+]
+
+# 🔴 绝不能出现在公开存档里的文件（作者刻意排除的内部材料）
+#    出现任何一个都要报 FATAL —— 公开 + 永久的曝光面比 GitHub 更广。
+MUST_NOT_CONTAIN = [
+    "docs/论文的申请定位策略_v1.md",   # 个人港校申请策略
+    "docs/论文CoverLetter_v1.md",      # 致编辑的文书
+    "docs/导师接触方案_2026-11-09.md",  # 导师接触策略
+    "docs/给老师的项目一页纸.md",       # 含学号位
+    "docs/选刊与投稿策略_2027见刊版.md",
+    ".gh_api_push_map.json",           # 本地推送映射
 ]
 
 # 论文头条统计量的来源字段（缺了就无法复现正文）
@@ -102,6 +122,12 @@ def check():
         for f in MUST_CONTAIN:
             if f not in names:
                 problems.append(f"ZIP 缺少必需文件：{f}")
+
+        # ②b 绝不能出现的内部材料（公开存档 = 永久曝光）
+        for f in MUST_NOT_CONTAIN:
+            if f in names:
+                problems.append(
+                    f"🔴 ZIP 含有作者刻意排除的内部材料：{f}（公开存档不可出现）")
 
         # ③ 头条统计量字段
         f, key = HEADLINE_FIELD
