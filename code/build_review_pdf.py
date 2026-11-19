@@ -98,8 +98,22 @@ def main():
         return 5
     with open(pdf_path, "rb") as f:
         data = f.read()
-    n_pages = data.count(b"/Type /Page") or data.count(b"/Type/Page")
-    print(f"   页数：约 {n_pages}")
+    # 🔴 2026-11-19 修：原实现用 `data.count(b"/Type /Page")` 数页数，
+    #    但这个子串**也会命中 `/Type /Pages`**（页树根节点）。
+    #    实测 11-12 至 11-18 的审阅稿真实 39 页，却被报成 45 页，
+    #    且这个错数字在每日清单与 MEMORY.md 里连续传播了 7 天。
+    #    现在改用 pdfplumber 读真实页数（读不到就退回正则精确匹配）。
+    n_pages = None
+    try:
+        import pdfplumber
+        with pdfplumber.open(pdf_path) as pdf:
+            n_pages = len(pdf.pages)
+    except Exception as e:                                   # pragma: no cover
+        print(f"   ⚠️  pdfplumber 不可用（{type(e).__name__}），退回正则计数")
+    if n_pages is None:
+        # 精确匹配：/Type /Page 后面必须不是字母 's'
+        n_pages = len(re.findall(rb"/Type\s*/Page(?![s/\w])", data))
+    print(f"   页数：{n_pages}")
 
     # ---- 校验：图片是否真的嵌进去了 ----
     n_img = data.count(b"/Image")
