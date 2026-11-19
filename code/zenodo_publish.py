@@ -149,15 +149,28 @@ def make_zip(zip_path):
        与 `results/cache_*.jsonl`（69,008 行推理缓存）。
        这些都是本地中间产物，不应进存档 —— 打包体积会翻倍且内容无意义。
        现在按"目录名 + 文件名前缀 + 后缀"三重排除。
+
+    🔴 2026-11-19 修（两个真实缺陷，都是上传前会炸的）：
+       ① **漏排除 `*.zip`**，导致打包产物把自己打进自己。
+          实测 11-10 生成的 ZIP 内含 `medical-ai-flagship-v1.0.1.zip`
+          （一条 10KB 的残缺自嵌条目）—— 审稿人解压会看到一个坏文件。
+          现在把 `.zip` 加进后缀排除表。
+       ② **ZIP 内容与工作区脱节**：11-10 的 ZIP 有 45/161 个文件过时，
+          其中 `results/noise_baseline.json` 缺 `sign_flip_test_dataset_level`
+          —— 那是论文头条统计量（率差符号翻转 p=0.03125）的唯一来源。
+          若照此上传，DOI 上永久留存的存档**无法复现论文正文**。
+          根因：ZIP 是手工生成的一次性产物，此后稿件与结果一直在改。
+          对策见 `code/build_zenodo_zip.py`（每次投稿前重建 + 逐文件校验）。
     """
     import zipfile
-    excludes_suffix = (".npz", ".bak", ".log")
+    excludes_suffix = (".npz", ".bak", ".log", ".zip")
     excludes_names = {
         ".git", "__pycache__", ".venv", "venv",
     }
     excludes_prefix = ("results/cache_", "results/_backup", "results/raw/",
                       "results/feat_")
     n = 0
+    target = os.path.abspath(zip_path)
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
         for root, dirs, files in os.walk(REPO):
             # 目录级排除（跳过整棵子树）
@@ -167,6 +180,8 @@ def make_zip(zip_path):
                        and d not in ("__pycache__", ".git", ".venv", "venv")]
             for fn in files:
                 full = os.path.join(root, fn)
+                if os.path.abspath(full) == target:
+                    continue          # 🔴 绝不把自己打进自己
                 rel = os.path.relpath(full, REPO).replace("\\", "/")
                 if rel.endswith(excludes_suffix):
                     continue
