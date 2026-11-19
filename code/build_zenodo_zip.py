@@ -183,6 +183,15 @@ def main():
     log("")
     log(f"▸ 存档条目：{len(names)} 个文件")
 
+    # 🔴 指纹由脚本现算并打印，**不要把它硬写进本仓库里的任何文件**：
+    #    照填卡本身就在存档内 → 改了卡 → ZIP 变 → 指纹又变（自指循环）。
+    #    需要指纹的人直接跑这个脚本，或看每日清单（每日清单在本仓库之外）。
+    import hashlib
+    blob = open(ZIP_PATH, "rb").read()
+    log(f"▸ 大小：{len(blob):,} 字节（{len(blob)/1048576:.2f} MB）")
+    log(f"▸ SHA256：{hashlib.sha256(blob).hexdigest()}")
+    log(f"▸ MD5   ：{hashlib.md5(blob).hexdigest()}")
+
     if ok:
         log("")
         log("✅ 校验通过：")
