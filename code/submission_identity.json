@@ -1,0 +1,8 @@
+{
+  "_readme": "投稿身份单一源（作者姓名 / 通讯邮箱 / Zenodo DOI）。build_submission_docx.py 只从这里读，fill_submission_identity.py 只往这里写。任何字段为空字符串或 null → Word 稿保留占位符，不臆造。",
+  "authors": [],
+  "affiliation": "School of Electronic Information Engineering, Zhongshan College of Dalian Medical University, Dalian, China (ROR: https://ror.org/02ajraz35)",
+  "corresponding_author_name": "",
+  "corresponding_author_email": "",
+  "zenodo_doi": ""
+}

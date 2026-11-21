@@ -236,6 +236,53 @@ def parse_tables_md():
 INLINE_RE = re.compile(r"(\*\*.+?\*\*|`[^`]+`|(?<![\*\w])\*[^*\n]+?\*(?![\*\w]))")
 
 
+def measure_body_words(docx_path):
+    """用权威口径（code/wordcount_body.py）量 Word 稿正文词数。
+
+    🔴 为什么不用本文件自己那套正则（2026-11-21）
+    ------------------------------------------------------------------
+    本文件原先用 [A-Za-z][A-Za-z-']+ 在 **md 源** 上数 → 10184；
+    权威脚本用 journal 口径分词、在 **Word 载体** 上数 → 10926。
+    标题页会把这个数印给编辑看，**对不上就是硬伤**，所以这里直接复用权威脚本。
+    权威脚本不可用时返回 None（不阻断构建，交由 verify 环节兜底）。
+    """
+    try:
+        import wordcount_body as WB
+        texts = WB.paragraphs(docx_path)
+        idx = {}
+        for i, t in enumerate(texts):
+            s = t.strip()
+            for name, marker in WB.SECTIONS:
+                if s == marker and name not in idx:
+                    idx[name] = i
+            if s == WB.BODY_END and "end" not in idx:
+                idx["end"] = i
+        need = [n for n, _ in WB.SECTIONS] + ["end"]
+        if any(n not in idx for n in need):
+            return None
+        total = 0
+        for i, (name, _) in enumerate(WB.SECTIONS):
+            start = idx[name]
+            end = idx[WB.SECTIONS[i + 1][0]] if i + 1 < len(WB.SECTIONS) else idx["end"]
+            total += WB.wc("\n".join(texts[start:end]))
+        return total
+    except Exception as e:
+        print("[WARN] 无法用权威口径量词数：%s" % e)
+        return None
+
+
+def _retitle_wordcount(doc, n_words):
+    """把标题页「Main text: approximately N words」里的 N 改写为量到的值。"""
+    pat = re.compile(r"Main text: approximately \d+ words")
+    for p in doc.paragraphs:
+        for r in p.runs:
+            if pat.search(r.text):
+                r.text = pat.sub("Main text: approximately %d words" % n_words,
+                                 r.text)
+                return True
+    return False
+
+
 def add_inline(p, text):
     for part in INLINE_RE.split(text):
         if not part:
@@ -433,6 +480,39 @@ def main():
     meta = json.load(open(os.path.join(HERE, "zenodo_metadata.json"), encoding="utf-8"))
     title = meta["title"]
 
+    # ---------- 投稿身份（作者姓名 / 通讯邮箱 / Zenodo DOI）----------
+    # 单一源 = code/submission_identity.json；未填的字段一律保留占位符，不臆造。
+    ident_path = os.path.join(HERE, "submission_identity.json")
+    ident = {}
+    if os.path.isfile(ident_path):
+        with open(ident_path, encoding="utf-8") as f:
+            ident = json.load(f)
+
+    authors = [str(a).strip() for a in (ident.get("authors") or [])
+               if str(a).strip()]
+    if authors:
+        author_block = "\n".join(authors)
+    else:
+        author_block = ("[AUTHOR NAME TO BE FILLED]\n[AUTHOR NAME TO BE FILLED]\n"
+                        "[AUTHOR NAME TO BE FILLED]")
+
+    affiliation_text = (str(ident.get("affiliation") or "").strip()
+                        or ("School of Electronic Information Engineering, "
+                            "Zhongshan College of Dalian Medical University, "
+                            "Dalian, China (ROR: https://ror.org/02ajraz35)"))
+
+    corr_name = str(ident.get("corresponding_author_name") or "").strip()
+    corr_email = str(ident.get("corresponding_author_email") or "").strip()
+    if corr_name and corr_email:
+        corr_line = "Corresponding author: %s %s" % (corr_name, corr_email)
+    elif corr_email:
+        corr_line = "Corresponding author: %s" % corr_email
+    else:
+        corr_line = "Corresponding author: [NAME TO BE FILLED] [EMAIL TO BE FILLED]"
+
+    doi = str(ident.get("zenodo_doi") or "").strip()
+    doi_text = doi if doi else "[ZENODO DOI TO BE COMPLETED]"
+
     abs_words = None
     try:
         import abstract_wordcount as AW
@@ -484,14 +564,11 @@ def main():
         r.font.color.rgb = RGBColor(0, 0, 0)
 
     p = doc.add_paragraph()
-    add_inline(p, "[AUTHOR NAME TO BE FILLED]\n[AUTHOR NAME TO BE FILLED]\n"
-                  "[AUTHOR NAME TO BE FILLED]")
+    add_inline(p, author_block)
     p = doc.add_paragraph()
-    add_inline(p, "School of Electronic Information Engineering, Zhongshan College of "
-                  "Dalian Medical University, Dalian, China "
-                  "(ROR: https://ror.org/02ajraz35)")
+    add_inline(p, affiliation_text)
     p = doc.add_paragraph()
-    add_inline(p, "Corresponding author: [NAME TO BE FILLED] [EMAIL TO BE FILLED]")
+    add_inline(p, corr_line)
     p = doc.add_paragraph()
     add_inline(p, "Article type: Research Article")
     p = doc.add_paragraph()
@@ -500,7 +577,7 @@ def main():
                % (abs_words, body_words, len(refs)))
     p = doc.add_paragraph()
     add_inline(p, "Code and data: https://github.com/dian440/medical-ai-flagship "
-                  "(archived version: [ZENODO DOI TO BE COMPLETED])")
+                  "(archived version: %s)" % doi_text)
     doc.add_paragraph()
 
     # Abstract
@@ -532,7 +609,8 @@ def main():
     p = doc.add_paragraph()
     r = p.add_run("Availability of data and materials: ")
     r.bold = True
-    add_inline(p, re.sub(r"^###\s+.*$", "", avail, flags=re.M).strip())
+    add_inline(p, re.sub(r"^###\s+.*$", "", avail, flags=re.M).strip()
+               .replace("[ZENODO DOI TO BE COMPLETED]", doi_text))
     if ai_text:
         p = doc.add_paragraph()
         r = p.add_run("Use of AI tools: ")
@@ -547,9 +625,10 @@ def main():
                "re-derive every reported number are available at "
                "https://github.com/dian440/medical-ai-flagship under the MIT "
                "licence. The archived version is deposited at Zenodo with DOI "
-               "[ZENODO DOI TO BE COMPLETED]. Python 3.12 or higher is required; "
+               "%s. Python 3.12 or higher is required; "
                "the complete dependency set is listed in requirements.txt. All "
-               "analyses were executed on CPU hardware and no GPU is required.")
+               "analyses were executed on CPU hardware and no GPU is required."
+               % doi_text)
 
     # References
     doc.add_heading("References", level=1)
@@ -597,6 +676,24 @@ def main():
         os.makedirs(OUT)
     out_path = os.path.join(
         OUT, "medical-ai-flagship_manuscript_BMC_%s.docx" % TODAY)
+
+    # ---------- 正文词数：与 code/wordcount_body.py 同口径 ----------
+    # 🔴 2026-11-21：此前标题页印的是「approximately 10184 words」——
+    #   那是用 [A-Za-z][A-Za-z\-']+ 在 **md 源** 上数的，与权威脚本
+    #   （code/wordcount_body.py，journal 口径、在 **Word 载体** 上数）得到的 10926 不一致，
+    #   且 10184 正是已作废的旧记数字。编辑数出来对不上 = 硬伤。
+    #   → 改为：先落盘 → 用权威脚本量 → 把量到的值写回标题页 → 重新落盘。
+    #   （标题页在 "1. Introduction" 之前，不在正文统计区间内，故写回不会改变词数。）
+    doc.save(out_path)
+    body_words = measure_body_words(out_path)
+    if body_words:
+        _retitle_wordcount(doc, body_words)
+        doc.save(out_path)
+        # 复核：写回后必须仍然一致
+        again = measure_body_words(out_path)
+        if again and again != body_words:
+            print("[FAIL] 标题页词数写回后正文词数变了：%d → %d" % (body_words, again))
+            return 3
     doc.save(out_path)
 
     # ---------- 自检：回读 ----------
@@ -613,7 +710,7 @@ def main():
             "Availability of data and materials", "Use of AI tools",
             "Availability of tools and software", "References",
             "Figure legends", "Tables",
-            "[21]", "AUTHOR NAME TO BE FILLED", "[ZENODO DOI TO BE COMPLETED]"]
+            "[21]"]
     missing = [m for m in must if m not in alltext]
     if missing:
         print("[FAIL] docx 缺少关键内容：%s" % missing)
@@ -630,10 +727,28 @@ def main():
         print("[FAIL] 页码域未写入")
         return 3
 
-    # 占位符只允许出现在预期位置
-    ph = re.findall(r"\[ZENODO DOI TO BE COMPLETED\]", alltext)
-    if len(ph) < 2:
-        print("[FAIL] Zenodo DOI 占位符数量异常：%d" % len(ph))
+    # 占位符规则：未填身份 → 占位符必须存在（提醒）；已填身份 → 占位符必须消失
+    n_doi_ph = len(re.findall(r"\[ZENODO DOI TO BE COMPLETED\]", alltext))
+    n_name_ph = len(re.findall(r"\[AUTHOR NAME TO BE FILLED\]", alltext))
+    n_corr_ph = len(re.findall(r"\[(NAME|EMAIL) TO BE FILLED\]", alltext))
+    if doi:
+        if n_doi_ph:
+            print("[FAIL] 已填 DOI，但 docx 仍有 %d 处 DOI 占位符" % n_doi_ph)
+            return 3
+    else:
+        if n_doi_ph < 2:
+            print("[FAIL] 未填 DOI，DOI 占位符数量异常：%d" % n_doi_ph)
+            return 3
+    if authors:
+        if n_name_ph:
+            print("[FAIL] 已填作者名，但 docx 仍有 %d 处作者占位符" % n_name_ph)
+            return 3
+    else:
+        if n_name_ph < 1:
+            print("[FAIL] 未填作者名，作者占位符数量异常：%d" % n_name_ph)
+            return 3
+    if (corr_name and corr_email) and n_corr_ph:
+        print("[FAIL] 已填通讯作者，但 docx 仍有 %d 处通讯占位符" % n_corr_ph)
         return 3
 
     print("[OK] 投稿 Word 稿已生成")
@@ -643,7 +758,18 @@ def main():
              len(legends)))
     print("     摘要 %d 词 ｜ 正文约 %d 词" % (abs_words, body_words))
     print("     行号：连续 ｜ 页脚：PAGE 域 ｜ 单栏 ｜ 双倍行距 ｜ Times New Roman 12pt")
-    print("     仍为占位符（需用户填）：作者姓名/邮箱、Zenodo DOI")
+    if doi and authors and corr_email:
+        print("     身份已完整：作者 %d 位 ｜ 通讯 %s ｜ DOI %s"
+              % (len(authors), corr_email, doi))
+    else:
+        left = []
+        if not authors:
+            left.append("作者姓名")
+        if not (corr_name and corr_email):
+            left.append("通讯作者姓名/邮箱")
+        if not doi:
+            left.append("Zenodo DOI")
+        print("     仍为占位符（需用户填）：%s" % "、".join(left))
     return 0
 
 
