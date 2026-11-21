@@ -42,6 +42,7 @@ import os
 import re
 import subprocess
 import sys
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -76,6 +77,98 @@ def status(ident):
                ident.get("corresponding_author_email") or "—",
                ident.get("zenodo_doi") or "—"))
     return missing, line
+
+
+def _sync_zenodo_meta(ident):
+    """把作者/DOI 同步进 code/zenodo_metadata.json（Zenodo 记录的单一源）。
+
+    🔴 执行顺序铁律：必须**先**跑 make_zenodo_metadata.py 生成器，**再**替换。
+       反过来的话，生成器会用 metadata 里的旧占位符把 README/CITATION.cff 覆盖回去，
+       替换被静默撤销（2026-11-17 踩过）。
+    """
+    out = []
+    meta_path = os.path.join(HERE, "zenodo_metadata.json")
+    if not os.path.isfile(meta_path):
+        return out
+    with open(meta_path, encoding="utf-8") as f:
+        meta = json.load(f)
+
+    authors = ident.get("authors") or []
+    if authors:
+        affil = ident.get("affiliation") or ""
+        creators = []
+        for i, nm in enumerate(authors):
+            entry = {"name": nm, "affiliation": affil,
+                     "type": "ProjectLeader" if i == 0 else "ProjectMember"}
+            creators.append(entry)
+        meta["creators"] = creators
+        meta.pop("_creators_note", None)
+        out.append("zenodo_metadata.json.creators")
+
+    doi = ident.get("zenodo_doi") or ""
+    if doi:
+        meta["doi"] = doi
+        out.append("zenodo_metadata.json.doi")
+
+    if not out:
+        return out
+
+    with open(meta_path, "w", encoding="utf-8") as f:
+        json.dump(meta, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+    # 先跑生成器
+    gen = os.path.join(HERE, "make_zenodo_metadata.py")
+    if os.path.isfile(gen):
+        r = subprocess.run([sys.executable, gen], cwd=HERE,
+                           capture_output=True, text=True,
+                           encoding="utf-8", errors="replace")
+        if r.returncode == 0:
+            out.append(".zenodo.json / CITATION.cff / README 已重生成")
+        else:
+            print("[WARN] make_zenodo_metadata.py 退出码 %d：%s"
+                  % (r.returncode, (r.stderr or r.stdout or "")[:200]))
+    return out
+
+
+def _fill_doi_in_docs(doi):
+    """替换 md/json 里的 DOI 占位符（复用 fill_zenodo_doi.py 的替换逻辑）。"""
+    if not doi:
+        return 0
+    try:
+        import fill_zenodo_doi as FD
+    except Exception as e:
+        print("[WARN] 无法载入 fill_zenodo_doi：%s" % e)
+        return 0
+    changed = 0
+    for site in FD.find_placeholder_sites():
+        path = site[0]
+        txt = Path(path).read_text(encoding="utf-8")
+        new = txt
+        for p in FD.PLACEHOLDERS:
+            new = new.replace(p, doi)
+        if new != txt:
+            Path(path).write_text(new, encoding="utf-8")
+            changed += 1
+    # CITATION.cff / .zenodo.json 的 doi 字段
+    for rel in ("CITATION.cff", ".zenodo.json"):
+        p = Path(REPO) / rel
+        if not p.is_file():
+            continue
+        txt = p.read_text(encoding="utf-8")
+        if doi in txt:
+            continue
+        if rel == "CITATION.cff":
+            new = txt.replace(
+                'url: "https://github.com/dian440/medical-ai-flagship"',
+                'url: "https://github.com/dian440/medical-ai-flagship"\n'
+                'doi: "%s"' % doi)
+        else:
+            new = txt.replace('"upload_type"', '"doi": "%s",\n  "upload_type"' % doi)
+        if new != txt:
+            p.write_text(new, encoding="utf-8")
+            changed += 1
+    return changed
 
 
 def rebuild():
@@ -149,6 +242,16 @@ def main():
         json.dump(ident, f, ensure_ascii=False, indent=2)
         f.write("\n")
     print("✓ 已更新单一源：%s" % "、".join(changed))
+
+    # --- 同步 Zenodo 元数据链（creators + doi）---
+    synced = _sync_zenodo_meta(ident)
+    if synced:
+        print("✓ 已同步 Zenodo 元数据：%s" % "、".join(synced))
+
+    # --- 替换 md/json 里的 DOI 占位符 ---
+    if ident.get("zenodo_doi"):
+        n = _fill_doi_in_docs(ident["zenodo_doi"])
+        print("✓ 已替换 %d 处 DOI 占位符（md / json / cff）" % n)
 
     # --- 重建 Word 稿 ---
     print("→ 重建投稿 Word 稿 …")
